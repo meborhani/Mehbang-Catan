@@ -389,6 +389,8 @@ body{position:fixed;inset:0;width:100%}
 .tgb.off{border-color:var(--line);background:var(--panel);color:var(--ink-dim);opacity:.8}
 .tgb.off::after{content:"";position:absolute;width:26px;height:2px;background:#ff6b6b;transform:rotate(-45deg);border-radius:2px}
 .btn.off{color:var(--ink-dim)}
+#rejoin{position:fixed;top:0;left:0;right:0;z-index:85;display:flex;align-items:center;justify-content:center;gap:10px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:#7a1f1f;color:#fff;font-size:13px}
+#rejoin[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -477,7 +479,7 @@ var CARD={
 var NUMS=[2,3,3,4,4,5,5,6,6,8,8,9,9,10,10,11,11,12];
 var S=null, curSheet=null, chosenN=4;
 var MY=null, ROLE='solo', curDraw=null;
-var NET={kicked:false,localPend:null,fxSeen:undefined,links:{},pending:new Map(),askId:0,syncT:null,hostLink:null,lobby:null,lv:null,started:false,onTradeResult:null,peer:null};
+var NET={restore:null,cli:null,rejoinT:null,linkOk:false,kicked:false,localPend:null,fxSeen:undefined,links:{},pending:new Map(),askId:0,syncT:null,hostLink:null,lobby:null,lv:null,started:false,onTradeResult:null,peer:null};
 var PT={};
 var FEEL={mus:true,snd:true,vib:true};
 try{var _f=JSON.parse(localStorage.getItem('datis_feel')||'null');if(_f){FEEL.mus=_f.mus!==false;FEEL.snd=_f.snd!==false;FEEL.vib=_f.vib!==false;}}catch(e){}
@@ -745,7 +747,7 @@ function newState(n,spectate,cfg){
   for(var i=0;i<n;i++){
     var c=cfg&&cfg[i];
     players.push({id:i,name:c?c.name:names[i],ai:c?c.ai:(spectate?true:i>0),remote:c?!!c.remote:false,res:[0,0,0,0,0],
-      cards:{gravity:0,strong:0,em:0,planck:0,fine:0},fresh:{},played:0,playedCard:false,novaUsed:false,idle:0,acted:false,timedOut:false});
+      cards:{gravity:0,strong:0,em:0,planck:0,fine:0},fresh:{},played:0,playedCard:false,novaUsed:false,idle:0,acted:false,timedOut:false,hum:false,token:null,kicked:false});
   }
   return {players:players,tiles:new Map(),verts:new Map(),edges:new Map(),bld:new Map(),fil:new Map(),bh:'0,0',
     round:1,era:0,cur:0,phase:'setup',mode:'idle',dice:null,rolling:false,hotNum:null,newTile:null,flip:false,
@@ -756,7 +758,8 @@ function startGame(n,spectate){
   closeSheet();
   if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
   ROLE='solo';MY=spectate?null:0;
-  S=newState(n,spectate);S.diff=DIFF;
+  recClear();
+  S=newState(n,spectate);S.diff=DIFF;if(!spectate)S.players[0].hum=true;
   initBoard();
   $('#intro').hidden=true;$('#lobby').hidden=true;
   $('#toasts').innerHTML='';
@@ -771,6 +774,7 @@ function render(){
   renderTop();renderPlayers();renderAwards();renderStatus();renderBoard();renderLog();renderDock();
   if(curDraw)curDraw();
   noteTurn();
+  scheduleSave(false);
   if(ROLE==='host')scheduleSync();
 }
 function renderTop(){
@@ -1168,6 +1172,7 @@ function eraBanner(i){
   });
 }
 function showEnd(){
+  recClear();
   var order=S.players.slice().sort(function(a,b){return totalPoints(b)-totalPoints(a);});
   var sh=openSheet('<h3>'+(S.winner==null?'پایان بازی':S.players[S.winner].name+' برنده شد')+'</h3><div class="score">'+
     order.map(function(p){return '<div class="'+(p.id===S.winner?'win':'')+'"><i class="dot" style="--pc:'+PH[p.id]+'"></i><span>'+p.name+'</span><b>'+fa(totalPoints(p))+'</b></div>';}).join('')+
@@ -1421,10 +1426,10 @@ async function aiAct(p,st){
   if(Math.random()<AK().trade&&aiTrade(p))return true;
   return false;
 }
-async function aiTurn(p,st){
+async function aiTurn(p,st,skipRoll){
   await sleep(450);
   if(stale(st))return;
-  await rollAndResolve(p,st);
+  if(!skipRoll)await rollAndResolve(p,st);
   if(!stale(st)&&rint(100)<AK().offer)await aiOffer(p);
   for(var i=0;i<14;i++){
     if(stale(st))return;
@@ -1529,30 +1534,34 @@ function kickPlayer(p){
   var seat=p.id,l=NET.links[seat];
   log(p.name+' به‌خاطر بی‌تحرکی از بازی حذف شد و هوش مصنوعی جایش را گرفت.');
   toSeat(seat,{t:'kicked'});
-  p.ai=true;p.remote=false;NET.links[seat]=null;
+  p.ai=true;p.remote=false;p.kicked=true;p.token=null;NET.links[seat]=null;
   if(l){l.onclose=null;setTimeout(function(){l.close();},400);}
   NET.pending.forEach(function(pd){if(pd.seat===seat)pd.fin(defaultAnswer(pd.kind,pd.payload));});
 }
-async function turn(p,st){
-  S.cur=p.id;p.fresh={};p.playedCard=false;p.novaUsed=false;S.hotNum=null;S.mode='idle';S.busy=false;
+async function turn(p,st,rmode){
+  S.cur=p.id;
+  if(rmode!=='actions'){p.fresh={};p.playedCard=false;p.novaUsed=false;S.hotNum=null;}
+  S.mode='idle';S.busy=false;
   render();
   await sleep(300);
   if(stale(st))return;
   await entropyStep(p,st);
   if(stale(st))return;
-  if(p.ai){await aiTurn(p,st);}
+  if(p.ai){scheduleSave(true);await aiTurn(p,st,rmode==='actions');}
   else{
     var tOn=timerOn();
-    p.acted=false;S.tmo=false;
+    p.acted=(rmode==='actions');S.tmo=false;
     if(tOn)armTimer(p,st);
-    S.mode='needRoll';render();
-    await new Promise(function(r){S.waitRoll=r;});
-    if(stale(st)){disarmTimer();return;}
-    if(p.ai){disarmTimer();await aiTurn(p,st);S.mode='idle';return;}
-    S.mode='idle';S.busy=true;render();
-    await rollAndResolve(p,st);
-    S.busy=false;
-    if(stale(st)){disarmTimer();return;}
+    if(rmode!=='actions'){
+      S.mode='needRoll';render();
+      await new Promise(function(r){S.waitRoll=r;});
+      if(stale(st)){disarmTimer();return;}
+      if(p.ai){disarmTimer();await aiTurn(p,st);S.mode='idle';return;}
+      S.mode='idle';S.busy=true;render();
+      await rollAndResolve(p,st);
+      S.busy=false;
+      if(stale(st)){disarmTimer();return;}
+    }
     if(!S.tmo&&!p.ai){S.mode='actions';render();await new Promise(function(r){S.waitEnd=r;});}
     if(tOn&&!stale(st))strikeCheck(p);
     disarmTimer();
@@ -1568,13 +1577,14 @@ async function endRound(st){
   render();
   await sleep(300);
 }
-async function setupPhase(st){
+async function setupPhase(st,from){
   var N=S.players.length,ord=[];
   for(var i=0;i<N;i++)ord.push(i);
   var seq=ord.concat(ord.slice().reverse());
   S.phase='setup';
-  for(var s=0;s<seq.length;s++){
+  for(var s=from||0;s<seq.length;s++){
     if(stale(st))return;
+    S.setupS=s;scheduleSave(true);
     var p=S.players[seq[s]],second=s>=N;
     S.cur=p.id;S.mode='idle';render();
     var vk,ek,sTmr=timerOn()&&!p.ai,sMs=sTmr?limitFor(p)*1000*tScale():0;
@@ -1597,15 +1607,18 @@ async function setupPhase(st){
   }
   S.phase='play';
 }
-async function mainLoop(st){
-  await setupPhase(st);
+async function mainLoop(st,rs){
+  if(!rs||rs.phase==='setup'){await setupPhase(st,rs?rs.setupS:0);}
+  else S.phase='play';
   if(stale(st))return;
-  log('بازی شروع شد. موفق باشی!');
+  if(!rs)log('بازی شروع شد. موفق باشی!');
+  var startI=(rs&&rs.phase==='play')?rs.cur:0,rmode=(rs&&rs.phase==='play')?rs.mode:null;
   while(!stale(st)){
-    for(var i=0;i<S.players.length;i++){
+    for(var i=startI;i<S.players.length;i++){
       if(stale(st))return;
-      await turn(S.players[i],st);
+      await turn(S.players[i],st,i===startI?rmode:null);
     }
+    startI=0;rmode=null;
     if(stale(st))return;
     await endRound(st);
   }
@@ -2175,6 +2188,177 @@ document.addEventListener('click',function(e){
   if(FEEL.mus&&!MUS.timer)startMusic();
 },true);
 document.addEventListener('visibilitychange',function(){if(!AC)return;try{if(document.hidden)AC.suspend();else AC.resume();}catch(e){}});
+
+/* ---------- saving and resuming (refresh does not end the game) ---------- */
+var RK='datis_resume';
+function recLoad(){try{var r=JSON.parse(localStorage.getItem(RK)||'null');if(r&&r.t&&Date.now()-r.t<12*3600*1000)return r;}catch(e){}return null;}
+function recSave(r){try{r.t=Date.now();localStorage.setItem(RK,JSON.stringify(r));}catch(e){}}
+function recClear(){try{localStorage.removeItem(RK);}catch(e){}}
+function rid(){var a='abcdefghjkmnpqrstuvwxyz23456789',o='';for(var i=0;i<12;i++)o+=a[rint(a.length)];return o;}
+function serializeGame(){
+  return {v:1,n:S.players.length,my:MY,diff:S.diff,board:boardSnapshot(),round:S.round,cur:S.cur,phase:S.phase,mode:S.mode,dice:S.dice,
+    setupS:S.setupS||0,deck:S.deck.slice(),bld:Array.from(S.bld.entries()),fil:Array.from(S.fil.entries()),longest:S.longest,dark:S.dark,lens:S.lens,entropy:S.entropy,
+    players:S.players.map(function(p){return {name:p.name,ai:p.ai,hum:!!p.hum,token:p.token,kicked:p.kicked,res:p.res.slice(),cards:p.cards,fresh:p.fresh,played:p.played,playedCard:p.playedCard,novaUsed:p.novaUsed,idle:p.idle};})};
+}
+var saveT=null;
+function scheduleSave(force){
+  if(window.__FAST&&!window.__SAVE)return;
+  clearTimeout(saveT);saveT=setTimeout(function(){saveCheckpoint(force);},force?0:350);
+}
+function saveGate(){return !!S&&!S.over&&S.phase==='play'&&NET.pending.size===0&&(S.mode==='needRoll'||(S.mode==='actions'&&!S.busy&&!S.sel));}
+function saveCheckpoint(force){
+  if(!S||S.over)return;
+  var kind=(ROLE==='solo'&&MY!=null)?'solo':((ROLE==='host'&&NET.started)?'host':null);
+  if(!kind)return;
+  if(!force&&!saveGate())return;
+  var r={type:kind,g:serializeGame()};if(kind==='host')r.code=NET.code;
+  recSave(r);
+}
+function buildBoard(b){
+  S.R=b.R;
+  b.tiles.forEach(function(t){addTile(t[0],t[1],t[2],t[3]);});
+  S.ports=b.ports;S.portAt=new Map();
+  b.ports.forEach(function(pt){S.portAt.set(pt.a,pt.type);S.portAt.set(pt.b,pt.type);});
+  S.vb=b.vb;S.cen=b.cen;S.bh=b.bh;
+}
+function restoreState(g){
+  S=newState(g.n,false,g.players.map(function(p){return {name:p.name,ai:p.ai,remote:false};}));
+  S.diff=g.diff;
+  buildBoard(g.board);
+  S.round=g.round;S.cur=g.cur;S.phase=g.phase;S.dice=g.dice;S.setupS=g.setupS;S.deck=g.deck.slice();
+  S.bld=new Map(g.bld);S.fil=new Map(g.fil);S.longest=g.longest;S.dark=g.dark;S.lens=g.lens||[];S.entropy=g.entropy||0;
+  g.players.forEach(function(q,i){
+    var p=S.players[i];
+    p.res=q.res;p.cards=q.cards;p.fresh=q.fresh||{};p.played=q.played;p.playedCard=q.playedCard;p.novaUsed=q.novaUsed;p.idle=q.idle||0;
+    p.hum=!!q.hum;p.token=q.token||null;p.kicked=!!q.kicked;
+  });
+  S.mode='idle';
+}
+function resumeInfo(g){return {phase:g.phase,cur:g.cur,mode:g.mode,setupS:g.setupS};}
+function isReload(){try{var n=performance.getEntriesByType('navigation')[0];return !!n&&n.type==='reload';}catch(e){return false;}}
+function resumeSaved(){
+  var r=recLoad();if(!r)return;
+  closeSheet();
+  if(r.type==='solo'){
+    if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
+    ROLE='solo';restoreState(r.g);MY=r.g.my;
+    $('#intro').hidden=true;$('#lobby').hidden=true;$('#toasts').innerHTML='';
+    goSession();render();
+    mainLoop(S,resumeInfo(r.g)).catch(function(e){console.error(e);});
+  }else if(r.type==='host')hostRestore(r);
+  else if(r.type==='client')joinRoom(r.code,r.name,r.token);
+}
+function hostRestore(r){
+  if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
+  S=null;MY=0;closeSheet();NET.lobbyOn=true;
+  var g=r.g;
+  NET.code=r.code;NET.started=false;NET.links={};NET.restore={g:g,links:{}};
+  NET.lobby={n:g.n,diff:g.diff,players:[],restoring:true};
+  NET.lv={code:r.code,names:[],n:g.n,isHost:true,ready:false,restoring:true,connected:{0:true},gp:g.players.map(function(p){return {name:p.name,hum:p.hum};})};
+  ROLE='host';
+  showLobby();
+  openHost(r.code,0);
+}
+function openHost(code,tries){
+  NET.peer=transport().host(code,onJoin,function(){NET.lv.ready=true;NET.lv.err=null;renderLobby();},function(err){
+    if(err&&err.type==='unavailable-id'&&tries<30&&NET.lobbyOn){
+      NET.lv.err='در حال بازگرداندن اتاق…';renderLobby();
+      setTimeout(function(){if(NET.lobbyOn&&ROLE==='host'&&!NET.started){try{NET.peer.close();}catch(e){}openHost(code,tries+1);}},2000);
+      return;
+    }
+    NET.lv.err='بازگرداندن اتاق ممکن نشد ('+((err&&err.type)||'خطا')+'). اینترنت را بررسی کن.';renderLobby();
+  });
+}
+function restoreBroadcast(){
+  var R=NET.restore;if(!R)return;
+  var names=NET.lv.gp.map(function(p,i){return (i===0||NET.lv.connected[i])?p.name:'';});
+  Object.keys(R.links).forEach(function(i){R.links[i].send({t:'lobby',names:names,n:NET.lv.n,code:NET.code,restoring:true});});
+  renderLobby();
+}
+function onJoinRestore(link){
+  var R=NET.restore;
+  link.onmessage=function(m){
+    if(!m||m.t!=='hello')return;
+    var i=-1;R.g.players.forEach(function(p,k){if(k>0&&p.hum&&!p.kicked&&p.token&&p.token===m.token)i=k;});
+    if(i<1){link.send({t:'reject',reason:'این اتاق مالِ یک بازیِ ذخیره‌شده است و فقط بازیکن‌های همان بازی می‌توانند وارد شوند.'});setTimeout(function(){link.close();},300);return;}
+    if(R.links[i]){R.links[i].onclose=null;R.links[i].close();}
+    R.links[i]=link;NET.lv.connected[i]=true;
+    link.onclose=function(){if(R.links[i]===link){delete R.links[i];NET.lv.connected[i]=false;restoreBroadcast();}};
+    link.send({t:'welcome',seat:i,token:m.token});
+    restoreBroadcast();
+  };
+}
+function continueRestore(){
+  var R=NET.restore;if(!R||NET.started)return;
+  var g=R.g;
+  NET.started=true;NET.lobbyOn=false;ROLE='host';
+  restoreState(g);MY=0;
+  NET.links={};
+  S.players.forEach(function(p,i){
+    var sp=g.players[i];
+    if(i===0){p.ai=false;p.remote=false;p.hum=true;return;}
+    if(sp.hum&&!sp.kicked){
+      var l=R.links[i];
+      if(l){p.ai=false;p.remote=true;NET.links[i]=l;l.onmessage=function(m){hostMsg(i,m);};l.onclose=function(){onLeave(i);};}
+      else{p.ai=true;p.remote=false;}
+    }
+  });
+  NET.restore=null;
+  Object.keys(NET.links).forEach(function(i){sendInit(+i);});
+  $('#intro').hidden=true;$('#lobby').hidden=true;$('#toasts').innerHTML='';
+  render();syncNow();
+  mainLoop(S,resumeInfo(g)).catch(function(e){console.error(e);});
+}
+function sendInit(i){
+  toSeat(i,{t:'init',you:i,n:S.players.length,players:S.players.map(function(q){return {name:q.name,ai:q.ai};}),board:boardSnapshot()});
+}
+function onJoinLate(link){
+  link.onmessage=function(m){
+    if(!m||m.t!=='hello')return;
+    var p=null;S.players.forEach(function(q){if(q.id>0&&q.hum&&!q.kicked&&q.token&&q.token===m.token)p=q;});
+    if(!p){link.send({t:'reject',reason:'بازی شروع شده است.'});setTimeout(function(){link.close();},300);return;}
+    var old=NET.links[p.id];
+    if(old&&old!==link){old.onclose=null;try{old.close();}catch(e){}}
+    p.ai=false;p.remote=true;NET.links[p.id]=link;
+    link.onmessage=function(mm){hostMsg(p.id,mm);};
+    link.onclose=function(){if(NET.links[p.id]===link)onLeave(p.id);};
+    link.send({t:'welcome',seat:p.id,token:p.token});
+    sendInit(p.id);
+    log(p.name+' به بازی برگشت.');
+    render();syncNow();
+  };
+}
+function showRejoin(){
+  var d=document.getElementById('rejoin');
+  if(!d){d=document.createElement('div');d.id='rejoin';d.innerHTML='<span>ارتباط قطع شد. در حال اتصال دوباره…</span><button class="btn small" data-rj-exit>خروج</button>';document.body.appendChild(d);
+    d.addEventListener('click',function(e){if(e.target.closest('[data-rj-exit]')){recClear();leaveOnline();S=null;hideRejoin();showIntro();}});}
+  d.hidden=false;
+}
+function hideRejoin(){var d=document.getElementById('rejoin');if(d)d.hidden=true;}
+function startRejoin(){
+  if(NET.rejoinT||!NET.cli)return;
+  showRejoin();
+  var n=0;
+  (function attempt(){
+    if(NET.linkOk)return;
+    if(++n>40){NET.rejoinT=null;hideRejoin();
+      var sh=openSheet('<h3>اتصال دوباره ممکن نشد</h3><p class="sub">میزبان پیدا نشد. شاید صفحه‌اش بسته شده.</p><button class="btn primary wide" data-again>تلاش دوباره</button><button class="btn wide" data-home>صفحهٔ اصلی</button>',{dismiss:false});
+      sh.addEventListener('click',function(e){if(e.target.closest('[data-again]')){closeSheet();startRejoin();}else if(e.target.closest('[data-home]')){closeSheet();recClear();leaveOnline();S=null;showIntro();}});
+      return;}
+    try{if(NET.peer)NET.peer.close();}catch(e){}
+    connectClient(false);
+    NET.rejoinT=setTimeout(attempt,4500);
+  })();
+}
+function onHostLost(link){
+  if(link!==NET.hostLink)return;
+  NET.linkOk=false;
+  if(S&&S.over||NET.kicked||NET.leaving)return;
+  if(S&&NET.started)startRejoin();
+  else lobbyError('ارتباط با میزبان قطع شد.');
+}
+window.addEventListener('pagehide',function(){try{saveCheckpoint(false);}catch(e){}});
+document.addEventListener('visibilitychange',function(){if(document.hidden){try{saveCheckpoint(false);}catch(e){}}});
 /* ---------- navigation: back button goes home, and you can come back ---------- */
 var VIEW='intro';
 function goSession(){
@@ -2189,10 +2373,11 @@ function sessionKind(){
 }
 function refreshResume(){
   var r=$('#resume');if(!r)return;
-  var k=sessionKind();
-  r.hidden=!(k&&VIEW==='intro');
+  var k=sessionKind(),rec=k?null:recLoad();
+  r.hidden=!(VIEW==='intro'&&(k||rec));
   if(k==='game')r.textContent=ROLE==='solo'?'ادامهٔ بازی':'بازگشت به بازی آنلاین';
   else if(k==='lobby')r.textContent='بازگشت به اتاق'+(NET.lv&&NET.lv.code?' ('+NET.lv.code+')':'');
+  else if(rec)r.textContent=rec.type==='solo'?'ادامهٔ بازی قبلی':(rec.type==='host'?'بازگشایی اتاق قبلی ('+rec.code+')':'بازگشت به بازی آنلاین ('+rec.code+')');
   fitAll();
 }
 function showIntro(){
@@ -2210,13 +2395,14 @@ function resumeSession(){
   refreshResume();
 }
 window.addEventListener('popstate',function(){if(VIEW==='session')showIntro();});
-$('#resume').addEventListener('click',resumeSession);
+$('#resume').addEventListener('click',function(){if(sessionKind())resumeSession();else resumeSaved();});
 function leaveOnline(){
+  NET.leaving=true;clearTimeout(NET.rejoinT);NET.rejoinT=null;hideRejoin();NET.cli=null;NET.restore=null;NET.linkOk=false;recClear();
   try{Object.keys(NET.links).forEach(function(k){var l=NET.links[k];if(l){l.onclose=null;l.close();}});}catch(e){}
   try{if(NET.hostLink){NET.hostLink.onclose=null;NET.hostLink.close();}}catch(e){}
   try{if(NET.peer)NET.peer.close();}catch(e){}
   clearTimeout(TMR);NET.localPend=null;NET.links={};NET.pending.clear();NET.hostLink=null;NET.lobby=null;NET.lv=null;NET.started=false;NET.you=null;NET.peer=null;NET.lobbyOn=false;
-  ROLE='solo';
+  ROLE='solo';NET.leaving=false;
 }
 
 /* ---------- online rooms: host-authoritative, WebRTC through PeerJS ---------- */
@@ -2354,6 +2540,7 @@ function applyState(v){
     p.name=q.name;p.ai=q.ai;p.res=q.res;p.cards=q.cards;p.fresh=q.fresh;p.played=q.played;p.playedCard=q.playedCard;
   });
   render();
+  if(S.over)recClear();
   if(S.over&&!S.endShown){S.endShown=true;setTimeout(showEnd,window.__FAST?0:600);}
 }
 function hostMsg(seat,m){
@@ -2376,9 +2563,15 @@ function onLeave(seat){
 }
 function clientMsg(m){
   if(!m)return;
-  if(m.t==='welcome'){NET.you=m.seat;if(NET.lv&&!NET.lv.names.length){NET.lv.names=['…'];renderLobby();}return;}
-  if(m.t==='reject'){lobbyError(m.reason||'ورود ممکن نشد.');return;}
-  if(m.t==='lobby'){NET.lv={code:m.code,names:m.names,n:m.n,isHost:false};renderLobby();return;}
+  if(m.t==='welcome'){
+    NET.you=m.seat;NET.linkOk=true;
+    clearTimeout(NET.rejoinT);NET.rejoinT=null;
+    if(m.token&&NET.cli){NET.cli.token=m.token;recSave({type:'client',code:NET.cli.code,name:NET.cli.name,token:m.token});}
+    if(NET.lv&&!NET.lv.names.length){NET.lv.names=['…'];renderLobby();}
+    return;
+  }
+  if(m.t==='reject'){recClear();clearTimeout(NET.rejoinT);NET.rejoinT=null;hideRejoin();lobbyError(m.reason||'ورود ممکن نشد.');return;}
+  if(m.t==='lobby'){NET.lv={code:m.code,names:m.names,n:m.n,isHost:false,restoring:!!m.restoring};renderLobby();return;}
   if(m.t==='init'){clientInit(m);return;}
   if(!S||ROLE!=='client')return;
   if(m.t==='state'){applyState(m.s);return;}
@@ -2392,19 +2585,29 @@ function clientMsg(m){
   if(m.t==='ptradeResult'){if(NET.onTradeResult)NET.onTradeResult(m.results);return;}
 }
 function clientInit(m){
+  closeSheet();
   NET.started=true;NET.lobbyOn=false;NET.fxSeen=undefined;NET.kicked=false;ROLE='client';MY=m.you;
   S=newState(m.n,false,m.players.map(function(c){return {name:c.name,ai:c.ai,remote:false};}));
-  var b=m.board;S.R=b.R;
-  b.tiles.forEach(function(t){addTile(t[0],t[1],t[2],t[3]);});
-  S.ports=b.ports;S.portAt=new Map();
-  b.ports.forEach(function(pt){S.portAt.set(pt.a,pt.type);S.portAt.set(pt.b,pt.type);});
-  S.vb=b.vb;S.cen=b.cen;S.bh=b.bh;
+  buildBoard(m.board);
+  hideRejoin();
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#toasts').innerHTML='';
+  if(VIEW!=='session')goSession();
   render();
 }
 /* lobby */
 function renderLobby(){
   var L=NET.lv;if(!L)return;
+  if(L.restoring&&L.isHost){
+    var sh2='';
+    L.gp.forEach(function(p,i){
+      var tag=i===0?'✓ تو':(p.hum?(L.connected[i]?'✓ وصل شد':'⏳ منتظر…'):'هوش مصنوعی');
+      sh2+='<div class="seat '+((i===0||L.connected[i])?'on':'')+'">'+p.name+' <small>'+tag+'</small></div>';
+    });
+    $('#lobbyIn').innerHTML='<div class="over">بازگشت به بازی قبلی</div><div class="sub">'+(L.ready?'اتاق دوباره باز شد ✓':'در حال بازگرداندن اتاق…')+'</div><div class="lobby-code">'+L.code+'</div>'+
+      '<div class="seats">'+sh2+'</div><div class="sub">بازیکن‌هایی که وصل نشوند، فعلاً با هوش مصنوعی بازی می‌شوند و هر وقت برگردند جایشان را پس می‌گیرند.</div>'+
+      (L.err?'<p class="warn">'+L.err+'</p>':'')+'<button class="btn primary" data-start '+(L.ready?'':'disabled')+'>ادامهٔ بازی</button><button class="btn" data-leave>خروج</button>';
+    fitBox($('#lobbyIn'),0);return;
+  }
   var seats='';
   for(var i=0;i<L.n;i++)seats+='<div class="seat '+(L.names[i]?'on':'')+'">'+(L.names[i]?L.names[i]:'خالی (هوش مصنوعی)')+'</div>';
   var st=L.isHost?(L.ready?'<div class="sub">اتاق آماده است ✓ منتظر دوستان…</div>':'<div class="sub">در حال اتصال به سرور اتاق…</div>'):(NET.you!=null?'<div class="sub">به اتاق وصل شدی ✓</div>':'<div class="sub">در حال اتصال به اتاق…</div>');
@@ -2446,10 +2649,12 @@ function hostLobby(name){
   });
 }
 function onJoin(link){
+  if(NET.started){onJoinLate(link);return;}
+  if(NET.restore){onJoinRestore(link);return;}
   var L=NET.lobby;
-  if(!L||NET.started){link.send({t:'reject',reason:'بازی شروع شده است.'});link.close();return;}
+  if(!L){link.send({t:'reject',reason:'اتاق بسته است.'});link.close();return;}
   if(L.players.length>=L.n){link.send({t:'reject',reason:'اتاق پر است.'});link.close();return;}
-  var entry={name:'بازیکن '+fa(L.players.length+1),link:link};
+  var entry={name:'بازیکن '+fa(L.players.length+1),link:link,token:rid()};
   L.players.push(entry);
   link.onmessage=function(m){
     if(m&&m.t==='hello'&&!NET.started){
@@ -2463,10 +2668,11 @@ function onJoin(link){
     var i=L.players.indexOf(entry);if(i>0)L.players.splice(i,1);
     lobbyBroadcast();
   };
-  link.send({t:'welcome',seat:L.players.length-1});
+  link.send({t:'welcome',seat:L.players.length-1,token:entry.token});
   lobbyBroadcast();
 }
 function startOnline(){
+  if(NET.restore){continueRestore();return;}
   var L=NET.lobby;if(!L||NET.started)return;
   var humans=L.players.length,n=Math.max(L.n,humans,2);
   var used={};L.players.forEach(function(e){used[e.name]=1;});
@@ -2477,7 +2683,8 @@ function startOnline(){
     else cfg.push({name:pool.shift(),ai:true,remote:false});
   }
   NET.started=true;NET.lobbyOn=false;ROLE='host';MY=0;
-  S=newState(n,false,cfg);S.diff=L.diff!=null?L.diff:DIFF;
+  S=newState(n,false,cfg);
+  S.players.forEach(function(p,i){if(!p.ai){p.hum=true;if(i>0)p.token=L.players[i].token;}});S.diff=L.diff!=null?L.diff:DIFF;
   initBoard();
   NET.links={};
   L.players.forEach(function(e,i){
@@ -2494,33 +2701,39 @@ function startOnline(){
   render();syncNow();
   mainLoop(S).catch(function(e){console.error(e);});
 }
-function joinRoom(code,name){
+function joinRoom(code,name,token){
   code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(code.length!==5){toast('کد اتاق ۵ حرف است');return;}
   if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
   S=null;MY=null;closeSheet();NET.lobbyOn=true;
   NET.started=false;NET.lv={code:code,names:[],n:2,isHost:false};
+  NET.cli={code:code,name:cleanName(name),token:token||null};
   showLobby();
-  var linked=false;
-  var tm=setTimeout(function(){if(!linked)lobbyError('اتصال به اتاق ممکن نشد. میزبان صفحه را باز نگه داشته؟ اینترنت را عوض کن و دوباره تلاش کن.');},window.__FAST?3000:25000);
-  NET.peer=transport().join(code,function(link){
+  connectClient(true);
+}
+function connectClient(first){
+  var cli=NET.cli;if(!cli)return;
+  var linked=false;NET.you=null;
+  var tm=setTimeout(function(){if(!linked&&first)lobbyError('اتصال به اتاق ممکن نشد. میزبان صفحه را باز نگه داشته؟ اینترنت را عوض کن و دوباره تلاش کن.');},window.__FAST?3000:25000);
+  NET.peer=transport().join(cli.code,function(link){
     linked=true;clearTimeout(tm);
     NET.hostLink=link;ROLE='client';
     link.onmessage=clientMsg;
-    link.onclose=function(){
-      if(S&&S.over||NET.kicked)return;
-      var sh=openSheet('<h3>ارتباط قطع شد</h3><p class="sub">ارتباط با میزبان از بین رفت.</p><button class="btn primary wide" data-reload>برگشت به صفحهٔ اول</button>',{dismiss:false});
-      sh.addEventListener('click',function(e){if(e.target.closest('[data-reload]'))location.reload();});
-    };
-    var hn=0,hi=setInterval(function(){if(NET.you!=null||NET.started||hn++>10){clearInterval(hi);return;}link.send({t:'hello',name:cleanName(name)});},1500);link.send({t:'hello',name:cleanName(name)});
-  },function(err){if(!linked){clearTimeout(tm);var t=err&&err.type;lobbyError(t==='peer-unavailable'?'اتاقی با این کد پیدا نشد. کد را بررسی کن و مطمئن شو میزبان صفحه را باز نگه داشته.':'اتصال برقرار نشد ('+(t||'خطا')+'). اینترنت را عوض کن (وای‌فای/موبایل) و دوباره تلاش کن.');}});
+    link.onclose=function(){onHostLost(link);};
+    var hn=0,hi=setInterval(function(){if(NET.you!=null||hn++>10||NET.hostLink!==link){clearInterval(hi);return;}link.send({t:'hello',name:cli.name,token:cli.token});},1500);
+    link.send({t:'hello',name:cli.name,token:cli.token});
+  },function(err){
+    if(linked||!first)return;
+    clearTimeout(tm);var t=err&&err.type;
+    lobbyError(t==='peer-unavailable'?'اتاقی با این کد پیدا نشد. کد را بررسی کن و مطمئن شو میزبان صفحه را باز نگه داشته.':'اتصال برقرار نشد ('+(t||'خطا')+'). اینترنت را عوض کن (وای‌فای/موبایل) و دوباره تلاش کن.');
+  });
 }
 function saveName(n){try{localStorage.setItem('datis_name',n);}catch(e){}}
 function loadName(){try{return localStorage.getItem('datis_name')||'';}catch(e){return '';}}
 if(!onlineAvailable()){$('#onlineBox').innerHTML='<div class="sub">بازی آنلاین به اتصال اینترنت و بارگذاری کتابخانهٔ اتصال نیاز دارد.</div>';}
 else{
   $('#mkRoom').addEventListener('click',function(){hostLobby(cleanName(loadName())||'میزبان');});
-  $('#joinRoom').addEventListener('click',function(){joinRoom($('#joinCode').value,cleanName(loadName())||'مهمان');});
+  $('#joinRoom').addEventListener('click',function(){joinRoom($('#joinCode').value,cleanName(loadName())||'مهمان',null);});
 }
 $('#lobby').addEventListener('click',function(e){
   var t=e.target;
@@ -2537,7 +2750,9 @@ $('#lobby').addEventListener('click',function(e){
 DIFF=loadDiff();paintDiff();paintFeel();
 applyTheme(loadTheme(),true);
 fitAll();
-window.__cosmic={render:function(k,t0,secs){var c=new OfflineAudioContext(1,44100*secs,44100),cm=compose(k,0);MUS.master=c.createGain();MUS.master.gain.value=.6;var cp=c.createDynamicsCompressor();MUS.master.connect(cp);cp.connect(c.destination);cm.ev.forEach(function(e){if(e[0]>=t0&&e[0]<t0+secs)mPlay(c,e,-t0);});return c.startRendering().then(function(b){var d=b.getChannelData(0),pk=0,sq=0;for(var i=0;i<d.length;i++){var v=Math.abs(d[i]);if(v>pk)pk=v;sq+=d[i]*d[i];}MUS.master=null;return {peak:+pk.toFixed(3),rms:+Math.sqrt(sq/d.length).toFixed(4)};});},compose:function(k,l){var r=compose(k,l||0);return {n:r.ev.length,dur:r.dur};},state:function(){if(S)S.me=MY;return S;},fx:function(k,t){if(t)applyTheme(t,true);playFx(k);},theme:function(t){applyTheme(t,true);}};
+refreshResume();
+if(recLoad()&&isReload())setTimeout(resumeSaved,50);
+window.__cosmic={resumeSaved:function(){resumeSaved();},render:function(k,t0,secs){var c=new OfflineAudioContext(1,44100*secs,44100),cm=compose(k,0);MUS.master=c.createGain();MUS.master.gain.value=.6;var cp=c.createDynamicsCompressor();MUS.master.connect(cp);cp.connect(c.destination);cm.ev.forEach(function(e){if(e[0]>=t0&&e[0]<t0+secs)mPlay(c,e,-t0);});return c.startRendering().then(function(b){var d=b.getChannelData(0),pk=0,sq=0;for(var i=0;i<d.length;i++){var v=Math.abs(d[i]);if(v>pk)pk=v;sq+=d[i]*d[i];}MUS.master=null;return {peak:+pk.toFixed(3),rms:+Math.sqrt(sq/d.length).toFixed(4)};});},compose:function(k,l){var r=compose(k,l||0);return {n:r.ev.length,dur:r.dur};},state:function(){if(S)S.me=MY;return S;},fx:function(k,t){if(t)applyTheme(t,true);playFx(k);},theme:function(t){applyTheme(t,true);}};
 })();
 </script>
 
