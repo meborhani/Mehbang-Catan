@@ -1879,7 +1879,7 @@ function paintDiff(){
 }
 function setDiff(d){DIFF=d;saveDiff(d);if(NET.lobby)NET.lobby.diff=d;paintDiff();}
 document.addEventListener('click',function(e){var b=e.target.closest('.seg-d [data-d]');if(b)setDiff(+b.dataset.d);});
-function loadTheme(){try{return localStorage.getItem('datis_theme')||'datis';}catch(e){return 'datis';}}
+function loadTheme(){try{return localStorage.getItem('datis_theme')||'orig';}catch(e){return 'orig';}}
 function saveTheme(k){try{localStorage.setItem('datis_theme',k);}catch(e){}}
 function applyTheme(key,noSave){
   TH=THEMES.filter(function(t){return t.key===key;})[0]||THEMES[0];
@@ -1918,7 +1918,7 @@ function openSettings(){
   var sh=openSheet('');
   sh.innerHTML='<h3>تنظیمات</h3><div><label class="sub stg-lbl" for="setName">نام تو در بازی</label><input id="setName" class="inp" maxlength="12" placeholder="مثلاً علی" autocomplete="off"></div>'+
     '<div class="sub">تم بازی. فقط ظاهر و نام‌ها عوض می‌شود و قوانین یکی است. هر بازیکن تم خودش را می‌بیند.</div><div class="themes">'+
-    THEMES.map(function(t){return '<button class="th'+(t===TH?' on':'')+'" data-th="'+t.key+'"><span class="thi">'+[0,1,2,3,4].map(function(i){return '<svg class="ico" width="22" height="22" viewBox="0 0 24 24" style="color:'+t.RH[i]+'"><use href="#ic_'+t.key+i+'"/></svg>';}).join('')+'</span><b>'+t.name+'</b></button>';}).join('')+
+    ['orig','datis','cosmic','ww'].map(function(k){return THEMES.filter(function(t){return t.key===k;})[0];}).map(function(t){return '<button class="th'+(t===TH?' on':'')+'" data-th="'+t.key+'"><span class="thi">'+[0,1,2,3,4].map(function(i){return '<svg class="ico" width="22" height="22" viewBox="0 0 24 24" style="color:'+t.RH[i]+'"><use href="#ic_'+t.key+i+'"/></svg>';}).join('')+'</span><b>'+t.name+'</b></button>';}).join('')+
     '</div><div><div class="sub stg-lbl">سختی هوش مصنوعی</div><div class="seg-d"><button data-d="0">آسان</button><button data-d="1">متوسط</button><button data-d="2">سخت</button></div></div><p class="sub">نام از بازی بعد اعمال می‌شود.</p><button class="btn primary wide" data-close>تأیید</button>';
   var inp=sh.querySelector('#setName');inp.value=loadName();paintDiff();
   inp.addEventListener('input',function(){saveName(cleanName(inp.value));});
