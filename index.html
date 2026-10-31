@@ -7,7 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;700&family=Reem+Kufi:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Changa:wght@500;700&display=swap">
 <style>
 /* Layout: one phone column. Header + era rail, player strip, status line, an expanding hex board, log, sticky action dock.
    One committed dark look (deep-space indigo, ember accent), so no light theme. */
@@ -391,6 +391,61 @@ body{position:fixed;inset:0;width:100%}
 .btn.off{color:var(--ink-dim)}
 #rejoin{position:fixed;top:0;left:0;right:0;z-index:85;display:flex;align-items:center;justify-content:center;gap:10px;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 8px;background:#7a1f1f;color:#fff;font-size:13px}
 #rejoin[hidden]{display:none}
+
+/* ===== skins: each theme has its own atmosphere, panels, buttons ===== */
+body[data-skin]::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+/* --- سیطره کتان: wooden tabletop, sea and island --- */
+body[data-skin=orig]{--void:#1b120a;--deep:#24170c;--panel:#2f2011;--panel-2:#3e2b17;--line:#7d5a31;--ink:#f8edd5;--ink-dim:#cfb48a;--font-display:'Lalezar','Vazirmatn',Tahoma,sans-serif;
+  background-image:repeating-linear-gradient(92deg,#ffffff06 0 2px,transparent 2px 9px),repeating-linear-gradient(88deg,#00000022 0 1px,transparent 1px 23px),radial-gradient(120% 60% at 50% -10%,#4a3017 0%,transparent 65%);background-size:auto;background-attachment:fixed}
+body[data-skin=orig] .board{background-color:#1b6f8c;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='16'%3E%3Cpath d='M0 8q11-8 22 0t22 0' fill='none' stroke='%23ffffff' stroke-opacity='.14' stroke-width='1.6'/%3E%3C/svg%3E"),radial-gradient(75% 65% at 50% 50%,#2d93b3 0%,#16627f 60%,#0f4660 100%);border:5px solid #6b4423;border-radius:16px;box-shadow:inset 0 0 0 2px #3a2411,inset 0 0 40px #00000055,0 4px 0 #2a190b}
+body[data-skin=orig] .pl,body[data-skin=orig] .rc,body[data-skin=orig] .bb,body[data-skin=orig] .btn,body[data-skin=orig] .aw,body[data-skin=orig] .hchip{box-shadow:inset 0 1px 0 #ffffff26,0 2px 0 #00000066}
+body[data-skin=orig] .sheet{box-shadow:inset 0 1px 0 #ffffff22;border-color:#8c6535}
+body[data-skin=orig] .btn.primary{background:linear-gradient(#ffd97f,#e2a73b);border-color:#a8741d;color:#3a2200;box-shadow:inset 0 1px 0 #fff8,0 3px 0 #8a5a14}
+body[data-skin=orig] .pl.on{border-color:#ffd97f;box-shadow:0 0 0 1px #ffd97f,0 0 18px #ffd97f55}
+body[data-skin=orig] .hero{background:linear-gradient(180deg,#fff7df 8%,#f1c46a 55%,#cf8a2a 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #5a3410)}
+body[data-skin=orig] #intro{background-image:radial-gradient(80% 45% at 50% 100%,#1b6f8c88 0%,transparent 70%),repeating-linear-gradient(92deg,#ffffff06 0 2px,transparent 2px 9px),radial-gradient(90% 50% at 50% 0%,#5a3b1c 0%,transparent 70%)}
+/* --- داتیس: circuit-board factory --- */
+body[data-skin=datis]{--void:#04100b;--deep:#071a12;--panel:#0a2218;--panel-2:#0f2f22;--line:#1f6a50;--ink:#e6fff3;--ink-dim:#7fb9a0;--font-display:'Reem Kufi','Vazirmatn',Tahoma,sans-serif;
+  background-image:linear-gradient(#3dffb011 1px,transparent 1px),linear-gradient(90deg,#3dffb011 1px,transparent 1px),linear-gradient(#3dffb008 1px,transparent 1px),linear-gradient(90deg,#3dffb008 1px,transparent 1px),radial-gradient(120% 60% at 50% -10%,#0b3a29 0%,transparent 62%);background-size:56px 56px,56px 56px,14px 14px,14px 14px,auto;background-attachment:fixed}
+body[data-skin=datis]::before{background:repeating-linear-gradient(0deg,#00000030 0 1px,transparent 1px 3px)}
+body[data-skin=datis] .board{background:#04140e;background-image:linear-gradient(#3dffb012 1px,transparent 1px),linear-gradient(90deg,#3dffb012 1px,transparent 1px);background-size:22px 22px;border:1px solid #2a8a68;border-radius:6px;box-shadow:inset 0 0 40px #00ffa322,0 0 18px #00ffa31c}
+body[data-skin=datis] .pl,body[data-skin=datis] .rc,body[data-skin=datis] .bb,body[data-skin=datis] .btn,body[data-skin=datis] .sbtn,body[data-skin=datis] .cb,body[data-skin=datis] .pk,body[data-skin=datis] .aw,body[data-skin=datis] .hchip,body[data-skin=datis] .seg-n button,body[data-skin=datis] .th,body[data-skin=datis] .seat,body[data-skin=datis] .intro-in details,body[data-skin=datis] .crow{border-radius:4px}
+body[data-skin=datis] .sheet{border-radius:10px 10px 0 0;border-color:#2a8a68;box-shadow:0 -4px 30px #00ffa322}
+body[data-skin=datis] .pl{box-shadow:inset 3px 0 0 #1f6a50}
+body[data-skin=datis] .pl.on{box-shadow:inset 3px 0 0 var(--ember),0 0 0 1px var(--ember),0 0 16px #ffb00044}
+body[data-skin=datis] .btn.primary{border-radius:4px;box-shadow:0 0 14px #ffb00055}
+body[data-skin=datis] .pl-pt,body[data-skin=datis] .rc b,body[data-skin=datis] .lobby-code,body[data-skin=datis] .dsum{font-family:ui-monospace,Menlo,Consolas,monospace}
+body[data-skin=datis] .hero{background:linear-gradient(180deg,#fff 5%,#ffd27a 50%,#ffb000 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 16px #ffb00066)}
+body[data-skin=datis] .die{background:#06180f;color:#7CF2B5;border:1px solid #2a8a68;box-shadow:0 0 8px #00ffa333}
+body[data-skin=datis] #intro{background-image:linear-gradient(#3dffb012 1px,transparent 1px),linear-gradient(90deg,#3dffb012 1px,transparent 1px),radial-gradient(90% 50% at 50% 0%,#0b3a29 0%,transparent 70%);background-size:40px 40px,40px 40px,auto}
+/* --- مهبانگ: deep space, glass and glow --- */
+body[data-skin=cosmic]{--void:#05061a;--deep:#090b26;--panel:#10123a;--panel-2:#191c52;--line:#4a4fa8;--ink:#eef0ff;--ink-dim:#9ea4e0;--font-display:'Aref Ruqaa','Vazirmatn',Tahoma,sans-serif;
+  background-image:radial-gradient(60% 40% at 80% 10%,#5b2a9a55 0%,transparent 70%),radial-gradient(50% 40% at 10% 70%,#1d4fa855 0%,transparent 70%),radial-gradient(120% 60% at 50% -10%,#1a1450 0%,transparent 62%);background-size:auto;background-attachment:fixed}
+body[data-skin=cosmic]::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='20' cy='40' r='1.1'/%3E%3Ccircle cx='90' cy='120' r='.8' fill-opacity='.7'/%3E%3Ccircle cx='170' cy='30' r='1.3'/%3E%3Ccircle cx='230' cy='160' r='.9' fill-opacity='.8'/%3E%3Ccircle cx='60' cy='220' r='1'/%3E%3Ccircle cx='140' cy='200' r='.7' fill-opacity='.6'/%3E%3Ccircle cx='200' cy='90' r='.6' fill-opacity='.7'/%3E%3C/g%3E%3C/svg%3E");animation:twk 5s ease-in-out infinite alternate}
+@keyframes twk{from{opacity:.55}to{opacity:1}}
+body[data-skin=cosmic] .board{background:radial-gradient(70% 60% at 50% 50%,#1a1760aa 0%,#070924 100%);border:1px solid #6a6fe0aa;border-radius:22px;box-shadow:0 0 28px #6a6fe044,inset 0 0 40px #6a6fe022}
+body[data-skin=cosmic] .pl,body[data-skin=cosmic] .rc,body[data-skin=cosmic] .bb,body[data-skin=cosmic] .aw,body[data-skin=cosmic] .hchip,body[data-skin=cosmic] .seat,body[data-skin=cosmic] .intro-in details,body[data-skin=cosmic] .crow,body[data-skin=cosmic] .pk{border-radius:16px;background:#14175acc;backdrop-filter:blur(4px)}
+body[data-skin=cosmic] .btn,body[data-skin=cosmic] .seg-n button,body[data-skin=cosmic] .th{border-radius:999px}
+body[data-skin=cosmic] .sheet{border-radius:26px 26px 0 0;border-color:#6a6fe0aa;background:#0d1040f2;box-shadow:0 -6px 40px #6a6fe044}
+body[data-skin=cosmic] .btn.primary{background:linear-gradient(135deg,#b9acff,#6fa8ff);border-color:#cfc6ff;color:#0c0a30;box-shadow:0 0 18px #a99bff88}
+body[data-skin=cosmic] .pl.on{box-shadow:0 0 0 1px var(--ember),0 0 22px #a99bffaa}
+body[data-skin=cosmic] .hero{background:linear-gradient(180deg,#fff 5%,#c9c3ff 45%,#6fc8ff 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 24px #a99bffaa)}
+body[data-skin=cosmic] .die{background:#eef0ff;box-shadow:0 0 12px #a99bff99}
+body[data-skin=cosmic] #intro{background-image:radial-gradient(60% 40% at 80% 10%,#5b2a9a66 0%,transparent 70%),radial-gradient(50% 40% at 10% 70%,#1d4fa866 0%,transparent 70%),radial-gradient(90% 50% at 50% 0%,#1a1450 0%,transparent 70%)}
+/* --- جنگ جهانی: field-map olive drab, stencil and rivets --- */
+body[data-skin=ww]{--void:#14160d;--deep:#1b1e12;--panel:#262a18;--panel-2:#32371f;--line:#6b7240;--ink:#efe9c9;--ink-dim:#aaa77c;--font-display:'Changa','Vazirmatn',Tahoma,sans-serif;
+  background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px),radial-gradient(120% 60% at 50% -10%,#3a3f22 0%,transparent 65%);background-size:48px 48px,48px 48px,auto;background-attachment:fixed}
+body[data-skin=ww]::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");opacity:.5;mix-blend-mode:multiply}
+body[data-skin=ww] .board{background-color:#7d7a52;background-image:linear-gradient(#00000022 1px,transparent 1px),linear-gradient(90deg,#00000022 1px,transparent 1px),radial-gradient(75% 65% at 50% 50%,#8f8c60 0%,#5c5a3a 100%);background-size:34px 34px,34px 34px,auto;border:3px solid #3a3d22;outline:1px dashed #cfc690;outline-offset:-8px;border-radius:3px;box-shadow:inset 0 0 50px #00000066,0 3px 0 #0c0d07}
+body[data-skin=ww] .pl,body[data-skin=ww] .rc,body[data-skin=ww] .bb,body[data-skin=ww] .btn,body[data-skin=ww] .sbtn,body[data-skin=ww] .cb,body[data-skin=ww] .pk,body[data-skin=ww] .aw,body[data-skin=ww] .hchip,body[data-skin=ww] .seg-n button,body[data-skin=ww] .th,body[data-skin=ww] .seat,body[data-skin=ww] .intro-in details,body[data-skin=ww] .crow{border-radius:2px}
+body[data-skin=ww] .seg-d button,body[data-skin=datis] .seg-d button{border-radius:3px}
+body[data-skin=ww] .sheet{border-radius:4px 4px 0 0;border:2px solid #6b7240;border-bottom:0;outline:1px dashed #cfc69055;outline-offset:-6px}
+body[data-skin=ww] .pl{border-width:2px;box-shadow:inset 0 0 0 1px #00000055}
+body[data-skin=ww] .pl.on{border-color:#cfd36a;box-shadow:0 0 0 1px #cfd36a,0 0 14px #cfd36a44}
+body[data-skin=ww] .btn.primary{background:#6b7a2e;border-color:#aab35a;color:#f4f0cf;outline:1px dashed #f4f0cf66;outline-offset:-4px;box-shadow:0 3px 0 #2e3512}
+body[data-skin=ww] .hero{background:linear-gradient(180deg,#f4f0cf 8%,#c9d26a 60%,#8a9440 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #2a2d12)}
+body[data-skin=ww] .die{background:#e9e2b8;color:#1b1e12;border-radius:4px;box-shadow:0 2px 0 #00000088}
+body[data-skin=ww] #intro{background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px),conic-gradient(from 200deg at 50% 110%,transparent 0 20deg,#cfd36a18 24deg,transparent 30deg 40deg,#cfd36a12 44deg,transparent 50deg),radial-gradient(90% 50% at 50% 0%,#3a3f22 0%,transparent 70%);background-size:48px 48px,48px 48px,auto,auto}
 </style>
 </head>
 <body>
@@ -979,29 +1034,129 @@ function playFx(k){
   fxSound(kind);fxVibe(kind);
   clearTimeout(fxT);fxT=setTimeout(function(){host.innerHTML='';},2900);
 }
+
+/* ---------- theme skins: every theme has its own board art ---------- */
+function hexPath(q,r,k){return 'M'+hexPts(q,r,k).split(' ').join('L')+'Z';}
+var SKB={
+ orig:['#2E6B3A','#C25B3A','#8CCB68','#E6BF45','#8791A3','#E2CE98'],
+ datis:['#2c2a0b','#3a1b0c','#0c2f22','#0a2c3a','#241a3e','#16120a'],
+ ww:['#7d6538','#6d7a88','#68863f','#a5862c','#3f8a55','#8c8466']
+};
+function skinDefs(k){
+  var d='<radialGradient id="shade"><stop offset=".5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></radialGradient>',i,b;
+  if(k==='orig'){
+    b=SKB.orig;
+    d+='<pattern id="sk0" width=".56" height=".56" patternUnits="userSpaceOnUse"><rect width=".56" height=".56" fill="'+b[0]+'"/><path d="M.14 .46L.25 .22L.36 .46Z" fill="#1E4F2A"/><path d="M.16 .32L.25 .1L.34 .32Z" fill="#2a7d3c"/><path d="M.44 .3L.5 .14L.56 .3Z" fill="#245d30"/><path d="M0 .3L.06 .14L.12 .3Z" fill="#245d30"/></pattern>';
+    d+='<pattern id="sk1" width=".56" height=".28" patternUnits="userSpaceOnUse"><rect width=".56" height=".28" fill="'+b[1]+'"/><path d="M0 .14H.56M.14 0V.14M.42 .14V.28M0 0H.56" stroke="#8f3d22" stroke-width=".026" fill="none"/></pattern>';
+    d+='<pattern id="sk2" width=".5" height=".5" patternUnits="userSpaceOnUse"><rect width=".5" height=".5" fill="'+b[2]+'"/><path d="M.08 .2l.03-.08l.03.08M.34 .42l.03-.08l.03.08M.3 .14l.03-.07l.03.07" stroke="#5a9a3e" stroke-width=".02" fill="none" stroke-linecap="round"/><circle cx=".18" cy=".4" r=".02" fill="#fff" fill-opacity=".6"/></pattern>';
+    d+='<pattern id="sk3" width=".3" height=".3" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><rect width=".3" height=".3" fill="'+b[3]+'"/><path d="M0 .05H.3M0 .2H.3" stroke="#c4952a" stroke-width=".05"/><path d="M0 .125H.3" stroke="#f6dc82" stroke-width=".02"/></pattern>';
+    d+='<pattern id="sk4" width=".6" height=".42" patternUnits="userSpaceOnUse"><rect width=".6" height=".42" fill="'+b[4]+'"/><path d="M.02 .4L.2 .1L.38 .4Z" fill="#6a7487"/><path d="M.14 .2L.2 .1L.26 .2L.22 .18L.2 .22L.17 .18Z" fill="#f4f7ff"/><path d="M.38 .4L.5 .2L.62 .4Z" fill="#5d667a"/></pattern>';
+    d+='<pattern id="sk5" width=".6" height=".3" patternUnits="userSpaceOnUse"><rect width=".6" height=".3" fill="'+b[5]+'"/><path d="M0 .1Q.15 0 .3 .1T.6 .1M0 .25Q.15 .15 .3 .25T.6 .25" stroke="#c7ae6c" stroke-width=".025" fill="none"/></pattern>';
+  }else if(k==='datis'){
+    b=SKB.datis;
+    for(i=0;i<5;i++)d+='<pattern id="sk'+i+'" width=".6" height=".6" patternUnits="userSpaceOnUse"><rect width=".6" height=".6" fill="'+b[i]+'"/><path d="M0 .15H.18V.35H.42M.3 0V.15H.6M.42 .35V.6M.06 .6V.48H.24" stroke="'+RH[i]+'" stroke-opacity=".5" stroke-width=".022" fill="none"/><circle cx=".18" cy=".15" r=".035" fill="'+RH[i]+'" fill-opacity=".8"/><circle cx=".42" cy=".35" r=".035" fill="'+RH[i]+'" fill-opacity=".8"/><circle cx=".6" cy=".15" r=".03" fill="'+RH[i]+'" fill-opacity=".6"/></pattern>';
+    d+='<pattern id="sk5" width=".22" height=".22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width=".22" height=".22" fill="#14100a"/><rect width=".11" height=".22" fill="#FFB000" fill-opacity=".32"/></pattern>';
+  }else if(k==='cosmic'){
+    for(i=0;i<5;i++)d+='<radialGradient id="sk'+i+'" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".18" stop-color="'+RH[i]+'"/><stop offset=".62" stop-color="'+RH[i]+'" stop-opacity=".38"/><stop offset="1" stop-color="#070924"/></radialGradient>';
+    d+='<radialGradient id="sk5" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#000"/><stop offset=".35" stop-color="#000"/><stop offset=".45" stop-color="'+ACC+'" stop-opacity=".8"/><stop offset=".7" stop-color="#3a2a8a" stop-opacity=".4"/><stop offset="1" stop-color="#070924"/></radialGradient>';
+    d+='<pattern id="spk" width=".55" height=".55" patternUnits="userSpaceOnUse"><circle cx=".1" cy=".12" r=".014" fill="#fff"/><circle cx=".38" cy=".3" r=".01" fill="#fff" fill-opacity=".8"/><circle cx=".22" cy=".46" r=".012" fill="#fff" fill-opacity=".7"/><circle cx=".5" cy=".05" r=".008" fill="#fff"/></pattern>';
+  }else{
+    b=SKB.ww;
+    for(i=0;i<6;i++)d+='<pattern id="sk'+i+'" width=".7" height=".7" patternUnits="userSpaceOnUse"><rect width=".7" height=".7" fill="'+b[i]+'"/><path d="M-.05 .2Q.2 .02 .4 .2T.8 .2M-.05 .5Q.2 .32 .4 .5T.8 .5" stroke="#000" stroke-opacity=".17" stroke-width=".02" fill="none"/>'+(i===5?'<circle cx=".2" cy=".2" r=".07" fill="#000" fill-opacity=".18"/><circle cx=".5" cy=".52" r=".05" fill="#000" fill-opacity=".18"/>':'<path d="M.1 .66l.06-.1l.06.1z" fill="#000" fill-opacity=".1"/>')+'</pattern>';
+  }
+  return d;
+}
+function tileBase(t,k){
+  if(k==='orig')return '<path d="'+hexPath(t.q,t.r,1.1)+'" fill="#EBDAA4" stroke="#EBDAA4" stroke-width=".1" stroke-linejoin="round" pointer-events="none"/>';
+  if(k==='datis')return '<path d="'+hexPath(t.q,t.r,1.07)+'" fill="#06180f" stroke="#C58A2B" stroke-width=".045" stroke-linejoin="round" pointer-events="none"/>';
+  if(k==='cosmic')return '<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r="1.08" fill="'+ACC+'" fill-opacity=".05" pointer-events="none"/>';
+  return '<path d="'+hexPath(t.q,t.r,1.08)+'" fill="#2b2d18" stroke="#12130a" stroke-width=".05" stroke-linejoin="round" pointer-events="none"/>';
+}
+function tileArt(t,res,k){
+  var col=res<0?TH.des:RH[res],idx=res<0?5:res,pts=hexPts(t.q,t.r,0.95),hp=hexPath(t.q,t.r,0.95),s='',ix=t.cx-0.36,iy=t.cy-(t.num?0.66:0.36);
+  if(k==='orig'){
+    s+='<polygon points="'+pts+'" fill="url(#sk'+idx+')" stroke="#F8EDC8" stroke-linejoin="round"/>';
+    s+='<path d="'+hp+'" fill="url(#shade)" pointer-events="none"/><path d="'+hexPath(t.q,t.r,0.84)+'" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width=".016" pointer-events="none"/>';
+  }else if(k==='datis'){
+    s+='<polygon points="'+pts+'" fill="url(#sk'+idx+')" stroke="'+col+'" stroke-linejoin="miter"/>';
+    s+='<path d="'+hexPath(t.q,t.r,0.74)+'" fill="#000" fill-opacity=".38" stroke="'+col+'" stroke-opacity=".55" stroke-width=".02" pointer-events="none"/>';
+    s+='<circle cx="'+f3(t.cx-0.52)+'" cy="'+f3(t.cy-0.3)+'" r=".035" fill="'+col+'" pointer-events="none"/>';
+  }else if(k==='cosmic'){
+    s+='<polygon points="'+pts+'" fill="#070924" fill-opacity=".55" stroke="'+col+'" stroke-opacity=".55"/>';
+    s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r=".82" fill="url(#sk'+idx+')" pointer-events="none"/>';
+    s+='<path d="'+hp+'" fill="url(#spk)" pointer-events="none"/>';
+    s+='<ellipse cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" rx=".9" ry=".28" fill="none" stroke="'+col+'" stroke-opacity=".4" stroke-width=".02" transform="rotate(-24 '+f3(t.cx)+' '+f3(t.cy)+')" pointer-events="none"/>';
+  }else{
+    s+='<polygon points="'+pts+'" fill="url(#sk'+idx+')" stroke="#E4DBA8" stroke-dasharray=".1 .06"/>';
+    s+='<path d="'+hexPath(t.q,t.r,0.82)+'" fill="none" stroke="#000" stroke-opacity=".28" stroke-width=".02" pointer-events="none"/>';
+    s+='<path d="'+hp+'" fill="url(#shade)" pointer-events="none"/>';
+  }
+  var icol=k==='orig'?'#FFF6DC':(k==='ww'?'#F1EBC6':col);
+  s+='<use href="'+icn(idx)+'" x="'+f3(ix+0.02)+'" y="'+f3(iy+0.03)+'" width="0.72" height="0.72" style="color:#000" opacity=".4" pointer-events="none"/>';
+  s+='<use href="'+icn(idx)+'" x="'+f3(ix)+'" y="'+f3(iy)+'" width="0.72" height="0.72" style="color:'+icol+'" pointer-events="none"/>';
+  if(t.num)s+=tileToken(t,k,col);
+  return s;
+}
+function tileToken(t,k,col){
+  var hot=t.num===6||t.num===8,x=f3(t.cx),y=f3(t.cy+0.4),s='',n=fa(t.num),i,dots;
+  if(k==='orig'){
+    s+='<circle cx="'+x+'" cy="'+y+'" r=".29" fill="#F5E9C2" stroke="#8a6532" stroke-width=".035"/><circle cx="'+x+'" cy="'+y+'" r=".235" fill="none" stroke="#8a6532" stroke-opacity=".35" stroke-width=".012"/>';
+    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.46)+'" text-anchor="middle" font-size=".29" fill="'+(hot?'#C0281C':'#3a2512')+'">'+n+'</text>';
+    dots=6-Math.abs(7-t.num);
+    for(i=0;i<dots;i++)s+='<circle cx="'+f3(t.cx+(i-(dots-1)/2)*0.056)+'" cy="'+f3(t.cy+0.555)+'" r=".017" fill="'+(hot?'#C0281C':'#5a3d1c')+'"/>';
+  }else if(k==='datis'){
+    s+='<rect x="'+f3(t.cx-0.28)+'" y="'+f3(t.cy+0.22)+'" width=".56" height=".36" rx=".05" fill="#03100b" stroke="'+col+'" stroke-width=".03"/>';
+    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".28" fill="'+(hot?ACC:'#7CF2B5')+'" style="font-family:ui-monospace,Menlo,Consolas,monospace">'+n+'</text>';
+  }else if(k==='cosmic'){
+    s+='<circle cx="'+x+'" cy="'+y+'" r=".37" fill="'+ACC+'" fill-opacity="'+(hot?'.3':'.14')+'"/><circle cx="'+x+'" cy="'+y+'" r=".27" fill="#0a0a26" stroke="'+(hot?'#fff':ACC)+'" stroke-width=".03"/>';
+    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".29" fill="'+(hot?'#FFE9A8':'#fff')+'">'+n+'</text>';
+  }else{
+    s+='<path d="M'+f3(t.cx-0.27)+' '+f3(t.cy+0.24)+'H'+f3(t.cx+0.27)+'V'+f3(t.cy+0.52)+'L'+x+' '+f3(t.cy+0.62)+'L'+f3(t.cx-0.27)+' '+f3(t.cy+0.52)+'Z" fill="#262a16" stroke="#D5CC96" stroke-width=".028" stroke-dasharray=".07 .04"/>';
+    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.48)+'" text-anchor="middle" font-size=".28" fill="'+(hot?'#FF8A2A':'#EDE5B8')+'">'+n+'</text>';
+  }
+  return s;
+}
+function cableSvg(a,b,o,k){
+  var A='x1="'+a.x.toFixed(3)+'" y1="'+a.y.toFixed(3)+'" x2="'+b.x.toFixed(3)+'" y2="'+b.y.toFixed(3)+'"',c=PH[o];
+  if(k==='orig')return '<line '+A+' stroke="#3b2412" stroke-width=".22" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".13" stroke-linecap="butt"/><line '+A+' stroke="#fff" stroke-opacity=".35" stroke-width=".03" stroke-linecap="butt" transform="translate(0 -.025)"/>';
+  if(k==='datis')return '<line '+A+' stroke="#021208" stroke-width=".21" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".09" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-opacity=".65" stroke-width=".02" stroke-linecap="round"/><circle cx="'+a.x.toFixed(3)+'" cy="'+a.y.toFixed(3)+'" r=".06" fill="'+c+'"/><circle cx="'+b.x.toFixed(3)+'" cy="'+b.y.toFixed(3)+'" r=".06" fill="'+c+'"/>';
+  if(k==='cosmic')return '<line '+A+' stroke="'+c+'" stroke-opacity=".18" stroke-width=".34" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-opacity=".4" stroke-width=".18" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".07" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-width=".022" stroke-linecap="round"/>';
+  return '<line '+A+' stroke="#12130a" stroke-width=".22" stroke-linecap="butt"/><line '+A+' stroke="'+c+'" stroke-width=".11" stroke-dasharray=".2 .08" stroke-linecap="butt"/>';
+}
+function portArt(pt,k,bx,by,col,va,vb){
+  var s='',f=function(n){return n.toFixed(3);};
+  var ln='M'+f(va.x)+' '+f(va.y)+'L'+f(bx)+' '+f(by)+'L'+f(vb.x)+' '+f(vb.y);
+  if(k==='orig'){
+    s+='<path d="'+ln+'" fill="none" stroke="#7a4f27" stroke-width=".07" stroke-linecap="round" stroke-linejoin="round"/><path d="'+ln+'" fill="none" stroke="#c9975a" stroke-width=".03" stroke-linecap="round" stroke-linejoin="round"/>';
+    s+='<circle cx="'+f(bx)+'" cy="'+f(by)+'" r=".38" fill="#4a2f17" stroke="#E9C77B" stroke-width=".05"/><circle cx="'+f(bx)+'" cy="'+f(by)+'" r=".31" fill="none" stroke="'+col+'" stroke-opacity=".7" stroke-width=".02"/>';
+  }else if(k==='datis'){
+    s+='<path d="'+ln+'" fill="none" stroke="'+col+'" stroke-opacity=".8" stroke-width=".04" stroke-linejoin="miter"/>';
+    s+='<rect x="'+f(bx-.34)+'" y="'+f(by-.34)+'" width=".68" height=".68" rx=".06" fill="#03100b" stroke="'+col+'" stroke-width=".05"/>';
+    for(var i=-1;i<=1;i++)s+='<rect x="'+f(bx+i*.17-.025)+'" y="'+f(by-.41)+'" width=".05" height=".07" fill="'+col+'"/><rect x="'+f(bx+i*.17-.025)+'" y="'+f(by+.34)+'" width=".05" height=".07" fill="'+col+'"/>';
+  }else if(k==='cosmic'){
+    s+='<path d="'+ln+'" fill="none" stroke="'+col+'" stroke-opacity=".6" stroke-width=".03" stroke-dasharray=".02 .09" stroke-linecap="round"/>';
+    s+='<circle cx="'+f(bx)+'" cy="'+f(by)+'" r=".46" fill="'+col+'" fill-opacity=".1"/><circle cx="'+f(bx)+'" cy="'+f(by)+'" r=".36" fill="#0a0a26" stroke="'+col+'" stroke-width=".04"/><ellipse cx="'+f(bx)+'" cy="'+f(by)+'" rx=".5" ry=".14" fill="none" stroke="'+col+'" stroke-opacity=".6" stroke-width=".025" transform="rotate(-22 '+f(bx)+' '+f(by)+')"/>';
+  }else{
+    s+='<path d="'+ln+'" fill="none" stroke="'+col+'" stroke-opacity=".85" stroke-width=".045" stroke-dasharray=".16 .07"/>';
+    s+='<rect x="'+f(bx-.36)+'" y="'+f(by-.3)+'" width=".72" height=".6" fill="#2a2d17" stroke="'+col+'" stroke-width=".045" stroke-dasharray=".1 .05"/><path d="M'+f(bx-.36)+' '+f(by-.3)+'L'+f(bx+.36)+' '+f(by+.3)+'M'+f(bx+.36)+' '+f(by-.3)+'L'+f(bx-.36)+' '+f(by+.3)+'" stroke="'+col+'" stroke-opacity=".18" stroke-width=".02"/>';
+  }
+  return s;
+}
 function renderBoard(){
   $('#board').classList.toggle('big',S.R>2);
+  var sk=TH.key;
   var s='<svg viewBox="'+S.vb.map(function(n){return n.toFixed(2);}).join(' ')+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="نقشهٔ بازی">';
-  s+='<defs><radialGradient id="glow"><stop offset="0" stop-color="'+ACC+'" stop-opacity=".32"/><stop offset="1" stop-color="'+ACC+'" stop-opacity="0"/></radialGradient></defs>';
+  s+='<defs><radialGradient id="glow"><stop offset="0" stop-color="'+ACC+'" stop-opacity="'+(sk==='orig'?'.12':'.3')+'"/><stop offset="1" stop-color="'+ACC+'" stop-opacity="0"/></radialGradient>'+skinDefs(sk)+'</defs>';
   s+='<circle cx="'+S.cen[0].toFixed(2)+'" cy="'+S.cen[1].toFixed(2)+'" r="'+(S.R*1.9)+'" fill="url(#glow)"/>';
+  S.tiles.forEach(function(t){s+=tileBase(t,sk);});
   S.tiles.forEach(function(t){
-    var res=tileRes(t),col=res<0?TH.des:RH[res];
+    var res=tileRes(t);
     var cls='tile'+(S.hotNum&&t.num===S.hotNum?' hot':'')+(S.newTile===t.key?' grow':'')+(S.flip&&res>=0?' flip':'')+(S.sel&&S.sel.kind==='tile'&&S.sel.keys.has(t.key)?' sel':'');
-    s+='<g class="'+cls+'" data-kind="tile" data-k="'+t.key+'">';
-    s+='<polygon points="'+hexPts(t.q,t.r,0.95)+'" style="fill:'+col+';fill-opacity:'+(res<0?0.1:0.2)+';stroke:'+col+'"/>';
-    var ic=res<0?5:res;
-    s+='<use href="'+icn(ic)+'" x="'+(t.cx-0.36).toFixed(3)+'" y="'+(t.cy-(t.num?0.66:0.36)).toFixed(3)+'" width="0.72" height="0.72" style="color:'+col+'"/>';
-    if(t.num){
-      var hot=t.num===6||t.num===8;
-      s+='<circle cx="'+t.cx.toFixed(3)+'" cy="'+(t.cy+0.4).toFixed(3)+'" r="0.27" fill="#0b1219" stroke="'+col+'" stroke-opacity=".75" stroke-width=".03"/>';
-      s+='<text class="ntext" x="'+t.cx.toFixed(3)+'" y="'+(t.cy+0.5).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="'+(hot?ACC:'#E8EEF4')+'">'+fa(t.num)+'</text>';
-    }
-    s+='</g>';
+    s+='<g class="'+cls+'" data-kind="tile" data-k="'+t.key+'">'+tileArt(t,res,sk)+'</g>';
   });
   S.ports.forEach(function(pt){
     var col=pt.type<0?ACC:RH[pt.type],bx=pt.mx+pt.ox*0.72,by=pt.my+pt.oy*0.72,va=S.verts.get(pt.a),vb=S.verts.get(pt.b);
-    s+='<g pointer-events="none"><path d="M'+va.x.toFixed(3)+' '+va.y.toFixed(3)+'L'+bx.toFixed(3)+' '+by.toFixed(3)+'L'+vb.x.toFixed(3)+' '+vb.y.toFixed(3)+'" fill="none" stroke="'+col+'" stroke-opacity=".75" stroke-width=".05" stroke-dasharray=".12 .08"/>';
-    s+='<circle cx="'+bx.toFixed(3)+'" cy="'+by.toFixed(3)+'" r=".37" fill="#0b1219" stroke="'+col+'" stroke-width=".05"/>';
+    s+='<g pointer-events="none">'+portArt(pt,sk,bx,by,col,va,vb);
     if(pt.type<0)s+='<text class="ntext" x="'+bx.toFixed(3)+'" y="'+(by+0.1).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="'+ACC+'">'+fa(3)+':'+fa(1)+'</text>';
     else{
       s+='<use href="'+icn(pt.type)+'" x="'+(bx-0.15).toFixed(3)+'" y="'+(by-0.3).toFixed(3)+'" width=".3" height=".3" style="color:'+col+'"/>';
@@ -1010,9 +1165,8 @@ function renderBoard(){
     s+='</g>';
   });
   S.fil.forEach(function(o,ek){
-    var e=S.edges.get(ek),a=S.verts.get(e.a),b=S.verts.get(e.b);
-    s+='<line x1="'+a.x.toFixed(3)+'" y1="'+a.y.toFixed(3)+'" x2="'+b.x.toFixed(3)+'" y2="'+b.y.toFixed(3)+'" stroke="#04051a" stroke-width=".21" stroke-linecap="round"/>';
-    s+='<line x1="'+a.x.toFixed(3)+'" y1="'+a.y.toFixed(3)+'" x2="'+b.x.toFixed(3)+'" y2="'+b.y.toFixed(3)+'" stroke="'+PH[o]+'" stroke-width=".11" stroke-linecap="round"/>';
+    var e=S.edges.get(ek);
+    s+=cableSvg(S.verts.get(e.a),S.verts.get(e.b),o,sk);
   });
   S.bld.forEach(function(b,vk){
     var v=S.verts.get(vk),col=PH[b.o];
@@ -1970,6 +2124,7 @@ function applyTheme(key,noSave){
   st.setProperty('--ember',TH.acc);st.setProperty('--ember-ink',TH.ink);st.setProperty('--void',TH.void);
   CARD.fine.n=TH.t.c4;
   buildTx();
+  document.body.dataset.skin=TH.key;document.documentElement.dataset.skin=TH.key;
   document.title=TH.brand;
   var br=document.querySelector('.brand');if(br)br.innerHTML=TH.brand+'<small>'+TH.tag+'</small>';
   $('#hero').innerHTML=TH.hero.join('<br>');
