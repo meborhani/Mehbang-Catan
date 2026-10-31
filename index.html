@@ -446,6 +446,53 @@ body[data-skin=ww] .btn.primary{background:#6b7a2e;border-color:#aab35a;color:#f
 body[data-skin=ww] .hero{background:linear-gradient(180deg,#f4f0cf 8%,#c9d26a 60%,#8a9440 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 3px 0 #2a2d12)}
 body[data-skin=ww] .die{background:#e9e2b8;color:#1b1e12;border-radius:4px;box-shadow:0 2px 0 #00000088}
 body[data-skin=ww] #intro{background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px),conic-gradient(from 200deg at 50% 110%,transparent 0 20deg,#cfd36a18 24deg,transparent 30deg 40deg,#cfd36a12 44deg,transparent 50deg),radial-gradient(90% 50% at 50% 0%,#3a3f22 0%,transparent 70%);background-size:48px 48px,48px 48px,auto,auto}
+
+/* ===== alive: ambient motion that belongs to each theme ===== */
+.orb{transform-box:fill-box;transform-origin:center;animation:orbit 46s linear infinite}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.led{animation:led 1.6s ease-in-out infinite}
+@keyframes led{0%,100%{opacity:1}50%{opacity:.35}}
+.halo{animation:halo 2.4s ease-in-out infinite}
+@keyframes halo{0%,100%{fill-opacity:.18}50%{fill-opacity:.5}}
+.march{animation:march 1.2s linear infinite}
+@keyframes march{to{stroke-dashoffset:-.28}}
+.pulse{animation:pulse2 1.6s linear infinite}
+@keyframes pulse2{to{stroke-dashoffset:-.4}}
+.board::before,.board::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1}
+/* orig: sea drifts, a ship sails past, sun glints */
+body[data-skin=orig] .board{animation:seaw 22s linear infinite}
+@keyframes seaw{to{background-position:44px 0,0 0}}
+body[data-skin=orig] .board::before{background:radial-gradient(40% 30% at 20% 15%,#ffffff30 0%,transparent 70%),radial-gradient(35% 25% at 80% 85%,#ffffff1c 0%,transparent 70%);animation:glint 9s ease-in-out infinite alternate}
+@keyframes glint{from{opacity:.4;transform:translateX(-4%)}to{opacity:1;transform:translateX(4%)}}
+body[data-skin=orig] .board::after{inset:auto 0 3% 0;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='44' viewBox='0 0 64 44'%3E%3Cpath d='M6 30h52l-8 10H14z' fill='%238a5a2b' stroke='%233a2411' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M32 4v26' stroke='%233a2411' stroke-width='2'/%3E%3Cpath d='M34 6l18 20H34z' fill='%23fff3d0' stroke='%233a2411' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M30 10L16 26h14z' fill='%23f1c46a' stroke='%233a2411' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat -70px 0/auto 44px;animation:sail 46s linear infinite;opacity:.9}
+@keyframes sail{from{background-position:-70px 0}to{background-position:calc(100% + 70px) 0}}
+body[data-skin=orig] #intro::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(30% 12% at 20% 18%,#ffffff12 0%,transparent 70%),radial-gradient(34% 12% at 75% 30%,#ffffff0e 0%,transparent 70%);animation:cloud 40s linear infinite alternate}
+@keyframes cloud{from{transform:translateX(-12%)}to{transform:translateX(12%)}}
+/* datis: scanner sweep and data pulses on the board */
+body[data-skin=datis] .board::before{background:linear-gradient(180deg,transparent 0%,#3dffb01f 48%,#3dffb040 50%,#3dffb01f 52%,transparent 100%);background-size:100% 34%;background-repeat:no-repeat;animation:scan 5.5s linear infinite}
+@keyframes scan{from{background-position:0 -40%}to{background-position:0 140%}}
+body[data-skin=datis] .board::after{background:radial-gradient(circle at 10px 10px,#C58A2B 0 3px,transparent 4px),radial-gradient(circle at calc(100% - 10px) 10px,#C58A2B 0 3px,transparent 4px),radial-gradient(circle at 10px calc(100% - 10px),#C58A2B 0 3px,transparent 4px),radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),#C58A2B 0 3px,transparent 4px)}
+body[data-skin=datis] #intro::before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,#3dffb040 0 8px,transparent 8px 40px);-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 2px,transparent 2px 26px);mask-image:repeating-linear-gradient(90deg,#000 0 2px,transparent 2px 26px);opacity:.35;animation:rain 6s linear infinite}
+@keyframes rain{from{background-position:0 0}to{background-position:0 160px}}
+/* cosmic: nebula turns, shooting stars cross the sky */
+body[data-skin=cosmic] .board::before{background:conic-gradient(from 0deg at 50% 50%,#7a4cff22,transparent 25%,#2fb8ff1c 50%,transparent 75%,#ff5fa21c);animation:spinN 90s linear infinite;inset:-30%}
+@keyframes spinN{to{transform:rotate(360deg)}}
+body[data-skin=cosmic]::after{content:"";position:fixed;left:-20%;top:12%;width:120px;height:2px;pointer-events:none;z-index:-1;background:linear-gradient(90deg,transparent,#fff);transform:rotate(24deg);opacity:0;animation:shoot 9s linear infinite}
+@keyframes shoot{0%{transform:translate(0,0) rotate(24deg);opacity:0}4%{opacity:1}14%{transform:translate(160vw,70vw) rotate(24deg);opacity:0}100%{opacity:0}}
+body[data-skin=cosmic] #intro::before{content:"";position:fixed;inset:-20%;pointer-events:none;background:conic-gradient(from 0deg at 50% 40%,#7a4cff26,transparent 25%,#2fb8ff22 50%,transparent 75%,#ff5fa222);animation:spinN 120s linear infinite}
+body[data-skin=cosmic] .sheet h3{text-shadow:0 0 16px #a99bffaa}
+/* ww: radar sweep, drifting smoke, searchlights */
+body[data-skin=ww] .board::before{inset:-40%;background:conic-gradient(from 0deg at 50% 50%,#cfd36a00 0deg,#cfd36a00 300deg,#cfd36a33 355deg,#cfd36a00 360deg);animation:spinN 8s linear infinite}
+body[data-skin=ww] .board::after{background:radial-gradient(30% 20% at 25% 30%,#00000030 0%,transparent 70%),radial-gradient(34% 22% at 75% 70%,#00000030 0%,transparent 70%);animation:smoke 26s ease-in-out infinite alternate}
+@keyframes smoke{from{transform:translate(-6%,-3%)}to{transform:translate(6%,3%)}}
+body[data-skin=ww] #intro::before{content:"";position:fixed;left:50%;bottom:-10%;width:160%;height:120%;pointer-events:none;transform-origin:50% 100%;background:conic-gradient(from 330deg at 50% 100%,transparent 0deg,#f4f0cf22 8deg,transparent 16deg 40deg,#f4f0cf1a 48deg,transparent 56deg);margin-left:-80%;animation:beam 14s ease-in-out infinite alternate}
+@keyframes beam{from{transform:rotate(-18deg)}to{transform:rotate(18deg)}}
+body[data-skin=ww] .sheet h3::before{content:"★ ";color:#cfd36a}
+body[data-skin=datis] .sheet h3::before{content:"▍";color:var(--ember);margin-inline-end:6px}
+body[data-skin=orig] .sheet h3{border-bottom:2px double #7d5a31;padding-bottom:3px}
+body[data-skin=orig] .btn:active,body[data-skin=ww] .btn:active{transform:translateY(2px)}
+body[data-skin=cosmic] .btn:active{filter:brightness(1.3)}
+@media (prefers-reduced-motion:reduce){.orb,.led,.halo,.march,.pulse,.board,.board::before,.board::after,#intro::before,body::before,body::after{animation:none !important}}
 </style>
 </head>
 <body>
@@ -1036,6 +1083,7 @@ function playFx(k){
 }
 
 /* ---------- theme skins: every theme has its own board art ---------- */
+function ph(p){return 'animation-delay:-'+((Date.now()/1000)%p).toFixed(2)+'s';}
 function hexPath(q,r,k){return 'M'+hexPts(q,r,k).split(' ').join('L')+'Z';}
 var SKB={
  orig:['#2E6B3A','#C25B3A','#8CCB68','#E6BF45','#8791A3','#E2CE98'],
@@ -1085,7 +1133,7 @@ function tileArt(t,res,k){
     s+='<polygon points="'+pts+'" fill="#070924" fill-opacity=".55" stroke="'+col+'" stroke-opacity=".55"/>';
     s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r=".82" fill="url(#sk'+idx+')" pointer-events="none"/>';
     s+='<path d="'+hp+'" fill="url(#spk)" pointer-events="none"/>';
-    s+='<ellipse cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" rx=".9" ry=".28" fill="none" stroke="'+col+'" stroke-opacity=".4" stroke-width=".02" transform="rotate(-24 '+f3(t.cx)+' '+f3(t.cy)+')" pointer-events="none"/>';
+    s+='<g class="orb" style="'+ph(46+idx*7)+'" pointer-events="none"><ellipse cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" rx=".9" ry=".28" fill="none" stroke="'+col+'" stroke-opacity=".4" stroke-width=".02" transform="rotate(-24 '+f3(t.cx)+' '+f3(t.cy)+')"/><circle cx="'+f3(t.cx+0.9*Math.cos(0.419))+'" cy="'+f3(t.cy-0.9*Math.sin(0.419)*0.9)+'" r=".045" fill="#fff"/></g>';
   }else{
     s+='<polygon points="'+pts+'" fill="url(#sk'+idx+')" stroke="#E4DBA8" stroke-dasharray=".1 .06"/>';
     s+='<path d="'+hexPath(t.q,t.r,0.82)+'" fill="none" stroke="#000" stroke-opacity=".28" stroke-width=".02" pointer-events="none"/>';
@@ -1106,22 +1154,22 @@ function tileToken(t,k,col){
     for(i=0;i<dots;i++)s+='<circle cx="'+f3(t.cx+(i-(dots-1)/2)*0.056)+'" cy="'+f3(t.cy+0.555)+'" r=".017" fill="'+(hot?'#C0281C':'#5a3d1c')+'"/>';
   }else if(k==='datis'){
     s+='<rect x="'+f3(t.cx-0.28)+'" y="'+f3(t.cy+0.22)+'" width=".56" height=".36" rx=".05" fill="#03100b" stroke="'+col+'" stroke-width=".03"/>';
-    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".28" fill="'+(hot?ACC:'#7CF2B5')+'" style="font-family:ui-monospace,Menlo,Consolas,monospace">'+n+'</text>';
+    s+='<text class="ntext'+(hot?' led':'')+'" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".28" fill="'+(hot?ACC:'#7CF2B5')+'" style="font-family:ui-monospace,Menlo,Consolas,monospace;'+(hot?ph(1.6):'')+'">'+n+'</text>';
   }else if(k==='cosmic'){
-    s+='<circle cx="'+x+'" cy="'+y+'" r=".37" fill="'+ACC+'" fill-opacity="'+(hot?'.3':'.14')+'"/><circle cx="'+x+'" cy="'+y+'" r=".27" fill="#0a0a26" stroke="'+(hot?'#fff':ACC)+'" stroke-width=".03"/>';
+    s+='<circle class="'+(hot?'halo':'')+'" style="'+(hot?ph(2.4):'')+'" cx="'+x+'" cy="'+y+'" r=".37" fill="'+ACC+'" fill-opacity="'+(hot?'.3':'.14')+'"/><circle cx="'+x+'" cy="'+y+'" r=".27" fill="#0a0a26" stroke="'+(hot?'#fff':ACC)+'" stroke-width=".03"/>';
     s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".29" fill="'+(hot?'#FFE9A8':'#fff')+'">'+n+'</text>';
   }else{
     s+='<path d="M'+f3(t.cx-0.27)+' '+f3(t.cy+0.24)+'H'+f3(t.cx+0.27)+'V'+f3(t.cy+0.52)+'L'+x+' '+f3(t.cy+0.62)+'L'+f3(t.cx-0.27)+' '+f3(t.cy+0.52)+'Z" fill="#262a16" stroke="#D5CC96" stroke-width=".028" stroke-dasharray=".07 .04"/>';
-    s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.48)+'" text-anchor="middle" font-size=".28" fill="'+(hot?'#FF8A2A':'#EDE5B8')+'">'+n+'</text>';
+    s+='<text class="ntext'+(hot?' led':'')+'" style="'+(hot?ph(1.4):'')+'" x="'+x+'" y="'+f3(t.cy+0.48)+'" text-anchor="middle" font-size=".28" fill="'+(hot?'#FF8A2A':'#EDE5B8')+'">'+n+'</text>';
   }
   return s;
 }
 function cableSvg(a,b,o,k){
   var A='x1="'+a.x.toFixed(3)+'" y1="'+a.y.toFixed(3)+'" x2="'+b.x.toFixed(3)+'" y2="'+b.y.toFixed(3)+'"',c=PH[o];
   if(k==='orig')return '<line '+A+' stroke="#3b2412" stroke-width=".22" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".13" stroke-linecap="butt"/><line '+A+' stroke="#fff" stroke-opacity=".35" stroke-width=".03" stroke-linecap="butt" transform="translate(0 -.025)"/>';
-  if(k==='datis')return '<line '+A+' stroke="#021208" stroke-width=".21" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".09" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-opacity=".65" stroke-width=".02" stroke-linecap="round"/><circle cx="'+a.x.toFixed(3)+'" cy="'+a.y.toFixed(3)+'" r=".06" fill="'+c+'"/><circle cx="'+b.x.toFixed(3)+'" cy="'+b.y.toFixed(3)+'" r=".06" fill="'+c+'"/>';
-  if(k==='cosmic')return '<line '+A+' stroke="'+c+'" stroke-opacity=".18" stroke-width=".34" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-opacity=".4" stroke-width=".18" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".07" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-width=".022" stroke-linecap="round"/>';
-  return '<line '+A+' stroke="#12130a" stroke-width=".22" stroke-linecap="butt"/><line '+A+' stroke="'+c+'" stroke-width=".11" stroke-dasharray=".2 .08" stroke-linecap="butt"/>';
+  if(k==='datis')return '<line '+A+' stroke="#021208" stroke-width=".21" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".09" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-opacity=".85" stroke-width=".03" stroke-linecap="round" stroke-dasharray=".05 .35" class="pulse" style="'+ph(1.6)+'"/><circle cx="'+a.x.toFixed(3)+'" cy="'+a.y.toFixed(3)+'" r=".06" fill="'+c+'"/><circle cx="'+b.x.toFixed(3)+'" cy="'+b.y.toFixed(3)+'" r=".06" fill="'+c+'"/>';
+  if(k==='cosmic')return '<line '+A+' stroke="'+c+'" stroke-opacity=".18" stroke-width=".34" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-opacity=".4" stroke-width=".18" stroke-linecap="round"/><line '+A+' stroke="'+c+'" stroke-width=".07" stroke-linecap="round"/><line '+A+' stroke="#fff" stroke-width=".026" stroke-linecap="round" stroke-dasharray=".08 .3" class="pulse" style="'+ph(2.2)+'"/>';
+  return '<line '+A+' stroke="#12130a" stroke-width=".22" stroke-linecap="butt"/><line '+A+' stroke="'+c+'" stroke-width=".11" stroke-dasharray=".2 .08" stroke-linecap="butt" class="march" style="'+ph(1.2)+'"/>';
 }
 function portArt(pt,k,bx,by,col,va,vb){
   var s='',f=function(n){return n.toFixed(3);};
