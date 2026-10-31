@@ -51,12 +51,12 @@ button:disabled{cursor:default}
 .seg{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--ink-dim)}
 .seg i{display:block;height:4px;border-radius:2px;background:var(--panel-2)}
 .seg.done i{background:#6b8299}
-.seg.now i{background:var(--ember);box-shadow:0 0 10px #ffb00088}
+.seg.now i{background:var(--ember);box-shadow:0 0 10px color-mix(in srgb,var(--ember) 53%,transparent)}
 .seg.now{color:var(--ink);font-weight:700}
 
 .pls{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:6px}
 .pl{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 8px;min-width:0;position:relative}
-.pl.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember),0 0 16px #ffb00044}
+.pl.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember),0 0 16px color-mix(in srgb,var(--ember) 27%,transparent)}
 .pl-top{display:flex;align-items:center;gap:6px;min-width:0}
 .dot{width:10px;height:10px;border-radius:50%;background:var(--pc);flex:none;box-shadow:0 0 0 2px #0006}
 .nm{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -64,7 +64,7 @@ button:disabled{cursor:default}
 .pl-pt small{font-family:var(--font-body);font-size:10px;color:var(--ink-dim);margin-inline-start:3px}
 .pl-sub{font-size:10.5px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;min-height:16px}
-.tags span{font-size:9.5px;padding:0 5px;border-radius:8px;background:#ffb00026;color:var(--ember);white-space:nowrap}
+.tags span{font-size:9.5px;padding:0 5px;border-radius:8px;background:color-mix(in srgb,var(--ember) 15%,transparent);color:var(--ember);white-space:nowrap}
 
 .status{display:flex;align-items:center;gap:8px;min-height:40px}
 .msg{flex:1;min-width:0;font-size:13px;color:var(--ink)}
@@ -118,10 +118,10 @@ button:disabled{cursor:default}
 .btn.small{padding:6px 12px;min-height:34px;font-size:13px}
 .btn.wide{width:100%}
 
-#layer{position:relative;z-index:50}
+#layer{position:relative;z-index:80}
 .backdrop{position:fixed;inset:0;z-index:50;background:rgba(4,7,10,.76);display:flex;align-items:flex-end;justify-content:center;
   padding-top:env(safe-area-inset-top,0px)}
-.sheet{width:min(560px,100%);max-height:88dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
+.sheet{width:min(560px,100%);max-height:none;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;
   padding-top:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));
   padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));
   display:flex;flex-direction:column;gap:12px;animation:rise .25s ease-out}
@@ -154,9 +154,9 @@ button:disabled{cursor:default}
 .score{display:flex;flex-direction:column;gap:6px}
 .score div{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--panel-2);border-radius:12px}
 .score b{margin-inline-start:auto;font-family:var(--font-display);font-size:24px;font-weight:400}
-.score .win{box-shadow:0 0 0 1px var(--ember);background:#3a2a08}
+.score .win{box-shadow:0 0 0 1px var(--ember);background:color-mix(in srgb,var(--ember) 22%,#0b1219)}
 
-.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(14px + env(safe-area-inset-top,0px));z-index:70;
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(14px + env(safe-area-inset-top,0px));z-index:90;
   background:#fff;color:#0b1219;padding:8px 16px;border-radius:20px;font-weight:700;font-size:13px;max-width:88vw;text-align:center;animation:rise .2s ease-out}
 
 .era-card{align-items:center;text-align:center}
@@ -164,7 +164,7 @@ button:disabled{cursor:default}
 .chain{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;color:var(--ink-dim)}
 
 #intro{position:fixed;inset:0;z-index:60;overflow:auto;background-color:var(--void);
-  background-image:radial-gradient(90% 50% at 50% 0%,#1f2d3a 0%,transparent 70%),radial-gradient(50% 30% at 50% 22%,#ffb00033 0%,transparent 100%)}
+  background-image:radial-gradient(90% 50% at 50% 0%,#1f2d3a 0%,transparent 70%),radial-gradient(50% 30% at 50% 22%,color-mix(in srgb,var(--ember) 20%,transparent) 0%,transparent 100%)}
 .intro-in{position:relative;max-width:520px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:16px;
   padding-top:calc(28px + env(safe-area-inset-top,0px));padding-bottom:calc(28px + env(safe-area-inset-bottom,0px));
   padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
@@ -174,11 +174,11 @@ button:disabled{cursor:default}
 .intro-in>*{position:relative;z-index:1}
 .over{font-size:12px;color:var(--ember);letter-spacing:.06em;font-weight:700}
 .hero{font-family:var(--font-display);font-weight:400;font-size:clamp(56px,18vw,88px);line-height:.95;margin:0;
-  background:linear-gradient(180deg,#fff 5%,#ffc08a 55%,var(--ember) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px #ffb00055)}
+  background:linear-gradient(180deg,#fff 5%,#ffc08a 55%,var(--ember) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px color-mix(in srgb,var(--ember) 33%,transparent))}
 .lead{margin:0;color:#d3dde8;font-size:15px}
 .seg-n{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .seg-n button{padding:11px 4px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-weight:500}
-.seg-n button.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember);background:#33260a;font-weight:700}
+.seg-n button.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember);background:color-mix(in srgb,var(--ember) 20%,#0b1219);font-weight:700}
 .intro-in details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
 .intro-in summary{cursor:pointer;font-weight:700}
 .intro-in details .rules{margin-top:10px}
@@ -217,7 +217,7 @@ body{overflow:hidden}
 .hc{display:flex;align-items:center;gap:2px;font-size:10px;color:var(--ink-dim);flex:none;margin-inline-start:auto;font-family:var(--font-body)}
 .pl-pt{display:flex;align-items:baseline;gap:3px;font-size:21px;line-height:1.05;white-space:nowrap;overflow:hidden}
 .pl-pt small{margin:0}
-.pl-pt em{font-style:normal;font-family:var(--font-body);font-size:8.5px;color:var(--ember);background:#ffb00022;border-radius:6px;padding:0 4px}
+.pl-pt em{font-style:normal;font-family:var(--font-body);font-size:8.5px;color:var(--ember);background:color-mix(in srgb,var(--ember) 13%,transparent);border-radius:6px;padding:0 4px}
 .dense .pl-pt small{display:none}.dense .nm{font-size:11px}
 .status{min-height:30px;gap:6px}
 .msg{font-size:12.5px;line-height:1.35}
@@ -246,32 +246,89 @@ body{overflow:hidden}
 .lobby-code{font-family:var(--font-display);font-size:64px;line-height:1;letter-spacing:.14em;direction:ltr;text-align:center;color:var(--ember)}
 .seats{display:flex;flex-direction:column;gap:6px}
 .seat{padding:9px 12px;border-radius:12px;border:1px dashed var(--line);color:var(--ink-dim)}
-.seat.on{border-style:solid;border-color:var(--ember);color:var(--ink);background:#33260a}
+.seat.on{border-style:solid;border-color:var(--ember);color:var(--ink);background:color-mix(in srgb,var(--ember) 20%,#0b1219)}
 .warn{color:#ff8a8a;margin:0}
 .row{display:flex;justify-content:center}
+
+html{overflow:hidden;overscroll-behavior:none}
+html,body{margin:0;padding:0}
+body{position:fixed;inset:0;width:100%}
+#intro,#lobby{overflow:hidden;display:flex;align-items:center;justify-content:center}
+#intro[hidden],#lobby[hidden]{display:none}
+.intro-in{min-height:0 !important;width:min(520px,100%);gap:clamp(6px,1.5dvh,14px);justify-content:center;
+  padding-top:calc(10px + env(safe-area-inset-top,0px));padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+.hero{font-size:clamp(40px,11dvh,84px) !important;line-height:1.2 !important;padding:2px 0 6px}
+.lead{font-size:13.5px}
+.ihead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.two .btn{min-height:44px}
+.btn.big{min-height:52px;font-size:17px}
+.btn.sm{min-height:40px}
+.online{padding:10px;gap:6px}
+.join{grid-template-columns:1fr 1fr 64px}
+.inp{min-height:40px;padding:8px 10px}
+.icon-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;padding:0}
+.help svg,.icon-btn svg{display:block}
+.meta{gap:6px}
+.hv{font-size:10px;color:var(--ink-dim);font-style:normal;white-space:nowrap}
+.nn{font-size:10.5px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.tc b{font-size:17px;background:color-mix(in srgb,var(--ember) 16%,transparent);border-radius:8px;padding:0 8px;min-width:30px;text-align:center}
+.cb .hv{margin-top:1px}
+.themes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.th{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;border:1px solid var(--line);background:var(--panel-2)}
+.th.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember);background:color-mix(in srgb,var(--ember) 14%,#0b1219)}
+.thi{display:flex;gap:2px}
+.stg-lbl{display:block;margin-bottom:4px}
+.pager{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dots{display:flex;gap:5px}.dots i{width:7px;height:7px;border-radius:50%;background:var(--panel-2);border:1px solid var(--line)}
+.dots i.on{background:var(--ember);border-color:var(--ember)}
+.awards{position:absolute;top:4px;left:12px;right:12px;display:flex;justify-content:center;gap:6px;pointer-events:none;z-index:3}
+.aw{flex:1;max-width:50%;min-width:0;display:flex;align-items:center;gap:6px;padding:3px 8px;border-radius:12px;
+  background:rgba(8,12,18,.78);border:1px solid var(--line);color:var(--ink-dim);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.aw svg{width:20px;height:20px;flex:none;opacity:.5}
+.aw-t{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.aw-t small{font-size:9px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.aw-t b{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:4px}
+.aw-t .dot{width:8px;height:8px}
+.aw.held{color:#fff;border-color:#ffd24d;background:linear-gradient(135deg,rgba(255,196,60,.28),rgba(8,12,18,.85) 70%);animation:awglow 2.4s ease-in-out infinite}
+.aw.held svg{opacity:1;color:#ffd24d;filter:drop-shadow(0 0 4px #ffb300)}
+.aw.tie{border-color:#ff9d4d;color:#ffd9b0}
+@keyframes awglow{0%,100%{box-shadow:0 0 0 0 rgba(255,200,60,.0),0 0 8px rgba(255,200,60,.25)}50%{box-shadow:0 0 0 1px rgba(255,200,60,.5),0 0 16px rgba(255,200,60,.55)}}
+.bd{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:linear-gradient(135deg,#ffe27a,#ff9d1c);color:#3a2400;box-shadow:0 0 8px #ffb30088;margin-inline-start:2px}
+.bd svg{width:11px;height:11px}
+@media (max-height:640px){
+  .hero{font-size:clamp(34px,9dvh,60px) !important}
+  .lead{display:none}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,40%);grid-template-rows:auto auto auto 1fr;
+    grid-template-areas:"top top" "stage players" "stage status" "stage dock";column-gap:10px;row-gap:5px;max-width:none}
+  .wrap{grid-template-rows:auto auto auto minmax(0,1fr);gap:4px 10px}
+  .top{grid-area:top}.stage{grid-area:stage;margin:0}#players{grid-area:players;grid-template-columns:repeat(auto-fit,minmax(76px,1fr)) !important}
+  .pl{padding:2px 5px}.pl-pt{font-size:17px}.nm{font-size:11px}
+  .status{min-height:22px}.msg{font-size:11.5px;line-height:1.25}.die{width:22px;height:22px;font-size:12px}
+  .dock{min-height:0;gap:3px}.rc{padding:2px 1px}.rc b{font-size:13px}.rc span{display:none}.rc svg{width:14px;height:14px}
+  .bb{padding:3px 2px;flex-direction:row;gap:4px}.bb .cost{display:none}.bb{font-size:10.5px}
+  .rowA .btn{font-size:12px}.rowC .btn{min-height:28px;font-size:11.5px}
+  .brand{font-size:18px}.top{min-height:0}
+  #status{grid-area:status}.dock{grid-area:dock;align-self:end}
+  .hero{font-size:clamp(30px,13dvh,52px) !important}
+  .lead{display:none}
+}
 </style>
 </head>
 <body>
 
-<svg class="sprite" aria-hidden="true">
-  <defs>
-    <symbol id="ic0" viewBox="0 0 24 24"><rect x="2.5" y="9" width="19" height="11.5" rx="2.2" fill="currentColor"/><circle cx="8" cy="6" r="2.6" fill="currentColor"/><circle cx="16" cy="6" r="2.6" fill="currentColor"/><rect x="6" y="12.5" width="12" height="4" rx="1" fill="#0B1219" fill-opacity=".35"/></symbol>
-    <symbol id="ic1" viewBox="0 0 24 24"><path d="M2 8.5 12 3.5l10 5-10 5z" fill="currentColor"/><path d="M2 12.8l10 5 10-5M2 17l10 5 10-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
-    <symbol id="ic2" viewBox="0 0 24 24"><rect x="2.5" y="3" width="4" height="18" rx="1.2" fill="currentColor"/><rect x="17.5" y="3" width="4" height="18" rx="1.2" fill="currentColor"/><rect x="6.5" y="6" width="11" height="12" fill="currentColor" opacity=".8"/><path d="M6.5 9h11M6.5 12h11M6.5 15h11" stroke="#0B1219" stroke-opacity=".55" stroke-width="1.2"/></symbol>
-    <symbol id="ic3" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.8" fill="currentColor"/><rect x="9.2" y="9.2" width="5.6" height="5.6" rx=".8" fill="#0B1219" fill-opacity=".5"/><path d="M9 2v4M12 2v4M15 2v4M9 18v4M12 18v4M15 18v4M2 9h4M2 12h4M2 15h4M18 9h4M18 12h4M18 15h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
-    <symbol id="ic4" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="12" r="6.6"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(45 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(90 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(135 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(180 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(225 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(270 12 12)"/><rect x="10.2" y="1.6" width="3.6" height="4.2" rx=".8" transform="rotate(315 12 12)"/></g><circle cx="12" cy="12" r="2.6" fill="#0B1219" fill-opacity=".7"/></symbol>
-    <symbol id="ic5" viewBox="0 0 24 24"><path d="M2.5 21V10l6 4v-4l6 4V5h4v16z" fill="currentColor"/><rect x="5" y="16" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/><rect x="10" y="16" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/><rect x="15" y="12" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/></symbol>
-  </defs>
-</svg>
+<svg class="sprite" aria-hidden="true"><defs id="spriteDefs"></defs></svg>
 
 <div id="app" class="wrap" dir="rtl" lang="fa">
   <header class="top">
     <div class="brand">کارخانه داتیس<small>درایو و تابلو فرمان بساز</small></div>
-    <div class="meta"><div id="meta"></div><button class="help" id="btnHelp" aria-label="راهنمای قوانین">؟</button></div>
+    <div class="meta"><div id="meta"></div><button class="help" id="btnGear" aria-label="تنظیمات"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button><button class="help" id="btnHelp" aria-label="راهنمای قوانین">؟</button></div>
   </header>
   <div id="players" class="pls"></div>
   <div id="status" class="status"></div>
-  <div class="stage"><div id="board" class="board" dir="ltr"></div><ol id="log" class="log"></ol></div>
+  <div class="stage"><div id="awards" class="awards"></div><div id="board" class="board" dir="ltr"></div><ol id="log" class="log"></ol></div>
   <div id="dock" class="dock"></div>
 </div>
 
@@ -280,28 +337,27 @@ body{overflow:hidden}
 
 <div id="intro">
   <svg class="rings" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="98"/><circle cx="100" cy="100" r="98"/><circle cx="100" cy="100" r="98"/><circle cx="100" cy="100" r="98"/></svg>
-  <div class="intro-in">
-    <div class="over">بازی استراتژی ۲ تا ۴ نفره</div>
-    <h1 class="hero">کارخانه<br>داتیس</h1>
-    <p class="lead">ورق آهن، پلاستیک و قطعات جمع کن، درایو نصب کن، سیم برق بکش و تابلو فرمان بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.</p>
+  <div class="intro-in" id="introIn">
+    <div class="over">بازی استراتژی ۲ تا ۶ نفره</div>
+    <h1 class="hero" id="hero">کارخانه<br>داتیس</h1>
+    <p class="lead" id="lead"></p>
+    <button class="btn primary big" id="resume" hidden>ادامهٔ بازی</button>
     <div>
-      <div class="sub" style="margin-bottom:6px">تعداد بازیکنان (تو و حریف‌های کامپیوتری). ۵ و ۶ نفره نقشهٔ بزرگ‌تر ۳۰ کاشی دارد.</div>
+      <div class="sub stg-lbl">تعداد بازیکنان (با حریف‌های کامپیوتری)</div>
       <div class="seg-n" id="segN">
         <button data-n="2">۲</button><button data-n="3">۳</button><button data-n="4" class="on">۴</button><button data-n="5">۵</button><button data-n="6">۶</button>
       </div>
     </div>
-    <button class="btn primary" id="go" style="min-height:52px;font-size:17px">شروع بازی</button>
-    <button class="btn" id="watch">تماشای بازی ۴ هوش مصنوعی</button>
+    <div class="two"><button class="btn primary big" id="go">شروع بازی</button><button class="btn big" id="watch">تماشا</button></div>
     <div class="online" id="onlineBox">
       <div class="sub">بازی آنلاین با دوستان</div>
-      <input id="myName" class="inp" maxlength="12" placeholder="اسم تو" autocomplete="off">
       <div class="join">
-        <button class="btn" id="mkRoom">ساخت اتاق</button>
+        <button class="btn sm" id="mkRoom">ساخت اتاق</button>
         <input id="joinCode" class="inp code" maxlength="5" placeholder="کد اتاق" dir="ltr" autocomplete="off" autocapitalize="characters">
-        <button class="btn" id="joinRoom">ورود</button>
+        <button class="btn sm" id="joinRoom">ورود</button>
       </div>
     </div>
-    <details><summary>قوانین سریع</summary><div id="introRules"></div></details>
+    <div class="two"><button class="btn sm" id="btnSet">تنظیمات و تم</button><button class="btn sm" id="btnRules">قوانین</button></div>
   </div>
 </div>
 
@@ -331,7 +387,7 @@ var COST={fil:[1,1,0,0,0],star:[1,1,1,1,0],gal:[0,0,0,2,3],planet:[1,0,1,0,2],bu
 var LIM={star:5,gal:4,fil:15};
 var CARD={
   gravity:{n:'سرباز',d:'خرابی را به کاشی دیگری ببر و از یک همسایه یک قطعه بدزد. سرباز بازی‌شده برای بزرگ‌ترین ارتش حساب می‌شود.'},
-  strong:{n:'ساخت راه',d:'دو سیم برق رایگان بکش.'},
+  strong:{n:'ساخت راه',d:'دو کابل شبکه رایگان بکش.'},
   em:{n:'برکت',d:'هر دو قطعه‌ای را که می‌خواهی از انبار بردار.'},
   planck:{n:'انحصار',d:'یک قطعه را نام ببر. همهٔ بازیکنان همهٔ آن قطعه را به تو می‌دهند.'},
   fine:{n:'امتیاز',d:'یک امتیاز پنهان. بازی نمی‌شود و همیشه حساب است.'}
@@ -356,7 +412,8 @@ var hexDist=function(q,r){return (Math.abs(q)+Math.abs(r)+Math.abs(q+r))/2;};
 var ALLPOS=[];
 for(var qq=-2;qq<=2;qq++)for(var rr=-2;rr<=2;rr++)if(hexDist(qq,rr)<=2)ALLPOS.push([qq,rr]);
 
-function ico(i,s){return '<svg class="ico" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" style="color:'+RH[i]+'"><use href="#ic'+i+'"/></svg>';}
+function icn(i){return '#ic_'+TH.key+i;}
+function ico(i,s){return '<svg class="ico" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" style="color:'+RH[i]+'"><use href="'+icn(i)+'"/></svg>';}
 function costHTML(c,s){return c.map(function(n,i){return ico(i,s||10).repeat(n);}).join('');}
 
 /* ---------- board geometry ---------- */
@@ -557,7 +614,7 @@ function updateAwards(){
     var c=[];S.lens.forEach(function(l,i){if(l===mx)c.push(i);});
     if(c.indexOf(S.longest)<0)S.longest=c.length===1?c[0]:null;
   }else S.longest=null;
-  if(S.longest!==old&&S.longest!==null)log(S.players[S.longest].name+' بلندترین سیم‌کشی را دارد ('+fa(mx)+').');
+  if(S.longest!==old&&S.longest!==null)log(S.players[S.longest].name+' بلندترین شبکه را دارد ('+fa(mx)+').');
   var dm=Math.max.apply(null,S.players.map(function(p){return p.played;})),od=S.dark;
   if(dm>=3){
     var d=[];S.players.forEach(function(p,i){if(p.played===dm)d.push(i);});
@@ -578,7 +635,8 @@ function toast(msg){
 
 /* ---------- state ---------- */
 function newState(n,spectate,cfg){
-  var names=spectate?['رضا','مهسا','کیان','نگار']:['شما','رضا','مهسا','کیان','نگار','سینا'];
+  var names=spectate?['رضا','مهسا','کیان','نگار']:[cleanName(loadName())||'شما','رضا','مهسا','کیان','نگار','سینا'];
+  var tk=0;
   var players=[];
   for(var i=0;i<n;i++){
     var c=cfg&&cfg[i];
@@ -592,11 +650,13 @@ function newState(n,spectate,cfg){
 }
 function startGame(n,spectate){
   closeSheet();
+  if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
   ROLE='solo';MY=spectate?null:0;
   S=newState(n,spectate);
   initBoard();
-  $('#intro').hidden=true;
+  $('#intro').hidden=true;$('#lobby').hidden=true;
   $('#toasts').innerHTML='';
+  goSession();
   render();
   mainLoop(S).catch(function(e){console.error(e);});
 }
@@ -604,7 +664,7 @@ function startGame(n,spectate){
 /* ---------- rendering ---------- */
 function render(){
   if(!S)return;
-  renderTop();renderPlayers();renderStatus();renderBoard();renderLog();renderDock();
+  renderTop();renderPlayers();renderAwards();renderStatus();renderBoard();renderLog();renderDock();
   if(curDraw)curDraw();
   if(ROLE==='host')scheduleSync();
 }
@@ -619,7 +679,7 @@ function renderPlayers(){
     var pts=(m&&m.id===p.id)?totalPoints(p):publicPoints(p);
     return '<div class="pl '+(S.cur===p.id&&!S.over?'on':'')+'" style="--pc:'+PH[p.id]+'">'+
       '<div class="pl-top"><i class="dot"></i><span class="nm">'+p.name+'</span></div>'+
-      '<div class="pl-pt">'+fa(pts)+'<small>امتیاز</small>'+(S.longest===p.id?'<em>راه</em>':'')+(S.dark===p.id?'<em>ارتش</em>':'')+'<span class="hc"><svg width="8" height="10" viewBox="0 0 8 10" aria-hidden="true"><rect x=".6" y=".6" width="6.8" height="8.8" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>'+fa(sum(p.res))+'</span></div></div>';
+      '<div class="pl-pt">'+fa(pts)+'<small>امتیاز</small>'+(S.longest===p.id?'<em class="bd">'+awardIcon('road')+'</em>':'')+(S.dark===p.id?'<em class="bd">'+awardIcon('army')+'</em>':'')+'<span class="hc"><svg width="8" height="10" viewBox="0 0 8 10" aria-hidden="true"><rect x=".6" y=".6" width="6.8" height="8.8" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>'+fa(sum(p.res))+'</span></div></div>';
   }).join('');
 }
 function renderStatus(){
@@ -655,29 +715,29 @@ function pieceCab(v,col){
 function renderBoard(){
   $('#board').classList.toggle('big',S.R>2);
   var s='<svg viewBox="'+S.vb.map(function(n){return n.toFixed(2);}).join(' ')+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="نقشهٔ بازی">';
-  s+='<defs><radialGradient id="glow"><stop offset="0" stop-color="#ffb000" stop-opacity=".32"/><stop offset="1" stop-color="#ffb000" stop-opacity="0"/></radialGradient></defs>';
+  s+='<defs><radialGradient id="glow"><stop offset="0" stop-color="'+ACC+'" stop-opacity=".32"/><stop offset="1" stop-color="'+ACC+'" stop-opacity="0"/></radialGradient></defs>';
   s+='<circle cx="'+S.cen[0].toFixed(2)+'" cy="'+S.cen[1].toFixed(2)+'" r="'+(S.R*1.9)+'" fill="url(#glow)"/>';
   S.tiles.forEach(function(t){
-    var res=tileRes(t),col=res<0?'#FFB347':RH[res];
+    var res=tileRes(t),col=res<0?TH.des:RH[res];
     var cls='tile'+(S.hotNum&&t.num===S.hotNum?' hot':'')+(S.newTile===t.key?' grow':'')+(S.flip&&res>=0?' flip':'')+(S.sel&&S.sel.kind==='tile'&&S.sel.keys.has(t.key)?' sel':'');
     s+='<g class="'+cls+'" data-kind="tile" data-k="'+t.key+'">';
     s+='<polygon points="'+hexPts(t.q,t.r,0.95)+'" style="fill:'+col+';fill-opacity:'+(res<0?0.1:0.2)+';stroke:'+col+'"/>';
     var ic=res<0?5:res;
-    s+='<use href="#ic'+ic+'" x="'+(t.cx-0.36).toFixed(3)+'" y="'+(t.cy-(t.num?0.66:0.36)).toFixed(3)+'" width="0.72" height="0.72" style="color:'+col+'"/>';
+    s+='<use href="'+icn(ic)+'" x="'+(t.cx-0.36).toFixed(3)+'" y="'+(t.cy-(t.num?0.66:0.36)).toFixed(3)+'" width="0.72" height="0.72" style="color:'+col+'"/>';
     if(t.num){
       var hot=t.num===6||t.num===8;
       s+='<circle cx="'+t.cx.toFixed(3)+'" cy="'+(t.cy+0.4).toFixed(3)+'" r="0.27" fill="#0b1219" stroke="'+col+'" stroke-opacity=".75" stroke-width=".03"/>';
-      s+='<text class="ntext" x="'+t.cx.toFixed(3)+'" y="'+(t.cy+0.5).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="'+(hot?'#ffb000':'#E8EEF4')+'">'+fa(t.num)+'</text>';
+      s+='<text class="ntext" x="'+t.cx.toFixed(3)+'" y="'+(t.cy+0.5).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="'+(hot?ACC:'#E8EEF4')+'">'+fa(t.num)+'</text>';
     }
     s+='</g>';
   });
   S.ports.forEach(function(pt){
-    var col=pt.type<0?'#FFB000':RH[pt.type],bx=pt.mx+pt.ox*0.72,by=pt.my+pt.oy*0.72,va=S.verts.get(pt.a),vb=S.verts.get(pt.b);
+    var col=pt.type<0?ACC:RH[pt.type],bx=pt.mx+pt.ox*0.72,by=pt.my+pt.oy*0.72,va=S.verts.get(pt.a),vb=S.verts.get(pt.b);
     s+='<g pointer-events="none"><path d="M'+va.x.toFixed(3)+' '+va.y.toFixed(3)+'L'+bx.toFixed(3)+' '+by.toFixed(3)+'L'+vb.x.toFixed(3)+' '+vb.y.toFixed(3)+'" fill="none" stroke="'+col+'" stroke-opacity=".75" stroke-width=".05" stroke-dasharray=".12 .08"/>';
     s+='<circle cx="'+bx.toFixed(3)+'" cy="'+by.toFixed(3)+'" r=".37" fill="#0b1219" stroke="'+col+'" stroke-width=".05"/>';
-    if(pt.type<0)s+='<text class="ntext" x="'+bx.toFixed(3)+'" y="'+(by+0.1).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="#FFB000">'+fa(3)+':'+fa(1)+'</text>';
+    if(pt.type<0)s+='<text class="ntext" x="'+bx.toFixed(3)+'" y="'+(by+0.1).toFixed(3)+'" text-anchor="middle" font-size=".3" fill="'+ACC+'">'+fa(3)+':'+fa(1)+'</text>';
     else{
-      s+='<use href="#ic'+pt.type+'" x="'+(bx-0.15).toFixed(3)+'" y="'+(by-0.3).toFixed(3)+'" width=".3" height=".3" style="color:'+col+'"/>';
+      s+='<use href="'+icn(pt.type)+'" x="'+(bx-0.15).toFixed(3)+'" y="'+(by-0.3).toFixed(3)+'" width=".3" height=".3" style="color:'+col+'"/>';
       s+='<text class="ntext" x="'+bx.toFixed(3)+'" y="'+(by+0.24).toFixed(3)+'" text-anchor="middle" font-size=".21" fill="#E8EEF4">'+fa(2)+':'+fa(1)+'</text>';
     }
     s+='</g>';
@@ -697,7 +757,7 @@ function renderBoard(){
   if(bt){
     s+='<g pointer-events="none"><circle class="spin" cx="'+bt.cx.toFixed(3)+'" cy="'+bt.cy.toFixed(3)+'" r=".6" fill="none" stroke="#FF4D4D" stroke-opacity=".7" stroke-width=".05" stroke-dasharray=".22 .14"/>';
     s+='<circle cx="'+bt.cx.toFixed(3)+'" cy="'+bt.cy.toFixed(3)+'" r=".42" fill="#05080c" stroke="#FF4D4D" stroke-width=".05"/>';
-    s+='<use href="#ic0" x="'+(bt.cx-0.2).toFixed(3)+'" y="'+(bt.cy-0.22).toFixed(3)+'" width=".4" height=".4" style="color:#FF4D4D" display="none"/>';
+    s+='<use href="'+icn(0)+'" x="'+(bt.cx-0.2).toFixed(3)+'" y="'+(bt.cy-0.22).toFixed(3)+'" width=".4" height=".4" style="color:#FF4D4D" display="none"/>';
     s+='<path d="M'+(bt.cx+0.04).toFixed(3)+' '+(bt.cy-0.28).toFixed(3)+'l-.16 .3h.13l-.05 .26l.2 -.34h-.13z" fill="#FF4D4D"/></g>';
   }
   if(S.sel){
@@ -733,7 +793,7 @@ function renderDock(){
   var ncards=sum(Object.keys(m.cards).map(function(k){return m.cards[k];}));
   var h='<div class="rowA">'+RS.map(function(n,i){return '<div class="rc">'+ico(i,18)+'<b>'+fa(m.res[i])+'</b><span>'+n+'</span></div>';}).join('')+
     '<button class="btn primary" data-act="'+(canRoll?'roll':'end')+'" '+((canRoll||can)?'':'disabled')+'>'+(S.mode==='needRoll'&&mine?'ریختن تاس':'پایان نوبت')+'</button></div>';
-  var defs=[['fil','سیم برق'],['star','درایو'],['gal','تابلو فرمان'],['buy','کارت ('+fa(S.deck.length)+')']];
+  var defs=[['fil','کابل شبکه'],['star','درایو'],['gal','تابلو فرمان'],['buy','کارت ('+fa(S.deck.length)+')']];
   h+='<div class="bld">'+defs.map(function(d){return '<button class="bb" data-act="'+d[0]+'" '+(ok[d[0]]?'':'disabled')+'><span>'+d[1]+'</span><span class="cost">'+costHTML(COST[d[0]],9)+'</span></button>';}).join('')+'</div>';
   h+='<div class="rowC"><button class="btn" data-act="trade" '+(can?'':'disabled')+'>برون‌سپاری</button><button class="btn" data-act="ptrade" '+(can?'':'disabled')+'>معامله</button><button class="btn" data-act="cards" '+((mine&&!S.busy&&!S.sel)?'':'disabled')+'>کارت‌ها'+(ncards?' ('+fa(ncards)+')':'')+'</button></div>';
   el.innerHTML=h;
@@ -747,8 +807,36 @@ function openSheet(html,opt){
   var sh=document.createElement('div');sh.className='sheet'+((opt&&opt.cls)?' '+opt.cls:'');sh.innerHTML=html;
   bd.appendChild(sh);$('#layer').appendChild(bd);
   if(dismiss)bd.addEventListener('click',function(e){if(e.target===bd)closeSheet();});
-  curSheet=bd;return sh;
+  curSheet=bd;
+  var q=0;
+  function refit(){if(q)return;q=requestAnimationFrame(function(){q=0;fitSheet(sh);});}
+  try{new MutationObserver(refit).observe(sh,{childList:true,subtree:true});}catch(e){}
+  fitSheet(sh);
+  return sh;
 }
+function fitSheet(sh){
+  sh.style.zoom='';sh.style.width='';
+  var maxH=window.innerHeight*0.95-8,h=sh.offsetHeight;
+  if(h>maxH){
+    var z=Math.max(0.5,maxH/h);
+    sh.style.zoom=z;sh.style.width=(Math.min(560,window.innerWidth)/z)+'px';
+  }
+}
+function fitBox(el,pad){
+  if(!el)return;
+  el.style.zoom='';el.style.width='';
+  var maxH=window.innerHeight-(pad||0)-12,h=el.offsetHeight;
+  if(h>maxH&&maxH>100){
+    var z=Math.max(0.45,maxH/h);
+    el.style.zoom=z;el.style.width=(Math.min(520,window.innerWidth)/z)+'px';
+  }
+}
+function fitAll(){
+  fitBox($('#introIn'),0);fitBox($('#lobbyIn'),0);
+  var sh=curSheet&&curSheet.firstChild;if(sh)fitSheet(sh);
+}
+window.addEventListener('resize',fitAll);
+window.addEventListener('orientationchange',function(){setTimeout(fitAll,200);});
 function closeSheet(){curDraw=null;NET.onTradeResult=null;if(curSheet){curSheet.remove();curSheet=null;}}
 function choose(title,opts){
   return new Promise(function(res){
@@ -780,22 +868,37 @@ function pickResources(o){
 }
 function rulesHTML(){
   return '<ol class="rules">'+
-  '<li><b>هدف:</b> اولین کسی که در نوبت خودش به ۱۲ امتیاز برسد برنده است. هر درایو ۱ امتیاز، هر تابلو فرمان ۲، بلندترین سیم‌کشی (دست‌کم ۵ تکه) ۲، بزرگ‌ترین ارتش (دست‌کم ۳ سرباز) ۲ و هر کارت «امتیاز» ۱ امتیاز پنهان.</li>'+
+  '<li><b>هدف:</b> اولین کسی که در نوبت خودش به ۱۲ امتیاز برسد برنده است. هر درایو ۱ امتیاز، هر تابلو فرمان ۲، بلندترین شبکه (دست‌کم ۵ تکه) ۲، بزرگ‌ترین ارتش (دست‌کم ۳ سرباز) ۲ و هر کارت «امتیاز» ۱ امتیاز پنهان.</li>'+
   '<li><b>نوبت:</b> تاس بریز. هر درایوی که کنار کاشیِ هم‌شماره باشد یک قطعه می‌گیرد و هر تابلو فرمان دو قطعه.</li>'+
   '<li><b>عدد ۷ (قطعی برق):</b> هر کس بیش از ۷ قطعه دارد نیمی را از دست می‌دهد. تو «خرابی» را روی یک کاشی می‌گذاری؛ آن کاشی تولید نمی‌کند و از یکی از همسایه‌هایش یک قطعه می‌دزدی.</li>'+
   '<li><b>ساخت:</b><div class="costs">'+
-    '<div><em>سیم برق</em>'+costHTML(COST.fil,16)+'</div>'+
+    '<div><em>کابل شبکه</em>'+costHTML(COST.fil,16)+'</div>'+
     '<div><em>درایو</em>'+costHTML(COST.star,16)+'</div>'+
     '<div><em>تابلو فرمان (ارتقای درایو)</em>'+costHTML(COST.gal,16)+'</div>'+
     '<div><em>کارت</em>'+costHTML(COST.buy,16)+'</div></div>'+
-  'درایو باید به سیم برق خودت وصل باشد و کنار درایو دیگری نیفتد. سیم‌ها هم از ساخته‌های خودت ادامه پیدا می‌کنند.</li>'+
+  'درایو باید به کابل شبکه خودت وصل باشد و کنار درایو دیگری نیفتد. کابل‌ها هم از ساخته‌های خودت ادامه پیدا می‌کنند.</li>'+
   '<li><b>برون‌سپاری:</b> هر ۴ قطعهٔ همسان را با ۱ قطعهٔ دلخواه عوض کن. روی لبهٔ نقشه بندرهای برون‌سپاری هست. اگر درایو یا تابلو فرمانت کنار بندر عمومی (۳:۱) باشد نرخ ۳ به ۱ می‌گیری و کنار بندر اختصاصی یک قطعه (۲:۱) نرخ ۲ به ۱ برای همان قطعه.</li>'+
   '<li><b>معامله:</b> در نوبت خودت می‌توانی به بقیه پیشنهاد بدهی: چه قطعاتی می‌دهی و چه قطعاتی می‌خواهی. هر کس موافق بود، همان را انتخاب کن. بازیکن‌های کامپیوتری هم گاهی در نوبتشان به تو پیشنهاد می‌دهند.</li>'+
-  '<li><b>کارت‌ها:</b> با سیم‌وکابل، الکترونیک و الکترومکانیک یک کارت برمی‌داری. <b>سرباز</b>: خرابی را جابه‌جا می‌کنی و یک قطعه می‌دزدی (۳ سرباز و بیشتر از همه = بزرگ‌ترین ارتش). <b>ساخت راه</b>: دو سیم برق رایگان. <b>برکت</b>: هر دو قطعهٔ دلخواه از انبار. <b>انحصار</b>: یک قطعه را نام ببر و همهٔ بازیکن‌ها همهٔ آن را به تو بدهند. <b>امتیاز</b>: یک امتیاز پنهان. هر نوبت یک کارت بازی می‌شود (حتی پیش از تاس) و کارتی که همان نوبت گرفته‌ای از نوبت بعد قابل بازی است.</li>'+
+  '<li><b>کارت‌ها:</b> با سیم‌وکابل، الکترونیک و الکترومکانیک یک کارت برمی‌داری. <b>سرباز</b>: خرابی را جابه‌جا می‌کنی و یک قطعه می‌دزدی (۳ سرباز و بیشتر از همه = بزرگ‌ترین ارتش). <b>ساخت راه</b>: دو کابل شبکه رایگان. <b>برکت</b>: هر دو قطعهٔ دلخواه از انبار. <b>انحصار</b>: یک قطعه را نام ببر و همهٔ بازیکن‌ها همهٔ آن را به تو بدهند. <b>امتیاز</b>: یک امتیاز پنهان. هر نوبت یک کارت بازی می‌شود (حتی پیش از تاس) و کارتی که همان نوبت گرفته‌ای از نوبت بعد قابل بازی است.</li>'+
   '<li><b>نقشه:</b> هر بازی نقشه‌ای تازه و تصادفی دارد: ۱۹ کاشی برای ۲ تا ۴ نفر و ۳۰ کاشی با ۲ کارگاه برای ۵ و ۶ نفر. «کارگاه» که قطعه‌ای تولید نمی‌کند هر بار جای دیگری می‌افتد و خرابی از یکی از آن‌ها شروع می‌کند. عدد ۶ و ۸ (نارنجی) بیشتر از بقیه می‌آیند.</li>'+
   '</ol>';
 }
-function openHelp(){openSheet('<h3>قوانین</h3>'+rulesHTML()+'<button class="btn wide" data-close>بستن</button>').addEventListener('click',function(e){if(e.target.closest('[data-close]'))closeSheet();});}
+function openHelp(){
+  var items=rulesHTML().match(/<li>[\s\S]*?<\/li>/g)||[],pages=[],cur='',len=0;
+  items.forEach(function(it){var l=it.replace(/<[^>]*>/g,'').length;if(len&&len+l>380){pages.push(cur);cur='';len=0;}cur+=it;len+=l;});
+  if(cur)pages.push(cur);
+  var pg=0,sh=openSheet('');
+  function draw(){
+    sh.innerHTML='<h3>قوانین</h3><ol class="rules">'+pages[pg]+'</ol><div class="pager"><button class="btn small" data-prev '+(pg?'':'disabled')+'>قبلی</button><div class="dots">'+pages.map(function(_,i){return '<i class="'+(i===pg?'on':'')+'"></i>';}).join('')+'</div>'+
+      (pg<pages.length-1?'<button class="btn small primary" data-next>بعدی</button>':'<button class="btn small primary" data-close>بستن</button>')+'</div>';
+  }
+  sh.addEventListener('click',function(e){
+    if(e.target.closest('[data-prev]')&&pg>0){pg--;draw();}
+    else if(e.target.closest('[data-next]')){pg++;draw();}
+    else if(e.target.closest('[data-close]'))closeSheet();
+  });
+  draw();
+}
 function eraBanner(i){
   return new Promise(function(res){
     var e=ERAS[i];
@@ -810,7 +913,7 @@ function showEnd(){
   var sh=openSheet('<h3>'+(S.winner==null?'پایان بازی':S.players[S.winner].name+' برنده شد')+'</h3><div class="score">'+
     order.map(function(p){return '<div class="'+(p.id===S.winner?'win':'')+'"><i class="dot" style="--pc:'+PH[p.id]+'"></i><span>'+p.name+'</span><b>'+fa(totalPoints(p))+'</b></div>';}).join('')+
     '</div><p class="sub">'+fa(S.round)+' دور بازی شد.</p><button class="btn primary wide" data-again>بازی دوباره</button>',{dismiss:false});
-  sh.addEventListener('click',function(e){if(e.target.closest('[data-again]')){if(ROLE!=='solo'){location.reload();return;}closeSheet();$('#intro').hidden=false;}});
+  sh.addEventListener('click',function(e){if(e.target.closest('[data-again]')){closeSheet();if(ROLE!=='solo'){leaveOnline();S=null;}showIntro();}});
 }
 
 /* ---------- target selection ---------- */
@@ -826,7 +929,7 @@ function finishSel(val){
 
 /* ---------- actions shared by humans and AI ---------- */
 function doBuild(p,kind,key,free){
-  if(kind==='fil'){if(!free)pay(p,COST.fil);S.fil.set(key,p.id);log(p.name+' سیم برق کشید.');}
+  if(kind==='fil'){if(!free)pay(p,COST.fil);S.fil.set(key,p.id);log(p.name+' کابل شبکه کشید.');}
   else if(kind==='star'){pay(p,COST.star);S.bld.set(key,{o:p.id,t:'star',planet:false});log(p.name+' یک درایو نصب کرد.');}
   else if(kind==='gal'){pay(p,COST.gal);S.bld.get(key).t='gal';log(p.name+' درایو را به تابلو فرمان ارتقا داد.');}
   else if(kind==='planet'){pay(p,COST.planet);S.bld.get(key).planet=true;log(p.name+' سیاره‌ای حیات‌بخش ساخت.');}
@@ -861,7 +964,7 @@ async function playCard(p,type,st){
       if(stale(st))return;
       if(count(p,'fil')>=LIM.fil)break;
       var sp=filSpots(p);if(!sp.length)break;
-      var k=p.ai?aiPickFil(p,sp):await askSeat(p,'target',{kind:'edge',keys:sp,cancel:false,hint:'سیم رایگان '+fa(i+1)+' را انتخاب کن'});
+      var k=p.ai?aiPickFil(p,sp):await askSeat(p,'target',{kind:'edge',keys:sp,cancel:false,hint:'کابل رایگان '+fa(i+1)+' را انتخاب کن'});
       doBuild(p,'fil',k,true);
     }
   }else if(type==='em'){
@@ -1006,7 +1109,7 @@ async function aiOffer(p){
 }
 function offerSheet(pl){
   return new Promise(function(res){
-    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.name+'</b> به تو پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+ico(pl.want,28)+'<br>۱ '+RS[pl.want]+'</div><div>تو می‌گیری<br>'+ico(pl.give,28)+'<br>۱ '+RS[pl.give]+'</div></div><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
+    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.name+'</b> به تو پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+ico(pl.want,28)+'<br>۱ '+RS[pl.want]+'</div><div>تو می‌گیری<br>'+ico(pl.give,28)+'<br>۱ '+RS[pl.give]+'</div></div><p class="sub">موجودی تو: '+haveStr()+'</p><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
     sh.addEventListener('click',function(e){
       var y=e.target.closest('[data-y]'),n=e.target.closest('[data-n]');
       if(!y&&!n)return;
@@ -1016,7 +1119,7 @@ function offerSheet(pl){
 }
 function tradeOfferSheet(pl){
   return new Promise(function(res){
-    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.from+'</b> پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+fmtRes(pl.get)+'</div><div>تو می‌گیری<br>'+fmtRes(pl.give)+'</div></div><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
+    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.from+'</b> پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+fmtRes(pl.get)+'</div><div>تو می‌گیری<br>'+fmtRes(pl.give)+'</div></div><p class="sub">موجودی تو: '+haveStr()+'</p><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
     sh.addEventListener('click',function(e){
       var y=e.target.closest('[data-y]'),n=e.target.closest('[data-n]');
       if(!y&&!n)return;
@@ -1175,11 +1278,11 @@ async function setupPhase(st){
     if(second)S.verts.get(vk).tiles.forEach(function(tk){var t=S.tiles.get(tk),r=tileRes(t);if(r>=0)p.res[r]++;});
     render();
     if(p.ai){await sleep(280);ek=aiSetupFil(p,vk);}
-    else ek=await askSeat(p,'target',{kind:'edge',keys:filSpots(p,vk),cancel:false,hint:'یک سیم برق کنار درایو بکش'});
+    else ek=await askSeat(p,'target',{kind:'edge',keys:filSpots(p,vk),cancel:false,hint:'یک کابل شبکه کنار درایو بکش'});
     if(stale(st))return;
     S.fil.set(ek,p.id);
     updateAwards();render();
-    log(p.name+' '+(second?'درایو دوم':'درایو نخست')+' و یک سیم برق را گذاشت.');
+    log(p.name+' '+(second?'درایو دوم':'درایو نخست')+' و یک کابل شبکه را گذاشت.');
     await sleep(200);
   }
   S.phase='play';
@@ -1229,7 +1332,7 @@ async function hBuild(p,kind){
   if(!canDo(p,kind))return;
   if(kind==='buy'){buyCard(p);return;}
   var keys=[],hint='',kk='vertex';
-  if(kind==='fil'){keys=filSpots(p);hint='مسیر سیم برق را انتخاب کن';kk='edge';}
+  if(kind==='fil'){keys=filSpots(p);hint='مسیر کابل شبکه را انتخاب کن';kk='edge';}
   else if(kind==='star'){keys=starSpots(p,false);hint='جای درایو را انتخاب کن';}
   else if(kind==='gal'){S.bld.forEach(function(b,vk){if(b.o===p.id&&b.t==='star')keys.push(vk);});hint='کدام درایو به تابلو فرمان ارتقا یابد؟';}
   else return;
@@ -1305,8 +1408,8 @@ function openTrade(){
   function draw(){
     if(give>=0&&p.res[give]<ratio(p,give))give=-1;
     sh.innerHTML='<h3>برون‌سپاری</h3><p class="sub">نرخ پایه ۴ به ۱ است. درایو یا تابلو فرمان کنار بندر برون‌سپاری نرخ بهتر می‌دهد (۳ به ۱ یا ۲ به ۱).</p>'+
-      '<div class="sub">می‌دهی</div><div class="grid5">'+RS.map(function(n,i){var r=ratio(p,i);return '<button class="cb '+(give===i?'on':'')+'" data-g="'+i+'" '+(p.res[i]>=r?'':'disabled')+'>'+ico(i,24)+'<b>'+fa(p.res[i])+'</b>'+n+'<small>'+fa(r)+':'+fa(1)+'</small></button>';}).join('')+'</div>'+
-      '<div class="sub">می‌گیری</div><div class="grid5">'+RS.map(function(n,i){return '<button class="cb '+(get===i?'on':'')+'" data-t="'+i+'">'+ico(i,24)+'<b>'+fa(p.res[i])+'</b>'+n+'</button>';}).join('')+'</div>'+
+      '<div class="sub">می‌دهی (موجودی تو زیر هر قطعه)</div><div class="grid5">'+RS.map(function(n,i){var r=ratio(p,i);return '<button class="cb '+(give===i?'on':'')+'" data-g="'+i+'" '+(p.res[i]>=r?'':'disabled')+'>'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">داری <b>'+fa(p.res[i])+'</b></span><small>'+fa(r)+':'+fa(1)+'</small></button>';}).join('')+'</div>'+
+      '<div class="sub">می‌گیری</div><div class="grid5">'+RS.map(function(n,i){return '<button class="cb '+(get===i?'on':'')+'" data-t="'+i+'">'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">داری <b>'+fa(p.res[i])+'</b></span></button>';}).join('')+'</div>'+
       '<button class="btn primary wide" data-do '+((give>=0&&get>=0&&give!==get)?'':'disabled')+'>برون‌سپاری</button><button class="btn wide" data-close>بستن</button>';
   }
   sh.addEventListener('click',function(e){
@@ -1327,7 +1430,7 @@ function openPlayerTrade(){
     return '<div class="grid5">'+RS.map(function(n,i){
       var other=kind==='give'?get:give;
       var plusOff=(kind==='give'?arr[i]>=p.res[i]:arr[i]>=4)||other[i]>0;
-      return '<div class="tc">'+ico(i,22)+'<b>'+fa(arr[i])+'</b><span>'+n+'</span><div class="pm"><button data-s="'+kind+'" data-i="'+i+'" data-d="-1" '+(arr[i]<=0?'disabled':'')+'>−</button><button data-s="'+kind+'" data-i="'+i+'" data-d="1" '+(plusOff?'disabled':'')+'>+</button></div></div>';
+      return '<div class="tc">'+ico(i,22)+'<span class="nn">'+n+'</span><em class="hv">داری '+fa(p.res[i])+'</em><b>'+fa(arr[i])+'</b><div class="pm"><button data-s="'+kind+'" data-i="'+i+'" data-d="-1" '+(arr[i]<=0?'disabled':'')+'>−</button><button data-s="'+kind+'" data-i="'+i+'" data-d="1" '+(plusOff?'disabled':'')+'>+</button></div></div>';
     }).join('')+'</div>';
   }
   function draw(){
@@ -1335,7 +1438,7 @@ function openPlayerTrade(){
     if(!results){
       for(var i=0;i<5;i++)if(give[i]>p.res[i])give[i]=p.res[i];
       var ok=sum(give)>0&&sum(get)>0;
-      sh.innerHTML='<h3>معامله با بازیکن‌ها</h3><p class="sub">بگو چه قطعاتی می‌دهی و چه قطعاتی می‌خواهی. بازیکن‌ها جواب می‌دهند.</p><div class="sub">می‌دهی</div>'+grid('give',give)+'<div class="sub">می‌خواهی</div>'+grid('get',get)+
+      sh.innerHTML='<h3>معامله با بازیکن‌ها</h3><p class="sub">بگو چه قطعاتی می‌دهی و چه قطعاتی می‌خواهی. بازیکن‌ها جواب می‌دهند.</p><div class="sub">می‌دهی (عدد درشت = مقدار پیشنهادی)</div>'+grid('give',give)+'<div class="sub">می‌خواهی</div>'+grid('get',get)+
         '<button class="btn primary wide" data-submit '+(ok?'':'disabled')+'>پیشنهاد به بقیه</button><button class="btn wide" data-close>بستن</button>';
     }else{
       var yes=results.filter(function(r){return r.ok;});
@@ -1411,7 +1514,9 @@ $('#dock').addEventListener('click',function(e){
   dispatchCmd({cmd:'build',kind:a});
 });
 $('#btnHelp').addEventListener('click',openHelp);
-$('#introRules').innerHTML=rulesHTML();
+$('#btnRules').addEventListener('click',openHelp);
+$('#btnGear').addEventListener('click',openSettings);
+$('#btnSet').addEventListener('click',openSettings);
 $('#segN').addEventListener('click',function(e){
   var b=e.target.closest('[data-n]');if(!b)return;
   chosenN=+b.dataset.n;
@@ -1419,6 +1524,205 @@ $('#segN').addEventListener('click',function(e){
 });
 $('#go').addEventListener('click',function(){startGame(chosenN,false);});
 $('#watch').addEventListener('click',function(){startGame(4,true);});
+
+/* ---------- themes ---------- */
+function gearTeeth(){var t='';for(var a=0;a<360;a+=45)t+='<rect x="10.3" y="1.6" width="3.4" height="4.6" rx=".9" transform="rotate('+a+' 12 12)"/>';return t;}
+var ICONS={
+ datis:[
+  '<rect x="2.5" y="9" width="19" height="11.5" rx="2.2" fill="currentColor"/><circle cx="7" cy="6.2" r="2.3" fill="currentColor"/><circle cx="12" cy="6.2" r="2.3" fill="currentColor"/><circle cx="17" cy="6.2" r="2.3" fill="currentColor"/><rect x="2.5" y="16.5" width="19" height="4" rx="2" fill="#0B1219" fill-opacity=".22"/><path d="M4.8 11.5h14.4" stroke="#fff" stroke-opacity=".4" stroke-width="1.6" stroke-linecap="round"/>',
+  '<path d="M3 8l9-4.5L21 8l-9 4.5z" fill="currentColor"/><path d="M3 8v3.4l9 4.5 9-4.5V8l-9 4.5z" fill="currentColor" fill-opacity=".7"/><path d="M3 12.8v3.4l9 4.5 9-4.5v-3.4l-9 4.5z" fill="currentColor" fill-opacity=".45"/><circle cx="12" cy="8" r="1.1" fill="#0B1219" fill-opacity=".45"/><path d="M6.5 7.3l5-2.5" stroke="#fff" stroke-opacity=".55" stroke-width="1" stroke-linecap="round"/>',
+  '<rect x="3" y="3" width="18" height="3.4" rx="1.4" fill="currentColor"/><rect x="3" y="17.6" width="18" height="3.4" rx="1.4" fill="currentColor"/><rect x="6" y="6.4" width="12" height="11.2" fill="currentColor" fill-opacity=".55"/><path d="M6 9h12M6 12h12M6 15h12" stroke="#0B1219" stroke-opacity=".45" stroke-width="1.3"/><path d="M18 12c2.6 0 3.5 1.2 3.5 3.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/><rect x="9" y="9" width="6" height="6" rx="1" fill="#0B1219" fill-opacity=".5"/><circle cx="8.2" cy="8.2" r=".8" fill="#fff" fill-opacity=".7"/><path d="M9 2.5v3.5M12 2.5v3.5M15 2.5v3.5M9 18v3.5M12 18v3.5M15 18v3.5M2.5 9h3.5M2.5 12h3.5M2.5 15h3.5M18 9h3.5M18 12h3.5M18 15h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+  '<g fill="currentColor">'+gearTeeth()+'<circle cx="12" cy="12" r="7"/></g><circle cx="12" cy="12" r="3.9" fill="#0B1219" fill-opacity=".78"/><path d="M12.9 9.6l-2.4 3.1h1.8l-.9 2.5 2.7-3.4h-1.9z" fill="currentColor"/>',
+  '<path d="M2.5 21V11l6 3.5V11l6 3.5V5h4v16z" fill="currentColor"/><rect x="5" y="16.5" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/><rect x="10" y="16.5" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/><rect x="15" y="12" width="2.4" height="2.4" fill="#0B1219" fill-opacity=".5"/><circle cx="16.8" cy="3" r="1.5" fill="currentColor" fill-opacity=".5"/>'
+ ],
+ orig:[
+  '<circle cx="7.5" cy="16.5" r="4.7" fill="currentColor"/><circle cx="16.5" cy="16.5" r="4.7" fill="currentColor"/><circle cx="12" cy="8.4" r="4.7" fill="currentColor"/><g fill="none" stroke="#0B1219" stroke-opacity=".4" stroke-width="1"><circle cx="7.5" cy="16.5" r="2.6"/><circle cx="16.5" cy="16.5" r="2.6"/><circle cx="12" cy="8.4" r="2.6"/></g><g fill="#0B1219" fill-opacity=".4"><circle cx="7.5" cy="16.5" r=".9"/><circle cx="16.5" cy="16.5" r=".9"/><circle cx="12" cy="8.4" r=".9"/></g>',
+  '<rect x="2" y="4" width="20" height="16" rx="1.5" fill="currentColor"/><path d="M2 9.3h20M2 14.7h20M8 4v5.3M15 4v5.3M5 9.3v5.4M12 9.3v5.4M19 9.3v5.4M8 14.7V20M15 14.7V20" stroke="#0B1219" stroke-opacity=".45" stroke-width="1.1"/>',
+  '<g fill="currentColor"><circle cx="7.5" cy="10" r="3.6"/><circle cx="12.5" cy="8.4" r="4"/><circle cx="16" cy="11.6" r="3.3"/><circle cx="9.5" cy="13.6" r="3.6"/><circle cx="14" cy="14.2" r="3.4"/></g><ellipse cx="20" cy="12.6" rx="2.3" ry="3" fill="currentColor" fill-opacity=".62"/><circle cx="20.6" cy="11.8" r=".6" fill="#0B1219"/><path d="M8 17.5v3.7M15 17.5v3.7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>',
+  '<path d="M12 22V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><g fill="currentColor"><ellipse cx="12" cy="4.6" rx="1.7" ry="3"/><ellipse cx="9" cy="9" rx="1.6" ry="3" transform="rotate(-35 9 9)"/><ellipse cx="15" cy="9" rx="1.6" ry="3" transform="rotate(35 15 9)"/><ellipse cx="8.8" cy="14" rx="1.6" ry="3" transform="rotate(-35 8.8 14)"/><ellipse cx="15.2" cy="14" rx="1.6" ry="3" transform="rotate(35 15.2 14)"/></g>',
+  '<path d="M3 19.5l3.6-8.2 4-2.8 5 1.6 4.4 5.6-2 3.8z" fill="currentColor"/><path d="M6.6 11.3l4 2.4 5-4.2M10.6 13.7l-2 5.8M10.6 13.7l7.2 1" stroke="#0B1219" stroke-opacity=".4" stroke-width="1" fill="none"/><path d="M18.6 3.2l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" fill="currentColor"/>',
+  '<path d="M2 19c3-5.5 6-5.5 9-1.8 2-3.2 5-4.2 11 1v4.8H2z" fill="currentColor"/><circle cx="17" cy="6.5" r="3.2" fill="currentColor" fill-opacity=".6"/><path d="M6 20.5h3" stroke="#0B1219" stroke-opacity=".3" stroke-width="1.2"/>'
+ ],
+ cosmic:[
+  '<g fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></g><circle cx="12" cy="12" r="2.7" fill="currentColor"/><circle cx="21.5" cy="12" r="1.3" fill="currentColor"/>',
+  '<circle cx="16" cy="16" r="5.6" fill="currentColor"/><circle cx="14.5" cy="14.6" r="1.2" fill="#0B1219" fill-opacity=".4"/><circle cx="18.2" cy="17.6" r=".9" fill="#0B1219" fill-opacity=".4"/><path d="M11.4 11.4L3 3M10 15.2L2.6 9.6M15 10.2L9.6 2.6" stroke="currentColor" stroke-opacity=".6" stroke-width="1.7" stroke-linecap="round"/>',
+  '<path d="M12 12c0-2 3-2.4 4-.4s-1 5-4.6 5-6.4-3-6.4-6.6S9 3.2 12.6 3.2 20 6.2 20 10.2" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="currentColor"/><circle cx="19.5" cy="18.5" r="1" fill="currentColor"/><circle cx="4.5" cy="19" r=".8" fill="currentColor"/><circle cx="4" cy="5" r=".9" fill="currentColor"/>',
+  '<path d="M12 2.5c1 3.6 5.2 5.6 5.2 10.6a5.2 5.2 0 0 1-10.4 0c0-2.2 1-3.4 2.1-4.4.2 1.6.9 2.5 1.8 2.9C10.4 8.6 11 5.6 12 2.5z" fill="currentColor"/><path d="M12 21.2a2.9 2.9 0 0 1-2.9-2.9c0-1.7 1.6-2.4 2.9-4.2 1.3 1.8 2.9 2.5 2.9 4.2A2.9 2.9 0 0 1 12 21.2z" fill="#fff" fill-opacity=".55"/>',
+  '<circle cx="12" cy="12" r="6" fill="currentColor"/><circle cx="12" cy="12" r="3.2" fill="#0B1219" fill-opacity=".78"/><ellipse cx="12" cy="12" rx="10.5" ry="3.4" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(-20 12 12)"/>',
+  '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="2.2" fill="currentColor"/>'
+ ],
+ ww:[
+  '<path d="M12 2.5C9 7 6 10 6 14.5a6 6 0 0 0 12 0C18 10 15 7 12 2.5z" fill="currentColor"/><path d="M9 14.8a3 3 0 0 0 3 3" stroke="#fff" stroke-opacity=".55" stroke-width="1.5" fill="none" stroke-linecap="round"/>',
+  '<path d="M3 4h18v4h-6.5v8H21v4H3v-4h6.5V8H3z" fill="currentColor"/><g fill="#0B1219" fill-opacity=".45"><circle cx="5.5" cy="6" r=".8"/><circle cx="18.5" cy="6" r=".8"/><circle cx="5.5" cy="18" r=".8"/><circle cx="18.5" cy="18" r=".8"/></g><path d="M12 9v6" stroke="#0B1219" stroke-opacity=".3" stroke-width="1"/>',
+  '<rect x="5" y="5" width="14" height="15" rx="2" fill="currentColor"/><ellipse cx="12" cy="5" rx="7" ry="2" fill="currentColor"/><ellipse cx="12" cy="5" rx="7" ry="2" fill="#fff" fill-opacity=".3"/><rect x="5" y="9.5" width="14" height="6" fill="#0B1219" fill-opacity=".38"/><path d="M9 12.5h6" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-opacity=".85"/>',
+  '<g fill="currentColor"><path d="M2 21V12c0-2.4 1.2-4.6 2.5-6C5.8 7.4 7 9.6 7 12v9z"/><path transform="translate(7.5 0)" d="M2 21V12c0-2.4 1.2-4.6 2.5-6C5.8 7.4 7 9.6 7 12v9z"/><path transform="translate(15 0)" d="M2 21V12c0-2.4 1.2-4.6 2.5-6C5.8 7.4 7 9.6 7 12v9z"/></g><rect x="2" y="17" width="20" height="1.4" fill="#0B1219" fill-opacity=".38"/>',
+  '<circle cx="12" cy="12" r="10.3" fill="currentColor" fill-opacity=".22"/><g fill="currentColor"><path d="M12 12L16 5.07A8 8 0 0 0 8 5.07z"/><path d="M12 12L4 12A8 8 0 0 0 8 18.93z"/><path d="M12 12L16 18.93A8 8 0 0 0 20 12z"/></g><circle cx="12" cy="12" r="1.9" fill="currentColor"/>',
+  '<circle cx="11" cy="14" r="6.2" fill="currentColor"/><rect x="9" y="5.8" width="4" height="2.8" rx=".6" fill="currentColor"/><path d="M13 6.3c2-.4 3.2-1.9 3.6-3.4" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="17.2" cy="3" r="1.2" fill="currentColor"/><path d="M7.6 12.5a4 4 0 0 1 2.4-2.3" stroke="#fff" stroke-opacity=".5" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
+ ]
+};
+var THEMES=[
+ {key:'datis',name:'داتیس',brand:'کارخانه داتیس',hero:['کارخانه','داتیس'],tag:'درایو و تابلو فرمان بساز',
+  lead:'ورق آهن، پلاستیک و قطعات جمع کن، درایو نصب کن، کابل شبکه بکش و تابلو فرمان بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  acc:'#FFB000',ink:'#1A1000',void:'#0A0F14',des:'#FFB347',
+  RN:RN.slice(),RS:RS.slice(),RH:RH.slice(),
+  t:{star:'درایو',gal:'تابلو فرمان',fil:'کابل شبکه',filing:'شبکه',rob:'خرابی',evt:'قطعی برق',port:'برون‌سپاری',army:'ارتش',c0:'سرباز',c1:'ساخت راه',c2:'برکت',c3:'انحصار',c4:'امتیاز'}},
+ {key:'orig',name:'بازی اصلی',brand:'سیطره کتان',hero:['سیطره','کتان'],tag:'خانه، جاده و شهر بساز',
+  lead:'چوب، آجر، گوسفند، گندم و سنگ جمع کن، خانه بساز، جاده بکش و شهر بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  acc:'#F2B84B',ink:'#1F1400',void:'#0D140E',des:'#E7C98A',
+  RN:['چوب','آجر','گوسفند','گندم','سنگ'],RS:['چوب','آجر','گوسفند','گندم','سنگ'],RH:['#5DBB63','#E2704F','#C8E6A0','#F4CF4A','#A9B4C4'],
+  t:{star:'خانه',gal:'شهر',fil:'جاده',filing:'جاده‌کشی',rob:'دزد',evt:'حملهٔ دزد',port:'بندر',army:'سپاه',c0:'شوالیه',c1:'ساخت راه',c2:'سال فراوانی',c3:'انحصار',c4:'امتیاز'}},
+ {key:'cosmic',name:'مهبانگ',brand:'مهبانگ',hero:['مهبانگ'],tag:'ستاره و کهکشان بساز',
+  lead:'هیدروژن، آهن ستاره‌ای و ماده تاریک جمع کن، ستاره بساز، مسیر نور بکش و کهکشان بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  acc:'#A99BFF',ink:'#0E0A24',void:'#080A18',des:'#C9C3FF',
+  RN:['هیدروژن','آهن ستاره‌ای','گرد کیهانی','پلاسما','ماده تاریک'],RS:['هیدروژن','آهن ستاره‌ای','گرد کیهانی','پلاسما','ماده تاریک'],RH:['#6EC8FF','#FF9A5C','#C79BFF','#FF6F91','#8F9BFF'],
+  t:{star:'ستاره',gal:'کهکشان',fil:'مسیر نور',filing:'مسیرکشی',rob:'سیاه‌چاله',evt:'طوفان کیهانی',port:'پل کیهانی',army:'ناوگان',c0:'گرانش',c1:'نیروی قوی',c2:'تابش',c3:'فروپاشی',c4:'ثابت کیهانی'}},
+ {key:'ww',name:'جنگ جهانی',brand:'جنگ جهانی',hero:['جنگ','جهانی'],tag:'پادگان و قرارگاه بساز',
+  lead:'نفت، فولاد، غذا، مهمات و اورانیوم جمع کن، پادگان بساز، خط ارتباطی بکش و قرارگاه بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  acc:'#C9D26A',ink:'#141800',void:'#0C0F0A',des:'#D5CBA0',
+  RN:['نفت','فولاد','غذا','مهمات','اورانیوم'],RS:['نفت','فولاد','غذا','مهمات','اورانیوم'],RH:['#C79A58','#9FB3C8','#9CCB6B','#E3B341','#7CF29A'],
+  t:{star:'پادگان',gal:'قرارگاه',fil:'خط ارتباطی',filing:'خط‌کشی',rob:'بمباران',evt:'حملهٔ هوایی',port:'بندر تدارکات',army:'ارتش',c0:'تانک',c1:'مهندسان',c2:'کمک متفقین',c3:'محاصره',c4:'نشان افتخار'}}
+];
+var TH=THEMES[0],ACC=TH.acc,TX=null;
+var CANON=THEMES[0];
+(function buildSprite(){
+  var h='';
+  Object.keys(ICONS).forEach(function(k){ICONS[k].forEach(function(g,i){h+='<symbol id="ic_'+k+i+'" viewBox="0 0 24 24">'+g+'</symbol>';});});
+  var d=document.getElementById('spriteDefs');d.innerHTML=h;
+})();
+function escRx(x){return x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function buildTx(){
+  TX=null;
+  if(TH.key==='datis')return;
+  var d={};
+  function add(a,b){if(a&&b&&a!==b)d[a]=b;}
+  CANON.RN.forEach(function(x,i){add(x,TH.RN[i]);});
+  CANON.RS.forEach(function(x,i){add(x,TH.RS[i]);});
+  ['star','gal','fil','filing','rob','evt','port','army','c0','c1','c2','c3'].forEach(function(k){add(CANON.t[k],TH.t[k]);});
+  add('«'+CANON.t.c4+'»','«'+TH.t.c4+'»');
+  var keys=Object.keys(d).sort(function(a,b){return b.length-a.length;});
+  var rx=new RegExp(keys.map(function(k){return escRx(k)+(k==='انحصار'?'(?!ی)':'');}).join('|'),'g');
+  TX=function(t){return t.replace(rx,function(m){return d[m]||m;});};
+}
+var TXS=new WeakMap();
+function txNode(n){
+  var p=n.parentNode;if(!p)return;
+  var tg=p.nodeName;if(tg==='SCRIPT'||tg==='STYLE'||tg==='TEXTAREA'||tg==='TITLE')return;
+  var rec=TXS.get(n),v=n.nodeValue,orig=(rec&&v===rec.out)?rec.orig:v;
+  var out=TX?TX(orig):orig;
+  TXS.set(n,{orig:orig,out:out});
+  if(v!==out)n.nodeValue=out;
+}
+function txTree(root){
+  if(!root)return;
+  if(root.nodeType===3){txNode(root);return;}
+  if(root.nodeType!==1)return;
+  var w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),n,list=[];
+  while((n=w.nextNode()))list.push(n);
+  list.forEach(txNode);
+}
+try{
+  new MutationObserver(function(ms){
+    if(!TX)return;
+    ms.forEach(function(m){
+      if(m.type==='characterData')txNode(m.target);
+      else m.addedNodes.forEach(txTree);
+    });
+  }).observe(document.body,{childList:true,subtree:true,characterData:true});
+}catch(e){}
+function loadTheme(){try{return localStorage.getItem('datis_theme')||'datis';}catch(e){return 'datis';}}
+function saveTheme(k){try{localStorage.setItem('datis_theme',k);}catch(e){}}
+function applyTheme(key,noSave){
+  TH=THEMES.filter(function(t){return t.key===key;})[0]||THEMES[0];
+  RH=TH.RH;ACC=TH.acc;
+  var st=document.documentElement.style;
+  st.setProperty('--ember',TH.acc);st.setProperty('--ember-ink',TH.ink);st.setProperty('--void',TH.void);
+  CARD.fine.n=TH.t.c4;
+  buildTx();
+  document.title=TH.brand;
+  var br=document.querySelector('.brand');if(br)br.innerHTML=TH.brand+'<small>'+TH.tag+'</small>';
+  $('#hero').innerHTML=TH.hero.join('<br>');
+  $('#lead').textContent=TH.lead;
+  if(!noSave)saveTheme(TH.key);
+  txTree(document.body);
+  if(S)render();
+  refreshResume();
+  fitAll();
+}
+function awardIcon(k){
+  return k==='road'
+   ?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18.5l6-8 5 4 6.5-9" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="3.5" cy="18.5" r="2.2" fill="currentColor"/><circle cx="20.5" cy="5.5" r="2.2" fill="currentColor"/></svg>'
+   :'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10v-6z" fill="currentColor"/><path d="M12 6.5v10M8.7 10.2h6.6" stroke="#0B1219" stroke-opacity=".7" stroke-width="2" stroke-linecap="round"/></svg>';
+}
+function renderAwards(){
+  var el=$('#awards');if(!el||!S)return;
+  var lens=S.lens||[],mx=lens.length?Math.max.apply(null,lens):0,ma=Math.max.apply(null,S.players.map(function(p){return p.played||0;}));
+  function chip(kind,holder,val,need,label,best){
+    var h=holder!=null?S.players[holder]:null,tie=!h&&best>=need;
+    return '<div class="aw '+kind+(h?' held':'')+(tie?' tie':'')+'"'+(h?' style="--pc:'+PH[h.id]+'"':'')+'>'+awardIcon(kind)+'<div class="aw-t"><small>'+label+'</small><b>'+
+      (h?'<i class="dot"></i>'+h.name+' · '+fa(val):(tie?'مساوی ('+fa(best)+')':'هنوز کسی · حداقل '+fa(need)))+'</b></div></div>';
+  }
+  el.innerHTML=chip('road',S.longest,S.longest!=null?lens[S.longest]:0,5,'طولانی‌ترین شبکه',mx)+chip('army',S.dark,S.dark!=null?S.players[S.dark].played:0,3,'بزرگ‌ترین ارتش',ma);
+}
+function haveStr(){var m=me();return (m&&fmtRes(m.res))||'هیچ';}
+function openSettings(){
+  var sh=openSheet('');
+  sh.innerHTML='<h3>تنظیمات</h3><div><label class="sub stg-lbl" for="setName">نام تو در بازی</label><input id="setName" class="inp" maxlength="12" placeholder="مثلاً علی" autocomplete="off"></div>'+
+    '<div class="sub">تم بازی. فقط ظاهر و نام‌ها عوض می‌شود و قوانین یکی است. هر بازیکن تم خودش را می‌بیند.</div><div class="themes">'+
+    THEMES.map(function(t){return '<button class="th'+(t===TH?' on':'')+'" data-th="'+t.key+'"><span class="thi">'+[0,1,2,3,4].map(function(i){return '<svg class="ico" width="22" height="22" viewBox="0 0 24 24" style="color:'+t.RH[i]+'"><use href="#ic_'+t.key+i+'"/></svg>';}).join('')+'</span><b>'+t.name+'</b></button>';}).join('')+
+    '</div><p class="sub">نام از بازی بعد اعمال می‌شود.</p><button class="btn primary wide" data-close>تأیید</button>';
+  var inp=sh.querySelector('#setName');inp.value=loadName();
+  inp.addEventListener('input',function(){saveName(cleanName(inp.value));});
+  sh.addEventListener('click',function(e){
+    var b=e.target.closest('[data-th]');
+    if(b){applyTheme(b.dataset.th);Array.prototype.forEach.call(sh.querySelectorAll('[data-th]'),function(x){x.classList.toggle('on',x===b);});return;}
+    if(e.target.closest('[data-close]'))closeSheet();
+  });
+}
+/* ---------- navigation: back button goes home, and you can come back ---------- */
+var VIEW='intro';
+function goSession(){
+  VIEW='session';
+  try{history.pushState({s:1},'');}catch(e){}
+  refreshResume();
+}
+function sessionKind(){
+  if(S&&!S.over)return 'game';
+  if(NET.lobbyOn&&NET.lv)return 'lobby';
+  return null;
+}
+function refreshResume(){
+  var r=$('#resume');if(!r)return;
+  var k=sessionKind();
+  r.hidden=!(k&&VIEW==='intro');
+  if(k==='game')r.textContent=ROLE==='solo'?'ادامهٔ بازی':'بازگشت به بازی آنلاین';
+  else if(k==='lobby')r.textContent='بازگشت به اتاق'+(NET.lv&&NET.lv.code?' ('+NET.lv.code+')':'');
+  fitAll();
+}
+function showIntro(){
+  VIEW='intro';
+  $('#lobby').hidden=true;$('#intro').hidden=false;
+  refreshResume();
+}
+function resumeSession(){
+  var k=sessionKind();if(!k)return;
+  VIEW='session';
+  try{history.pushState({s:1},'');}catch(e){}
+  $('#intro').hidden=true;
+  if(k==='lobby'){$('#lobby').hidden=false;renderLobby();}
+  else{$('#lobby').hidden=true;render();}
+  refreshResume();
+}
+window.addEventListener('popstate',function(){if(VIEW==='session')showIntro();});
+$('#resume').addEventListener('click',resumeSession);
+function leaveOnline(){
+  try{Object.keys(NET.links).forEach(function(k){var l=NET.links[k];if(l){l.onclose=null;l.close();}});}catch(e){}
+  try{if(NET.hostLink){NET.hostLink.onclose=null;NET.hostLink.close();}}catch(e){}
+  try{if(NET.peer)NET.peer.close();}catch(e){}
+  NET.links={};NET.pending.clear();NET.hostLink=null;NET.lobby=null;NET.lv=null;NET.started=false;NET.you=null;NET.peer=null;NET.lobbyOn=false;
+  ROLE='solo';
+}
+
 /* ---------- online rooms: host-authoritative, WebRTC through PeerJS ---------- */
 var CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function genCode(){var c='';for(var i=0;i<5;i++)c+=CODE_CHARS[rint(CODE_CHARS.length)];return c;}
@@ -1575,7 +1879,7 @@ function clientMsg(m){
   if(m.t==='ptradeResult'){if(NET.onTradeResult)NET.onTradeResult(m.results);return;}
 }
 function clientInit(m){
-  NET.started=true;ROLE='client';MY=m.you;
+  NET.started=true;NET.lobbyOn=false;ROLE='client';MY=m.you;
   S=newState(m.n,false,m.players.map(function(c){return {name:c.name,ai:c.ai,remote:false};}));
   var b=m.board;S.R=b.R;
   b.tiles.forEach(function(t){addTile(t[0],t[1],t[2],t[3]);});
@@ -1601,8 +1905,9 @@ function renderLobby(){
   if(L.err)h+='<p class="warn">'+L.err+'</p>';
   h+='<button class="btn" data-leave>خروج</button>';
   $('#lobbyIn').innerHTML=h;
+  fitBox($('#lobbyIn'),0);
 }
-function showLobby(){$('#intro').hidden=true;$('#lobby').hidden=false;renderLobby();}
+function showLobby(){$('#intro').hidden=true;$('#lobby').hidden=false;goSession();renderLobby();}
 function lobbyError(msg){
   if(!NET.lv)NET.lv={code:'',names:[],n:2,isHost:false};
   NET.lv.err=msg;$('#intro').hidden=true;$('#lobby').hidden=false;renderLobby();
@@ -1614,6 +1919,8 @@ function lobbyBroadcast(){
   renderLobby();
 }
 function hostLobby(name){
+  if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
+  S=null;MY=null;closeSheet();NET.lobbyOn=true;
   var code=genCode();
   NET.code=code;NET.started=false;NET.links={};
   NET.lobby={n:Math.max(chosenN,2),players:[{name:name||'میزبان',link:null}]};
@@ -1656,7 +1963,7 @@ function startOnline(){
     if(i<humans)cfg.push({name:L.players[i].name,ai:false,remote:i>0});
     else cfg.push({name:pool.shift(),ai:true,remote:false});
   }
-  NET.started=true;ROLE='host';MY=0;
+  NET.started=true;NET.lobbyOn=false;ROLE='host';MY=0;
   S=newState(n,false,cfg);
   initBoard();
   NET.links={};
@@ -1677,6 +1984,8 @@ function startOnline(){
 function joinRoom(code,name){
   code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
   if(code.length!==5){toast('کد اتاق ۵ حرف است');return;}
+  if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
+  S=null;MY=null;closeSheet();NET.lobbyOn=true;
   NET.started=false;NET.lv={code:code,names:[],n:2,isHost:false};
   showLobby();
   var linked=false;
@@ -1695,11 +2004,10 @@ function joinRoom(code,name){
 }
 function saveName(n){try{localStorage.setItem('datis_name',n);}catch(e){}}
 function loadName(){try{return localStorage.getItem('datis_name')||'';}catch(e){return '';}}
-$('#myName').value=loadName();
 if(!onlineAvailable()){$('#onlineBox').innerHTML='<div class="sub">بازی آنلاین به اتصال اینترنت و بارگذاری کتابخانهٔ اتصال نیاز دارد.</div>';}
 else{
-  $('#mkRoom').addEventListener('click',function(){var n=cleanName($('#myName').value)||'میزبان';saveName(n);hostLobby(n);});
-  $('#joinRoom').addEventListener('click',function(){var n=cleanName($('#myName').value)||'مهمان';saveName(n);joinRoom($('#joinCode').value,n);});
+  $('#mkRoom').addEventListener('click',function(){hostLobby(cleanName(loadName())||'میزبان');});
+  $('#joinRoom').addEventListener('click',function(){joinRoom($('#joinCode').value,cleanName(loadName())||'مهمان');});
 }
 $('#lobby').addEventListener('click',function(e){
   var t=e.target;
@@ -1711,8 +2019,10 @@ $('#lobby').addEventListener('click',function(e){
   var sn=t.closest('[data-sn]');
   if(sn&&NET.lobby&&!sn.disabled){NET.lobby.n=+sn.dataset.sn;chosenN=NET.lobby.n;lobbyBroadcast();return;}
   if(t.closest('[data-start]')){startOnline();return;}
-  if(t.closest('[data-leave]')){location.reload();}
+  if(t.closest('[data-leave]')){leaveOnline();S=null;showIntro();}
 });
+applyTheme(loadTheme(),true);
+fitAll();
 window.__cosmic={state:function(){if(S)S.me=MY;return S;}};
 })();
 </script>
