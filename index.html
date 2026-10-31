@@ -370,6 +370,11 @@ body{position:fixed;inset:0;width:100%}
 .die.dface{background:none;width:32px;height:32px;padding:0}
 .die.dface svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 2px #0008)}
 .dsum{font-weight:700;font-size:14px;color:var(--ink)}
+.hstrip{display:flex;justify-content:center;gap:6px}
+.hchip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line);font-weight:700;font-variant-numeric:tabular-nums}
+.hv{display:inline-flex;align-items:center;gap:3px}
+.hv b{font-size:12.5px}
+.tc b.hn{background:none;padding:0;min-width:0;font-size:12.5px}
 </style>
 </head>
 <body>
@@ -1303,7 +1308,7 @@ async function aiOffer(p){
 }
 function offerSheet(pl){
   return new Promise(function(res){
-    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.name+'</b> به تو پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+ico(pl.want,28)+'<br>۱ '+RS[pl.want]+'</div><div>تو می‌گیری<br>'+ico(pl.give,28)+'<br>۱ '+RS[pl.give]+'</div></div><p class="sub">موجودی تو: '+haveStr()+'</p><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
+    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.name+'</b> به تو پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+ico(pl.want,28)+'<br>۱ '+RS[pl.want]+'</div><div>تو می‌گیری<br>'+ico(pl.give,28)+'<br>۱ '+RS[pl.give]+'</div></div>'+haveStrip()+'<button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
     sh.addEventListener('click',function(e){
       var y=e.target.closest('[data-y]'),n=e.target.closest('[data-n]');
       if(!y&&!n)return;
@@ -1313,7 +1318,7 @@ function offerSheet(pl){
 }
 function tradeOfferSheet(pl){
   return new Promise(function(res){
-    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.from+'</b> پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+fmtRes(pl.get)+'</div><div>تو می‌گیری<br>'+fmtRes(pl.give)+'</div></div><p class="sub">موجودی تو: '+haveStr()+'</p><button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
+    var sh=openSheet('<h3>پیشنهاد معامله</h3><p><b>'+pl.from+'</b> پیشنهاد می‌دهد:</p><div class="offer"><div>تو می‌دهی<br>'+fmtRes(pl.get)+'</div><div>تو می‌گیری<br>'+fmtRes(pl.give)+'</div></div>'+haveStrip()+'<button class="btn primary wide" data-y>قبول می‌کنم</button><button class="btn wide" data-n>رد می‌کنم</button>',{dismiss:false});
     sh.addEventListener('click',function(e){
       var y=e.target.closest('[data-y]'),n=e.target.closest('[data-n]');
       if(!y&&!n)return;
@@ -1649,9 +1654,9 @@ function openTrade(){
   var sh=openSheet('');
   function draw(){
     if(give>=0&&p.res[give]<ratio(p,give))give=-1;
-    sh.innerHTML='<h3>برون‌سپاری</h3><p class="sub">نرخ پایه ۴ به ۱ است. درایو یا تابلو فرمان کنار بندر برون‌سپاری نرخ بهتر می‌دهد (۳ به ۱ یا ۲ به ۱).</p>'+
-      '<div class="sub">می‌دهی (موجودی تو زیر هر قطعه)</div><div class="grid5">'+RS.map(function(n,i){var r=ratio(p,i);return '<button class="cb '+(give===i?'on':'')+'" data-g="'+i+'" '+(p.res[i]>=r?'':'disabled')+'>'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">داری <b>'+fa(p.res[i])+'</b></span><small>'+fa(r)+':'+fa(1)+'</small></button>';}).join('')+'</div>'+
-      '<div class="sub">می‌گیری</div><div class="grid5">'+RS.map(function(n,i){return '<button class="cb '+(get===i?'on':'')+'" data-t="'+i+'">'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">داری <b>'+fa(p.res[i])+'</b></span></button>';}).join('')+'</div>'+
+    sh.innerHTML='<h3>برون‌سپاری</h3>'+haveStrip()+'<p class="sub">نرخ پایه ۴ به ۱ است. درایو یا تابلو فرمان کنار بندر برون‌سپاری نرخ بهتر می‌دهد (۳ به ۱ یا ۲ به ۱).</p>'+
+      '<div class="sub">می‌دهی</div><div class="grid5">'+RS.map(function(n,i){var r=ratio(p,i);return '<button class="cb '+(give===i?'on':'')+'" data-g="'+i+'" '+(p.res[i]>=r?'':'disabled')+'>'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">'+ico(i,13)+'<b style="color:'+RH[i]+'">'+fa(p.res[i])+'</b></span><small>'+fa(r)+':'+fa(1)+'</small></button>';}).join('')+'</div>'+
+      '<div class="sub">می‌گیری</div><div class="grid5">'+RS.map(function(n,i){return '<button class="cb '+(get===i?'on':'')+'" data-t="'+i+'">'+ico(i,24)+'<span class="nn">'+n+'</span><span class="hv">'+ico(i,13)+'<b style="color:'+RH[i]+'">'+fa(p.res[i])+'</b></span></button>';}).join('')+'</div>'+
       '<button class="btn primary wide" data-do '+((give>=0&&get>=0&&give!==get)?'':'disabled')+'>برون‌سپاری</button><button class="btn wide" data-close>بستن</button>';
   }
   sh.addEventListener('click',function(e){
@@ -1672,7 +1677,7 @@ function openPlayerTrade(){
     return '<div class="grid5">'+RS.map(function(n,i){
       var other=kind==='give'?get:give;
       var plusOff=(kind==='give'?arr[i]>=p.res[i]:arr[i]>=4)||other[i]>0;
-      return '<div class="tc">'+ico(i,22)+'<span class="nn">'+n+'</span><em class="hv">داری '+fa(p.res[i])+'</em><b>'+fa(arr[i])+'</b><div class="pm"><button data-s="'+kind+'" data-i="'+i+'" data-d="-1" '+(arr[i]<=0?'disabled':'')+'>−</button><button data-s="'+kind+'" data-i="'+i+'" data-d="1" '+(plusOff?'disabled':'')+'>+</button></div></div>';
+      return '<div class="tc">'+ico(i,22)+'<span class="nn">'+n+'</span><em class="hv">'+ico(i,13)+'<b class="hn" style="color:'+RH[i]+'">'+fa(p.res[i])+'</b></em><b>'+fa(arr[i])+'</b><div class="pm"><button data-s="'+kind+'" data-i="'+i+'" data-d="-1" '+(arr[i]<=0?'disabled':'')+'>−</button><button data-s="'+kind+'" data-i="'+i+'" data-d="1" '+(plusOff?'disabled':'')+'>+</button></div></div>';
     }).join('')+'</div>';
   }
   function draw(){
@@ -1680,7 +1685,7 @@ function openPlayerTrade(){
     if(!results){
       for(var i=0;i<5;i++)if(give[i]>p.res[i])give[i]=p.res[i];
       var ok=sum(give)>0&&sum(get)>0;
-      sh.innerHTML='<h3>معامله با بازیکن‌ها</h3><p class="sub">بگو چه قطعاتی می‌دهی و چه قطعاتی می‌خواهی. بازیکن‌ها جواب می‌دهند.</p><div class="sub">می‌دهی (عدد درشت = مقدار پیشنهادی)</div>'+grid('give',give)+'<div class="sub">می‌خواهی</div>'+grid('get',get)+
+      sh.innerHTML='<h3>معامله با بازیکن‌ها</h3>'+haveStrip()+'<p class="sub">بگو چه قطعاتی می‌دهی و چه قطعاتی می‌خواهی. بازیکن‌ها جواب می‌دهند.</p><div class="sub">می‌دهی</div>'+grid('give',give)+'<div class="sub">می‌خواهی</div>'+grid('get',get)+
         '<button class="btn primary wide" data-submit '+(ok?'':'disabled')+'>پیشنهاد به بقیه</button><button class="btn wide" data-close>بستن</button>';
     }else{
       var yes=results.filter(function(r){return r.ok;});
@@ -1913,6 +1918,7 @@ function renderAwards(){
   }
   el.innerHTML=chip('road',S.longest,S.longest!=null?lens[S.longest]:0,5,'طولانی‌ترین شبکه',mx)+chip('army',S.dark,S.dark!=null?S.players[S.dark].played:0,3,'بزرگ‌ترین ارتش',ma);
 }
+function haveStrip(){var m=me();if(!m)return '';return '<div class="hstrip">'+RS.map(function(n,i){return '<span class="hchip">'+ico(i,18)+'<b style="color:'+RH[i]+'">'+fa(m.res[i])+'</b></span>';}).join('')+'</div>';}
 function haveStr(){var m=me();return (m&&fmtRes(m.res))||'هیچ';}
 function openSettings(){
   var sh=openSheet('');
