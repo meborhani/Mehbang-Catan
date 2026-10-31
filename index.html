@@ -1083,6 +1083,7 @@ function playFx(k){
 }
 
 /* ---------- theme skins: every theme has its own board art ---------- */
+function mixc(h,t,to){var a=parseInt(h.slice(1),16),b=parseInt(to.slice(1),16),r='#';[16,8,0].forEach(function(sh){var x=Math.round(((a>>sh)&255)*(1-t)+((b>>sh)&255)*t);r+=('0'+x.toString(16)).slice(-2);});return r;}
 function ph(p){return 'animation-delay:-'+((Date.now()/1000)%p).toFixed(2)+'s';}
 function hexPath(q,r,k){return 'M'+hexPts(q,r,k).split(' ').join('L')+'Z';}
 var SKB={
@@ -1105,7 +1106,7 @@ function skinDefs(k){
     for(i=0;i<5;i++)d+='<pattern id="sk'+i+'" width=".6" height=".6" patternUnits="userSpaceOnUse"><rect width=".6" height=".6" fill="'+b[i]+'"/><path d="M0 .15H.18V.35H.42M.3 0V.15H.6M.42 .35V.6M.06 .6V.48H.24" stroke="'+RH[i]+'" stroke-opacity=".5" stroke-width=".022" fill="none"/><circle cx=".18" cy=".15" r=".035" fill="'+RH[i]+'" fill-opacity=".8"/><circle cx=".42" cy=".35" r=".035" fill="'+RH[i]+'" fill-opacity=".8"/><circle cx=".6" cy=".15" r=".03" fill="'+RH[i]+'" fill-opacity=".6"/></pattern>';
     d+='<pattern id="sk5" width=".22" height=".22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width=".22" height=".22" fill="#14100a"/><rect width=".11" height=".22" fill="#FFB000" fill-opacity=".32"/></pattern>';
   }else if(k==='cosmic'){
-    for(i=0;i<5;i++)d+='<radialGradient id="sk'+i+'" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".18" stop-color="'+RH[i]+'"/><stop offset=".62" stop-color="'+RH[i]+'" stop-opacity=".38"/><stop offset="1" stop-color="#070924"/></radialGradient>';
+    for(i=0;i<5;i++)d+='<radialGradient id="sk'+i+'" cx=".38" cy=".34" r=".85"><stop offset="0" stop-color="'+mixc(RH[i],.55,'#ffffff')+'"/><stop offset=".45" stop-color="'+RH[i]+'"/><stop offset="1" stop-color="'+mixc(RH[i],.62,'#050620')+'"/></radialGradient>';
     d+='<radialGradient id="sk5" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#000"/><stop offset=".35" stop-color="#000"/><stop offset=".45" stop-color="'+ACC+'" stop-opacity=".8"/><stop offset=".7" stop-color="#3a2a8a" stop-opacity=".4"/><stop offset="1" stop-color="#070924"/></radialGradient>';
     d+='<pattern id="spk" width=".55" height=".55" patternUnits="userSpaceOnUse"><circle cx=".1" cy=".12" r=".014" fill="#fff"/><circle cx=".38" cy=".3" r=".01" fill="#fff" fill-opacity=".8"/><circle cx=".22" cy=".46" r=".012" fill="#fff" fill-opacity=".7"/><circle cx=".5" cy=".05" r=".008" fill="#fff"/></pattern>';
   }else{
@@ -1130,16 +1131,17 @@ function tileArt(t,res,k){
     s+='<path d="'+hexPath(t.q,t.r,0.74)+'" fill="#000" fill-opacity=".38" stroke="'+col+'" stroke-opacity=".55" stroke-width=".02" pointer-events="none"/>';
     s+='<circle cx="'+f3(t.cx-0.52)+'" cy="'+f3(t.cy-0.3)+'" r=".035" fill="'+col+'" pointer-events="none"/>';
   }else if(k==='cosmic'){
-    s+='<polygon points="'+pts+'" fill="#070924" fill-opacity=".55" stroke="'+col+'" stroke-opacity=".55"/>';
-    s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r=".82" fill="url(#sk'+idx+')" pointer-events="none"/>';
-    s+='<path d="'+hp+'" fill="url(#spk)" pointer-events="none"/>';
-    s+='<g class="orb" style="'+ph(46+idx*7)+'" pointer-events="none"><ellipse cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" rx=".9" ry=".28" fill="none" stroke="'+col+'" stroke-opacity=".4" stroke-width=".02" transform="rotate(-24 '+f3(t.cx)+' '+f3(t.cy)+')"/><circle cx="'+f3(t.cx+0.9*Math.cos(0.419))+'" cy="'+f3(t.cy-0.9*Math.sin(0.419)*0.9)+'" r=".045" fill="#fff"/></g>';
+    s+='<polygon points="'+pts+'" fill="#080a2c" stroke="'+mixc(col,.25,'#ffffff')+'" stroke-linejoin="round"/>';
+    s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r=".8" fill="url(#sk'+idx+')" stroke="#fff" stroke-opacity=".25" stroke-width=".02" pointer-events="none"/>';
+    s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" r=".8" fill="url(#spk)" fill-opacity=".5" pointer-events="none"/>';
+    s+='<g class="orb" style="'+ph(46+idx*7)+'" pointer-events="none"><ellipse cx="'+f3(t.cx)+'" cy="'+f3(t.cy)+'" rx=".9" ry=".28" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".022" transform="rotate(-24 '+f3(t.cx)+' '+f3(t.cy)+')"/><circle cx="'+f3(t.cx+0.9*Math.cos(0.419))+'" cy="'+f3(t.cy-0.9*Math.sin(0.419)*0.9)+'" r=".05" fill="#fff"/></g>';
   }else{
     s+='<polygon points="'+pts+'" fill="url(#sk'+idx+')" stroke="#E4DBA8" stroke-dasharray=".1 .06"/>';
     s+='<path d="'+hexPath(t.q,t.r,0.82)+'" fill="none" stroke="#000" stroke-opacity=".28" stroke-width=".02" pointer-events="none"/>';
     s+='<path d="'+hp+'" fill="url(#shade)" pointer-events="none"/>';
   }
-  var icol=k==='orig'?'#FFF6DC':(k==='ww'?'#F1EBC6':col);
+  var icol=k==='orig'?'#FFF6DC':(k==='ww'?'#F1EBC6':(k==='cosmic'?'#FFFFFF':col));
+  if(k==='cosmic')s+='<circle cx="'+f3(t.cx)+'" cy="'+f3(iy+0.36)+'" r=".33" fill="#05061c" fill-opacity=".55" pointer-events="none"/>';
   s+='<use href="'+icn(idx)+'" x="'+f3(ix+0.02)+'" y="'+f3(iy+0.03)+'" width="0.72" height="0.72" style="color:#000" opacity=".4" pointer-events="none"/>';
   s+='<use href="'+icn(idx)+'" x="'+f3(ix)+'" y="'+f3(iy)+'" width="0.72" height="0.72" style="color:'+icol+'" pointer-events="none"/>';
   if(t.num)s+=tileToken(t,k,col);
@@ -1156,7 +1158,7 @@ function tileToken(t,k,col){
     s+='<rect x="'+f3(t.cx-0.28)+'" y="'+f3(t.cy+0.22)+'" width=".56" height=".36" rx=".05" fill="#03100b" stroke="'+col+'" stroke-width=".03"/>';
     s+='<text class="ntext'+(hot?' led':'')+'" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".28" fill="'+(hot?ACC:'#7CF2B5')+'" style="font-family:ui-monospace,Menlo,Consolas,monospace;'+(hot?ph(1.6):'')+'">'+n+'</text>';
   }else if(k==='cosmic'){
-    s+='<circle class="'+(hot?'halo':'')+'" style="'+(hot?ph(2.4):'')+'" cx="'+x+'" cy="'+y+'" r=".37" fill="'+ACC+'" fill-opacity="'+(hot?'.3':'.14')+'"/><circle cx="'+x+'" cy="'+y+'" r=".27" fill="#0a0a26" stroke="'+(hot?'#fff':ACC)+'" stroke-width=".03"/>';
+    s+='<circle class="'+(hot?'halo':'')+'" style="'+(hot?ph(2.4):'')+'" cx="'+x+'" cy="'+y+'" r=".37" fill="'+ACC+'" fill-opacity="'+(hot?'.3':'.14')+'"/><circle cx="'+x+'" cy="'+y+'" r=".27" fill="#05061c" stroke="'+(hot?'#FFE9A8':'#fff')+'" stroke-width=".035"/>';
     s+='<text class="ntext" x="'+x+'" y="'+f3(t.cy+0.5)+'" text-anchor="middle" font-size=".29" fill="'+(hot?'#FFE9A8':'#fff')+'">'+n+'</text>';
   }else{
     s+='<path d="M'+f3(t.cx-0.27)+' '+f3(t.cy+0.24)+'H'+f3(t.cx+0.27)+'V'+f3(t.cy+0.52)+'L'+x+' '+f3(t.cy+0.62)+'L'+f3(t.cx-0.27)+' '+f3(t.cy+0.52)+'Z" fill="#262a16" stroke="#D5CC96" stroke-width=".028" stroke-dasharray=".07 .04"/>';
