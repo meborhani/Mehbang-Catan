@@ -1423,28 +1423,34 @@ $('#watch').addEventListener('click',function(){startGame(4,true);});
 var CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 function genCode(){var c='';for(var i=0;i<5;i++)c+=CODE_CHARS[rint(CODE_CHARS.length)];return c;}
 function cleanName(s){return String(s||'').replace(/[<>&"'`\\]/g,'').replace(/\s+/g,' ').trim().slice(0,12);}
+var ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'},
+  {urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
 function wrapConn(conn){
-  var link={onmessage:null,onclose:null,send:function(m){try{conn.send(m);}catch(e){}},close:function(){try{conn.close();}catch(e){}}};
-  conn.on('data',function(d){if(link.onmessage)link.onmessage(d);});
+  var buf=[],om=null;
+  var link={onclose:null,send:function(m){try{conn.send(m);}catch(e){}},close:function(){try{conn.close();}catch(e){}}};
+  Object.defineProperty(link,'onmessage',{get:function(){return om;},set:function(f){om=f;if(om){while(buf.length)om(buf.shift());}}});
+  conn.on('data',function(d){if(om)om(d);else buf.push(d);});
   conn.on('close',function(){if(link.onclose)link.onclose();});
   return link;
 }
 var PeerTransport={
   host:function(code,onLink,onReady,onError){
-    var peer=new window.Peer('datis-'+code,{debug:0});
+    var peer=new window.Peer('datis-'+code,{debug:1,config:ICE});
     peer.on('open',function(){onReady();});
     peer.on('error',function(e){onError(e);});
     peer.on('connection',function(conn){var link=wrapConn(conn);conn.on('open',function(){onLink(link);});});
     return {close:function(){try{peer.destroy();}catch(e){}}};
   },
   join:function(code,onLink,onError){
-    var peer=new window.Peer({debug:0});
+    var peer=new window.Peer({debug:1,config:ICE});
     peer.on('error',function(e){onError(e);});
     peer.on('open',function(){
       var conn=peer.connect('datis-'+code,{reliable:true,serialization:'json'});
       var link=wrapConn(conn);
       conn.on('open',function(){onLink(link);});
       conn.on('error',function(e){onError(e);});
+      conn.on('close',function(){if(!link.opened)onError({type:'closed'});});
+      conn.on('open',function(){link.opened=true;});
     });
     return {close:function(){try{peer.destroy();}catch(e){}}};
   }
@@ -1554,7 +1560,7 @@ function onLeave(seat){
 }
 function clientMsg(m){
   if(!m)return;
-  if(m.t==='welcome'){NET.you=m.seat;return;}
+  if(m.t==='welcome'){NET.you=m.seat;if(NET.lv&&!NET.lv.names.length){NET.lv.names=['…'];renderLobby();}return;}
   if(m.t==='reject'){lobbyError(m.reason||'ورود ممکن نشد.');return;}
   if(m.t==='lobby'){NET.lv={code:m.code,names:m.names,n:m.n,isHost:false};renderLobby();return;}
   if(m.t==='init'){clientInit(m);return;}
@@ -1584,7 +1590,8 @@ function renderLobby(){
   var L=NET.lv;if(!L)return;
   var seats='';
   for(var i=0;i<L.n;i++)seats+='<div class="seat '+(L.names[i]?'on':'')+'">'+(L.names[i]?L.names[i]:'خالی (هوش مصنوعی)')+'</div>';
-  var h='<div class="over">اتاق بازی</div><div class="sub">این کد را به دوستانت بده تا وارد شوند</div>'+
+  var st=L.isHost?(L.ready?'<div class="sub">اتاق آماده است ✓ منتظر دوستان…</div>':'<div class="sub">در حال اتصال به سرور اتاق…</div>'):(NET.you!=null?'<div class="sub">به اتاق وصل شدی ✓</div>':'<div class="sub">در حال اتصال به اتاق…</div>');
+  var h='<div class="over">اتاق بازی</div>'+st+'<div class="sub">این کد را به دوستانت بده تا وارد شوند</div>'+
     '<div class="lobby-code">'+(L.code||'…')+'</div><div class="row"><button class="btn small" data-copy>کپی کد</button></div>'+
     '<div class="seats">'+seats+'</div>';
   if(L.isHost){
@@ -1615,7 +1622,7 @@ function hostLobby(name){
   showLobby();
   NET.peer=transport().host(code,onJoin,function(){NET.lv.ready=true;renderLobby();},function(err){
     if(err&&err.type==='unavailable-id'){hostLobby(name);return;}
-    NET.lv.err='ساخت اتاق ممکن نشد. اینترنت را بررسی کن و دوباره تلاش کن.';renderLobby();
+    NET.lv.err='ساخت اتاق ممکن نشد ('+((err&&err.type)||'خطا')+'). اینترنت را بررسی کن و دوباره تلاش کن.';renderLobby();
   });
 }
 function onJoin(link){
@@ -1673,7 +1680,7 @@ function joinRoom(code,name){
   NET.started=false;NET.lv={code:code,names:[],n:2,isHost:false};
   showLobby();
   var linked=false;
-  var tm=setTimeout(function(){if(!linked)lobbyError('اتصال به اتاق ممکن نشد. کد را بررسی کن.');},window.__FAST?3000:15000);
+  var tm=setTimeout(function(){if(!linked)lobbyError('اتصال به اتاق ممکن نشد. میزبان صفحه را باز نگه داشته؟ اینترنت را عوض کن و دوباره تلاش کن.');},window.__FAST?3000:25000);
   NET.peer=transport().join(code,function(link){
     linked=true;clearTimeout(tm);
     NET.hostLink=link;ROLE='client';
@@ -1683,8 +1690,8 @@ function joinRoom(code,name){
       var sh=openSheet('<h3>ارتباط قطع شد</h3><p class="sub">ارتباط با میزبان از بین رفت.</p><button class="btn primary wide" data-reload>برگشت به صفحهٔ اول</button>',{dismiss:false});
       sh.addEventListener('click',function(e){if(e.target.closest('[data-reload]'))location.reload();});
     };
-    link.send({t:'hello',name:cleanName(name)});
-  },function(){if(!linked){clearTimeout(tm);lobbyError('اتصال به اتاق ممکن نشد. کد را بررسی کن.');}});
+    var hn=0,hi=setInterval(function(){if(NET.you!=null||NET.started||hn++>10){clearInterval(hi);return;}link.send({t:'hello',name:cleanName(name)});},1500);link.send({t:'hello',name:cleanName(name)});
+  },function(err){if(!linked){clearTimeout(tm);var t=err&&err.type;lobbyError(t==='peer-unavailable'?'اتاقی با این کد پیدا نشد. کد را بررسی کن و مطمئن شو میزبان صفحه را باز نگه داشته.':'اتصال برقرار نشد ('+(t||'خطا')+'). اینترنت را عوض کن (وای‌فای/موبایل) و دوباره تلاش کن.');}});
 }
 function saveName(n){try{localStorage.setItem('datis_name',n);}catch(e){}}
 function loadName(){try{return localStorage.getItem('datis_name')||'';}catch(e){return '';}}
