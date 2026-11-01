@@ -110,6 +110,7 @@ button:disabled{cursor:default}
 .res{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .rc{display:flex;flex-direction:column;align-items:center;gap:0;padding:5px 2px 4px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
 .rc b{font-size:17px;line-height:1.2;font-variant-numeric:tabular-nums}
+.tgq{display:inline-flex;gap:3px}.tgq .btn{min-height:0;padding:3px 6px;font-size:13px}
 .rc{min-width:0}
 .rc span{font-size:9px;color:var(--ink-dim);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .row2{display:flex;gap:6px}
@@ -2776,12 +2777,22 @@ function renderAwards(){
 }
 function haveStrip(){var m=me();if(!m)return '';return '<div class="hstrip">'+RS.map(function(n,i){return '<span class="hchip">'+ico(i,18)+'<b style="color:'+RH[i]+'">'+fa(m.res[i])+'</b></span>';}).join('')+'</div>';}
 function haveStr(){var m=me();return (m&&fmtRes(m.res))||'هیچ';}
+function openGlobalSettings(){
+  var sh=openSheet('<h3>تنظیمات</h3><div class="sub">صدا و لرزش برای همهٔ بازی‌ها یکی است.</div><div class="three"><button class="btn" data-tg="mus"></button><button class="btn" data-tg="snd"></button><button class="btn" data-tg="vib"></button></div><button class="btn wide" data-close>بستن</button>');
+  var cb=sh.querySelector('[data-close]');
+  if(cb&&!isStandalone())cb.insertAdjacentHTML('beforebegin','<div class="inst"><div class="sub stg-lbl">نصب برنامه</div>'+(DEFI?'<button class="btn wide" data-install>نصب روی صفحهٔ اصلی</button>':'<p class="sub small">در Chrome اندروید: منو ⋮ ← «نصب برنامه». در iPhone: دکمهٔ اشتراک ← «Add to Home Screen».</p>')+'</div>');
+  paintFeel();
+  sh.addEventListener('click',function(e){
+    if(e.target.closest('[data-install]')&&DEFI){DEFI.prompt();DEFI.userChoice.then(function(){DEFI=null;closeSheet();});return;}
+    if(e.target.closest('[data-close]'))closeSheet();
+  });
+}
 function openSettings(){
   var sh=openSheet('');
-  sh.innerHTML='<h3>تنظیمات</h3><div><label class="sub stg-lbl" for="setName">نام تو در بازی</label><input id="setName" class="inp" maxlength="12" placeholder="مثلاً علی" autocomplete="off"></div>'+
+  sh.innerHTML='<h3>تنظیمات سیطره کتان</h3><div><label class="sub stg-lbl" for="setName">نام تو در بازی</label><input id="setName" class="inp" maxlength="12" placeholder="مثلاً علی" autocomplete="off"></div>'+
     '<div class="sub">تم بازی. فقط ظاهر و نام‌ها عوض می‌شود و قوانین یکی است. هر بازیکن تم خودش را می‌بیند.</div><div class="themes">'+
     ['orig','datis','cosmic','ww'].map(function(k){return THEMES.filter(function(t){return t.key===k;})[0];}).map(function(t){return '<button class="th'+(t===TH?' on':'')+'" data-th="'+t.key+'"><span class="thi">'+[0,1,2,3,4].map(function(i){return '<svg class="ico" width="22" height="22" viewBox="0 0 24 24" style="color:'+t.RH[i]+'"><use href="#ic_'+t.key+i+'"/></svg>';}).join('')+'</span><b>'+t.name+'</b></button>';}).join('')+
-    '</div><div><div class="sub stg-lbl">سختی هوش مصنوعی</div><div class="seg-d"><button data-d="0">آسان</button><button data-d="1">متوسط</button><button data-d="2">سخت</button></div></div><div class="three"><button class="btn sm" data-tg="mus"></button><button class="btn sm" data-tg="snd"></button><button class="btn sm" data-tg="vib"></button></div><p class="sub">نام از بازی بعد اعمال می‌شود.</p><button class="btn primary wide" data-close>تأیید</button>';
+    '</div><div><div class="sub stg-lbl">سختی هوش مصنوعی</div><div class="seg-d"><button data-d="0">آسان</button><button data-d="1">متوسط</button><button data-d="2">سخت</button></div></div><p class="sub">نام از بازی بعد اعمال می‌شود.</p><button class="btn primary wide" data-close>تأیید</button>';
   var cbtn=sh.querySelector('[data-close]');
   if(cbtn&&!isStandalone()){
     cbtn.insertAdjacentHTML('beforebegin','<div class="inst"><div class="sub stg-lbl">نصب برنامه</div>'+(DEFI?'<button class="btn wide" data-install>نصب روی صفحهٔ اصلی</button>':'<p class="sub small">در Chrome اندروید: منو ⋮ ← «نصب برنامه» یا «افزودن به صفحهٔ اصلی». در iPhone: دکمهٔ اشتراک ← «Add to Home Screen».</p>')+'</div>');
@@ -2956,7 +2967,8 @@ function paintFeel(){
   Array.prototype.forEach.call(document.querySelectorAll('[data-tg]'),function(b){
     var k=b.dataset.tg,on=!!FEEL[k];
     b.classList.toggle('off',!on);
-    if(b.classList.contains('btn'))b.textContent=({mus:'موسیقی',snd:'افکت',vib:'ویبره'})[k]+': '+(on?'روشن':'خاموش');
+    if(b.dataset.ic){b.textContent=b.dataset.ic;b.style.opacity=on?'1':'.4';b.style.textDecoration=on?'none':'line-through';b.title=({mus:'موسیقی',snd:'افکت',vib:'ویبره'})[k]+': '+(on?'روشن':'خاموش');}
+    else if(b.classList.contains('btn'))b.textContent=({mus:'موسیقی',snd:'افکت',vib:'ویبره'})[k]+': '+(on?'روشن':'خاموش');
   });
 }
 document.addEventListener('click',function(e){
@@ -5581,14 +5593,14 @@ function mgIcon(id){
   return '<svg viewBox="0 0 36 36"><polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5" fill="var(--e0)" stroke="var(--line)" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="var(--ember)"/></svg>';
 }
 function renderHub(){
-  var h='<div class="hb-in hub"><div style="grid-column:1/-1;display:flex;gap:8px;justify-content:center;align-items:center"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 10px;font-size:13px">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button><button class="btn sm" data-hg="hist" style="min-height:0;padding:3px 10px;font-size:13px">📜 سوابق</button>'+(mgrjOk()?'<button class="btn sm primary" data-hg="mgrj" style="min-height:0;padding:3px 10px;font-size:13px">↩ بازگشت به بازی قبلی</button>':'')+'</div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  var h='<div class="hb-in hub"><div style="grid-column:1/-1;display:flex;gap:8px;justify-content:center;align-items:center;gap:4px"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 8px;font-size:13px;min-width:0;max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button><button class="btn sm" data-hg="hist" aria-label="سوابق بازی‌ها" title="سوابق بازی‌ها" style="min-height:0;padding:3px 8px;font-size:13px">📜</button><span class="tgq"><button class="btn sm" data-tg="mus" data-ic="🎵" aria-label="موسیقی"></button><button class="btn sm" data-tg="snd" data-ic="🔊" aria-label="افکت"></button><button class="btn sm" data-tg="vib" data-ic="📳" aria-label="ویبره"></button></span>'+(mgrjOk()?'<button class="btn sm primary" data-hg="mgrj" style="min-height:0;padding:3px 10px;font-size:13px">↩ بازگشت به بازی قبلی</button>':'')+'</div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
     h+='<button class="hb-card" data-hg="'+k+'"><div class="hb-ic">'+mgIcon(k)+'</div><div><b>'+g.name+'</b><small>'+g.sub+'</small></div><span class="hb-tag">'+(g.max>2?'۲–'+fa(g.max)+' نفره':'۲ نفره')+'</span></button>';
   });
   h+='<button class="btn big" data-hg="people">افراد، دوستان و رده‌بندی</button></div>';
-  $('#hub').innerHTML=h;
+  $('#hub').innerHTML=h;paintFeel();
 }
 function mgOpen(k){
   var g=MGS[k];mgNew(g,'menu');
@@ -6084,6 +6096,7 @@ $('#hub').addEventListener('click',function(e){
   var c=e.target.closest('[data-hg]');if(!c)return;
   var k=c.dataset.hg;
   if(k==='hist'){histOpen();return;}
+  if(k==='gset'){openGlobalSettings();return;}
   if(k==='mgrj'){var rj=lsGet('mb_mgrj',null);if(mgrjOk()){mgOpen(rj.g);mgJoin(rj.code,rj.tk);}else{lsSet('mb_mgrj',null);renderHub();}}else if(k==='catan')hubCatan();else if(k==='people')openPeople();else if(k==='acct')accOpen();else mgOpen(k);
 });
 $('#mini').addEventListener('click',function(e){
