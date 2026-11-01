@@ -21,16 +21,22 @@ create table if not exists public.grants(
 create index if not exists grants_uid_idx on public.grants(uid) where claimed_at is null;
 
 create table if not exists public.admins(email text primary key);
-alter table public.admins enable row level security; -- بدون سیاست: از بیرون خوانده نمی‌شود
+alter table public.admins enable row level security; -- هر کاربر فقط ردیف خودش را می‌بیند
 alter table public.players enable row level security;
 alter table public.grants enable row level security;
 
+drop policy if exists admins_self on public.admins;
+create policy admins_self on public.admins for select to authenticated using (email = (auth.jwt()->>'email'));
 drop policy if exists admin_players_sel on public.players;
 drop policy if exists admin_grants_sel on public.grants;
 drop policy if exists admin_grants_ins on public.grants;
 create policy admin_players_sel on public.players for select to authenticated using (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
 create policy admin_grants_sel on public.grants for select to authenticated using (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
 create policy admin_grants_ins on public.grants for insert to authenticated with check (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
+
+revoke all on public.players, public.grants, public.admins from anon;
+revoke insert, update, delete on public.admins from authenticated;
+revoke update, delete on public.players, public.grants from authenticated;
 
 -- بازیکن‌ها فقط از این دو تابع می‌توانند استفاده کنند؛ به جدول‌ها دسترسی مستقیم ندارند
 create or replace function public.mb_register(p_uid text, p_name text) returns void
