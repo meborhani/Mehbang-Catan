@@ -4850,10 +4850,12 @@ function jzAiStep(seat){
     jzAct(seat,'jz',{a:'ev',f:best});return;
   }
   if(x.of){
-    var of=x.of,gain=0,cnt=0;
-    of.cards.forEach(function(t){if(jzHas(seat,t)>=0)gain++;});
+    var of=x.of,gain=0,cnt=0,sim=[],fz=0;
+    for(i=0;i<x.nf[seat];i++){if(x.sn[seat][i])sim.push(-9);else if(x.fl[seat][i])sim.push(x.fl[seat][i].t);else{sim.push(-1);fz++;}}
+    of.cards.forEach(function(t){var k2=sim.indexOf(t);if(k2>=0)gain++;else{var e2=sim.indexOf(-1);if(e2>=0){sim[e2]=t;gain++;}}});
+    var allOk=gain===of.cards.length;
     x.hand[seat].forEach(function(t){if(t===of.t)cnt++;});
-    var give=of.t===-2?0:of.j,okk=(of.t===-2?gain>=1:(cnt>=give&&((give===0&&gain>=1)||(give>0&&gain>=give))))&&Math.random()<.9;
+    var give=of.t===-2?0:of.j,okk=of.t===-2?(gain>=1&&jzTok(seat)>=0):(cnt>=give&&allOk&&gain>=1);
     jzAct(seat,'jz',{a:okk?'ac':'rj'});return;
   }
   if(x.ph==='hat'){
@@ -4948,7 +4950,7 @@ function jzStatus(){
   }
   if(M.turn!==me)return (M.ai[M.turn]?M.names[M.turn]+' فکر می‌کند…':'نوبت '+M.names[M.turn])+(v.lg?' · '+v.lg:'');
   if(v.fin)return 'دور آخر: تا '+fa(v.tr[me]?3:2)+' کارت بکار یا «رد کردن»';
-  return {p:v.pc?'زمین را بزن، بعد کارت بعدی را؛ یا «رد کردن»':'زمینی را بزن، بعد هر کارتی از دستت را',tr:'معامله کن یا «پایان معامله»',fu:(v.fu.length&&!jzSpotV(v,me)?'جای کاشت نداری؛ یک زمینت را بزن تا برداشت شود':'زمینی را بزن، بعد یکی از کارت‌های وسط را')}[v.ph]||'نوبت توست';
+  return {p:v.pc?'زمین را بزن، بعد کارت بعدی را؛ یا «رد کردن»':'زمینی را بزن، بعد هر کارتی از دستت را',tr:'معامله کن؛ اگر نمی‌خواهی «🌱 شروع کاشت» را بزن تا کارت‌های وسط را بکاری',fu:(v.fu.length&&!jzSpotV(v,me)?'جای کاشت نداری؛ یک زمینت را بزن تا برداشت شود':'زمینی را بزن، بعد یکی از کارت‌های وسط را')}[v.ph]||'نوبت توست';
 }
 function jzFm(v,i,f){
   var o=v.fl[i][f],m=(v.fe[i][f]?'🌱':'')+(v.rt[i][f]?'💧':'')+(v.sn[i][f]?'❄️':'')+(v.br[i][f]?'🧬':'');
@@ -5035,7 +5037,7 @@ function jzHtml(){
   if(my&&!of){
     if(v.ph==='p'&&(v.pc>=1||v.fin))acts+='<button class="btn sm" data-ja="sk">رد کردن</button>';
     if(v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me)){var anyH=false;for(i=0;i<v.nf[me];i++)if(v.fl[me][i]&&!v.sn[me][i])anyH=true;if(!anyH)acts+='<button class="btn sm primary" data-ja="bk">🔥 بسوزان</button>';}
-    if(v.ph==='tr')acts+='<button class="btn sm primary" data-ja="of">پیشنهاد</button><button class="btn sm" data-ja="dn">پایان معامله</button>';
+    if(v.ph==='tr')acts+='<button class="btn sm" data-ja="of">پیشنهاد</button><button class="btn sm primary" data-ja="dn">🌱 شروع کاشت</button>';
   }
   if(M.over){if(!M.left&&(M.mode==='ai'||M.mode==='host'))acts+='<button class="btn sm primary" data-mg="again">دوباره</button>';}
   if(M.over)acts+='<span class="jz-em">'+v.sc.map(function(s,k){return M.names[k]+': '+fa(s);}).join(' · ')+'</span>';
@@ -5056,6 +5058,7 @@ function jzClick(t){
     if(M.jm==='fz'&&can){M.jm=false;mgDo('jz',{a:'fz',f:f});mgRender();return true;}
     if(!my)return true;
     if(v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me)){if(v.fl[me][f]&&!v.sn[me][f])mgDo('jz',{a:'bk',f:f});else toast('یکی از زمین‌های پر را بزن تا برداشت شود');return true;}
+    if(v.ph==='tr'){toast('اول «🌱 شروع کاشت» را بزن؛ بعد زمین و کارت');return true;}
     if(v.ph==='p'||v.ph==='fu'){
       if(M.sc){jzPlant(f,M.sc);return true;}
       M.sf=M.sf===f?-1:f;mgRender();
