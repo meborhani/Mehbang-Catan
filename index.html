@@ -735,32 +735,61 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-hd{display:flex;flex-wrap:nowrap;gap:3px;overflow:hidden;min-height:clamp(26px,8.5dvh,38px)}
 .jz-ac{display:flex;gap:5px;justify-content:center;align-items:center;flex-wrap:nowrap}.jz-ac .btn{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:clamp(26px,8dvh,34px);padding:1px 6px;font-size:clamp(10px,2.8dvh,13px)}
 
-.jzt{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:3px;align-items:stretch}
-.jzt-t{grid-column:1/-1;grid-row:1;display:flex;gap:3px;justify-content:center}
-.jzt-t>.jz-s{flex:1;min-width:0;max-width:34%}
+.jzw{background:radial-gradient(ellipse at 50% 40%,#2a1c10,#150d07)}
+.jzt{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:4px;align-items:stretch}
+.jzt-t{grid-column:1/-1;grid-row:1;display:flex;gap:4px;justify-content:center}
+.jzt-t>.jz-s{flex:1;min-width:0;max-width:30%}
 .jzt-l{grid-column:1;grid-row:2;display:flex;align-items:center}.jzt-r{grid-column:3;grid-row:2;display:flex;align-items:center}
 .jzt-l>.jz-s,.jzt-r>.jz-s{flex:1}
-.jzt-c{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse,#1f6b3a,#14502b);border:2px solid #6b4310;border-radius:40px;padding:4px}
-.jzt-c .jz-mid{flex-direction:column;gap:3px;min-height:0;width:100%}
-.jzt-c .jz-fu{flex-wrap:wrap;justify-content:center;min-width:0}
+.jzt-c{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse at 50% 35%,#2f8a52,#17562f 70%);border:3px solid #8a5a26;border-radius:clamp(26px,9dvh,46px);padding:4px 8px;box-shadow:inset 0 0 22px #0009,0 3px 10px #000a,0 0 0 2px #3a2410}
+.jzt-c .jz-mid{flex-direction:column;gap:4px;min-height:0;width:100%;align-items:center}
+.jzt-c .jz-fu{flex-wrap:wrap;justify-content:center;min-width:0;gap:5px}
+.jzt-c .jz-rt{flex:none;width:100%}
 .jzt.n2 .jzt-c,.jzt.n3 .jzt-c{grid-column:1/-1}
 .jzt.n2 .jzt-t,.jzt.n3 .jzt-t{max-width:100%}
-.jzt-m{grid-column:1/-1;grid-row:3;display:flex;flex-direction:column;gap:2px}
-.jz-s{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:2px;display:flex;flex-direction:column;gap:2px;min-width:0;font-size:clamp(8.5px,2.3dvh,11.5px);line-height:1.2}
-.jz-s.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember) inset}
-.jz-sh{display:flex;justify-content:space-between;gap:3px;align-items:center;min-width:0}
-.jz-sh b{display:flex;gap:2px;align-items:center;min-width:0}.jz-sh b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.jz-sh small{color:var(--ink-dim);white-space:nowrap}
-.jz-sf{display:flex;gap:2px;justify-content:center}
-.jz-ft{position:relative;flex:1;min-width:0;max-width:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #6b4310;border-inline:4px solid #d6c23c;border-radius:6px;background:repeating-linear-gradient(90deg,#c58a3c 0 6px,#a8702a 6px 8px);min-height:clamp(26px,8.5dvh,40px);color:#fff;text-shadow:0 1px 2px #000b}
-.jz-ft i{font-style:normal;font-size:clamp(12px,3.8dvh,19px);line-height:1}.jz-ft b{font-size:clamp(9px,2.5dvh,12px);line-height:1}.jz-ft small{font-size:clamp(7px,2dvh,9px);line-height:1}
-.jz-ft.em{opacity:.55}
-.jz-mf{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.jz-mf .jz-f{height:clamp(40px,13dvh,62px);flex-direction:row;gap:6px;overflow:hidden}.jz-mf .jz-f i{font-size:clamp(18px,5.5dvh,28px)}.jz-hd{gap:clamp(4px,2vw,14px)}
-.jz-f.fsel{outline:3px solid #ffd35a;outline-offset:-1px;transform:translateY(-2px)}
-.jz-cd.hc{width:clamp(40px,13dvh,60px);height:clamp(40px,13.5dvh,58px);flex:none}
-.jz-hd{justify-content:center}
-.jz-cd.sel{outline:3px solid #ff9d2e;outline-offset:1px}
+.jzt.n3 .jzt-t>.jz-s,.jzt.n2 .jzt-t>.jz-s{max-width:46%}
+.jzt-m{grid-column:1/-1;grid-row:3;display:flex;align-items:stretch;gap:6px}
+.jz-s{--av:clamp(18px,6.4dvh,30px);border:1px solid #5a3d1d;border-radius:12px;background:linear-gradient(180deg,#3b2915,#27190c);padding:3px 4px;display:flex;flex-direction:column;gap:3px;min-width:0;line-height:1.15;box-shadow:0 2px 5px #0008}
+.jz-s.on{border-color:#ffb23f;box-shadow:0 0 0 2px #ffb23f77,0 0 12px #ffb23f88}
+.jz-s.on .pk-av{border-color:#ffb23f}
+.jz-s .pk-av{flex:none;border-width:2px}
+.jz-sh{display:flex;gap:5px;align-items:center;min-width:0}
+.jz-in{display:flex;flex-direction:column;min-width:0}
+.jz-in b{font-size:clamp(9px,2.6dvh,12.5px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jz-in small{font-size:clamp(8px,2.2dvh,11px);color:#d8c8a8;white-space:nowrap}
+.jz-cc{color:#ffd35a;font-weight:800}
+.jz-sf{display:flex;gap:3px;justify-content:center}
+.jz-pt{position:relative;flex:1;min-width:0;display:flex;align-items:center;justify-content:center;border-radius:7px;border:2px solid #5b3a14;background:repeating-linear-gradient(0deg,#7a4a22 0 3px,#6a3f1b 3px 6px);box-shadow:inset 0 2px 6px #0009;overflow:hidden}
+.jz-sf .jz-pt{max-width:52px;height:clamp(26px,9.5dvh,42px)}
+.jz-pt.em{background:repeating-linear-gradient(0deg,#5a3718 0 3px,#4e2f14 3px 6px);opacity:.75;border-style:dashed}
+.jz-pt.ice{background:repeating-linear-gradient(0deg,#9ec7e6 0 3px,#8ab6d8 3px 6px)}
+.jz-cr{display:flex;flex-wrap:wrap;justify-content:center;align-content:center;line-height:1;text-shadow:0 1px 2px #0008;padding:1px;max-width:100%}
+.jz-sf .jz-cr{font-size:clamp(9px,2.8dvh,14px)}.jz-sf .jz-cr.c1{font-size:clamp(13px,4.4dvh,22px)}.jz-sf .jz-cr.c3{font-size:clamp(7px,2.2dvh,11px)}
+.jz-nb{position:absolute;top:0;inset-inline-start:0;background:#1d6b3a;color:#fff;font-weight:800;font-size:clamp(7px,2.1dvh,10px);line-height:1;padding:1px 3px;border-radius:0 0 5px 0;border:1px solid #fff8}
+.jz-pv{position:absolute;bottom:0;inset-inline-end:0;background:#ffd35a;color:#3a2506;font-weight:800;font-size:clamp(7px,2dvh,10px);line-height:1;padding:1px 3px;border-radius:5px 0 0 0}
+.jz-mf{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.jz-mf .jz-f{height:clamp(44px,15dvh,70px);flex-direction:column;gap:0;overflow:hidden;padding:0;border-radius:10px;transition:transform .15s,box-shadow .15s;font:inherit}
+.jz-mf .jz-f.jz-pt{border:3px solid #5b3a14 !important;border-inline:3px solid #5b3a14 !important;background:repeating-linear-gradient(0deg,#7a4a22 0 4px,#6a3f1b 4px 8px) !important}
+.jz-mf .jz-f.em{background:repeating-linear-gradient(0deg,#5a3718 0 4px,#4e2f14 4px 8px) !important;border-style:dashed !important}
+.jz-mf .jz-cr{font-size:clamp(14px,5dvh,26px)}.jz-mf .jz-cr.c1{font-size:clamp(20px,7.5dvh,38px)}.jz-mf .jz-cr.c3{font-size:clamp(11px,3.8dvh,19px)}
+.jz-mf .jz-nb{font-size:clamp(9px,2.8dvh,13px);padding:1px 5px}.jz-mf .jz-pv{font-size:clamp(9px,2.8dvh,13px);padding:1px 5px}
+.jz-pl2{font-size:clamp(18px,6dvh,30px);color:#e8c98a;opacity:.7}
+.jz-mf .jz-f.lk{background:#2a1c10 !important;border:2px dashed #8a6a3a !important;color:#d8c8a8;display:flex;align-items:center;justify-content:center}
+.jz-mf .jz-f.lk small{font-size:clamp(8px,2.4dvh,11px)}
+.jz-f.fsel{border-color:#ffd35a !important;box-shadow:0 0 0 2px #ffd35a,0 4px 12px #000a;transform:translateY(-4px)}
+.jz-f.fit{box-shadow:0 0 0 2px #5be08a;animation:jzfit 1s ease-in-out infinite}
+.jz-f.hm{border-color:#e0443e !important;box-shadow:0 0 0 2px #e0443e}
+@keyframes jzfit{50%{box-shadow:0 0 0 4px #5be08a99}}
+.jzt-m .jz-s.me{flex:none;width:clamp(86px,20vw,150px);justify-content:center}
+.jz-hd{display:flex;flex-wrap:nowrap;justify-content:center;align-items:flex-end;overflow:visible;min-height:clamp(46px,15dvh,70px);padding-top:6px;gap:0}
+.jz-cd.hc{width:clamp(40px,13dvh,60px);height:clamp(44px,14.5dvh,64px);flex:none;margin-inline:calc(-1px*var(--ov,0));transform:rotate(var(--r,0deg));transform-origin:50% 120%;transition:transform .15s}
+.jz-cd.hc.nx,.jz-cd.hc.sel{transform:translateY(-8px) rotate(0);z-index:9 !important}
+.jz-cd.hc.nx{box-shadow:0 0 0 2px #ffb23f,0 3px 8px #000a}
+.jz-cd.dim{filter:brightness(.6) saturate(.6)}
+.jz-cd.sel{outline:3px solid #ffd35a;outline-offset:1px}
+.jz-cd.big.nx{box-shadow:0 0 0 2px #ffb23f,0 3px 8px #000a}
+.jz-of{background:#0008;border:1px solid #ffb23f;color:#fff}
+.jz-ac .btn{border-radius:6px}
 .hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
 
 .pkw{position:absolute;inset:0;align-items:stretch;display:flex;flex-direction:column;padding:4px 8px;gap:3px}
@@ -4882,7 +4911,8 @@ function jzV(){return M.mode==='guest'?M.x:jzView(M.me);}
 function jzCard(t,cls,attr,big){
   var c=JZ[t],h=(t*47+20)%360,co='';
   c.b.forEach(function(v){if(v)co+='<span class="jz-co"><i></i><small>'+fa(v)+'</small></span>';});
-  return '<button class="jz-cd '+cls+'" '+attr+' style="--ch:'+h+'" title="'+c.n+' — '+fa(c.c)+' کارت">'+
+  var st=/style="([^"]*)"/.exec(attr||'');if(st)attr=attr.replace(st[0],'');
+  return '<button class="jz-cd '+cls+'" '+attr+' style="--ch:'+h+(st?';'+st[1]:'')+'" title="'+c.n+' — '+fa(c.c)+' کارت">'+
     (big?'<b class="jz-nm">'+c.n+'</b>':'')+'<i class="jz-ce">'+c.e+'</i>'+
     (big?'<span class="jz-bt"><em class="jz-cn">'+fa(c.c)+'</em><span class="jz-cs">'+co+'</span></span>':'<em class="jz-cn">'+fa(c.c)+'</em>')+'</button>';
 }
@@ -4911,7 +4941,7 @@ function jzStatus(){
   }
   if(M.turn!==me)return (M.ai[M.turn]?M.names[M.turn]+' فکر می‌کند…':'نوبت '+M.names[M.turn])+(v.lg?' · '+v.lg:'');
   if(v.fin)return 'دور آخر: تا '+fa(v.tr[me]?3:2)+' کارت بکار یا «رد کردن»';
-  return {p:v.pc?'یک کارت دیگر بکار یا «رد کردن»':'کارت اول دستت را بکار',tr:'معامله کن یا «پایان معامله»',fu:(v.fu.length&&!jzSpotV(v,me)?'زمین خالی نداری؛ یک زمینت را بزن تا برداشت شود و کارت‌های رو شده بسوزند':'کارت‌های رو شده را بکار')}[v.ph]||'نوبت توست';
+  return {p:v.pc?'زمین را بزن، بعد کارت بعدی را؛ یا «رد کردن»':'زمینی را بزن، بعد کارت اول دستت را',tr:'معامله کن یا «پایان معامله»',fu:(v.fu.length&&!jzSpotV(v,me)?'جای کاشت نداری؛ یک زمینت را بزن تا برداشت شود':'زمینی را بزن، بعد یکی از کارت‌های وسط را')}[v.ph]||'نوبت توست';
 }
 function jzFm(v,i,f){
   var o=v.fl[i][f],m=(v.fe[i][f]?'🌱':'')+(v.rt[i][f]?'💧':'')+(v.sn[i][f]?'❄️':'')+(v.br[i][f]?'🧬':'');
@@ -4924,14 +4954,25 @@ function jzHtml(){
   var can=!M.over&&!v.ev&&!M.wait;
   if(!(my&&(v.ph==='p'||v.ph==='fu'))){M.sf=-1;M.sc=null;}
   if(M.sc&&((v.ph==='p'&&M.sc.s!=='h')||(v.ph==='fu'&&M.sc.s!=='f')||(M.sc.s==='f'&&M.sc.i>=v.fu.length)))M.sc=null;
+  var selT=M.sc?(M.sc.s==='f'?v.fu[M.sc.i]:v.hand[M.sc.i]):undefined;
+  function plotHtml(k,f2,mine){
+    var o2=v.fl[k][f2],tk2=jzTk(v,k,f2),cls='jz-pt'+(o2?'':' em')+(v.sn[k][f2]?' ice':'');
+    if(mine){
+      var fit=my&&(v.ph==='p'||v.ph==='fu')&&selT!==undefined&&!v.sn[k][f2]&&(!o2||o2.t===selT);
+      var burn2=my&&v.ph==='fu'&&v.fu.length&&!jzSpotV(v,k);
+      var pk2=(burn2&&o2&&!v.sn[k][f2])||(M.jm==='hv'&&o2)||(M.jm==='fz'&&!v.fe[k][f2])||((evq==='rain'||evq==='dry')&&o2)||evq==='gard';
+      cls+=(pk2?' hm':'')+(M.sf===f2?' fsel':'')+(fit?' fit':'');
+    }
+    var cr='';
+    if(o2){var cn=Math.min(o2.n,9);for(var q2=0;q2<cn;q2++)cr+=JZ[o2.t].e;}
+    var inner=(o2?'<div class="jz-cr c'+(o2.n<=2?1:o2.n<=4?2:3)+'">'+cr+'</div><span class="jz-nb">'+fa(o2.n)+'</span><span class="jz-pv">🪙'+fa(jzFValV(v,k,f2))+'</span>':(mine?'<span class="jz-pl2">＋</span>':''))+(tk2?'<span class="jz-tks">'+tk2+'</span>':'');
+    return mine?'<button class="jz-f '+cls+'" data-jf="'+f2+'">'+inner+'</button>':'<div class="'+cls+'">'+inner+'</div>';
+  }
   function seatHtml(k,nof){
     var held='',fs='',f2;
-    for(var j=0;j<M.n;j++)if(j!==k&&v.hh[j]===k)held+='🎩'+mgMark(j);
-    for(f2=0;f2<v.nf[k];f2++){
-      var o2=v.fl[k][f2],tk2=jzTk(v,k,f2);
-      fs+='<div class="jz-ft'+(o2?'':' em')+'">'+(o2?'<i>'+JZ[o2.t].e+'</i><b>'+fa(o2.n)+'</b><small>🪙'+fa(jzFValV(v,k,f2))+'</small>':'')+(tk2?'<span class="jz-tks">'+tk2+'</span>':'')+'</div>';
-    }
-    return '<div class="jz-s'+(M.turn===k&&!M.over?' on':'')+'"><div class="jz-sh"><b>'+mgMark(k)+'<span>'+esc2(M.names[k]||'')+'</span></b><small>🪙'+fa(v.co[k])+' ✋'+fa(v.hn[k])+(v.tr[k]?' <span class="jz-tk k5">🚜</span>':'')+(v.bl[k]?' 🏆'+fa(v.bl[k]):'')+(v.hh[k]!==k?' ⌀🎩':'')+held+'</small></div>'+(nof?'':'<div class="jz-sf">'+fs+'</div>')+'</div>';
+    for(var j=0;j<M.n;j++)if(j!==k&&v.hh[j]===k)held+='🎩';
+    if(!nof)for(f2=0;f2<v.nf[k];f2++)fs+=plotHtml(k,f2,false);
+    return '<div class="jz-s'+(M.turn===k&&!M.over?' on':'')+(k===me?' me':'')+'"><div class="jz-sh"><span class="pk-av">'+avHtml(mgAv(k),M.names[k]||'',M.ai[k],0)+'</span><div class="jz-in"><b>'+esc2(M.names[k]||'')+'</b><small><span class="jz-cc">🪙'+fa(v.co[k])+'</span> ✋'+fa(v.hn[k])+(v.tr[k]?' 🚜':'')+(v.bl[k]?' 🏆'+fa(v.bl[k]):'')+(v.hh[k]!==k?' ⌀🎩':'')+held+'</small></div></div>'+(nof?'':'<div class="jz-sf">'+fs+'</div>')+'</div>';
   }
   var oth=[];for(i=1;i<M.n;i++)oth.push((me+i)%M.n);
   var seatL='',seatR='',seatT='';
@@ -4962,18 +5003,20 @@ function jzHtml(){
     mid='<div class="jz-ty">'+[-1,-2].concat(JZ.map(function(c,t){return t;})).map(function(t){return '<button class="jz-t'+(M.wt===t?' sel':'')+'" data-jt="'+t+'">'+(t===-1?'∅':t===-2?'🎩':JZ[t].e)+'</button>';}).join('')+
       '<button class="jz-t'+(M.wj===2?' sel':'')+'" data-jj="'+(M.wj===2?1:2)+'">×'+fa(M.wj)+'</button></div>';
   }else mid='<div class="jz-of"><span>'+jzStatus()+'</span></div>';
-  var fuH=v.fu.length?v.fu.map(function(t,j){return jzCard(t,'big'+((M.gs.fu.indexOf(j)>=0||(M.sc&&M.sc.s==='f'&&M.sc.i===j))?' sel':'')+((my&&v.ph==='fu'&&M.sc===null&&M.sf<0&&j===0)?' nx':''),'data-jc="'+j+'"',true);}).join(''):'<span class="jz-em">رو شده‌ای نیست</span>';
+  var fuH=v.fu.length?v.fu.map(function(t,j){var sl=M.sc&&M.sc.s==='f'&&M.sc.i===j;return jzCard(t,'big'+((M.gs.fu.indexOf(j)>=0||sl)?' sel':'')+((my&&v.ph==='fu'&&M.sc===null&&M.sf<0&&j===0)?' nx':''),'data-jc="'+j+'"',true);}).join(''):'<span class="jz-em">کارت رو‌شده‌ای نیست</span>';
   var midH='<div class="jz-mid"><div class="jz-fu">'+fuH+'</div><div class="jz-rt">'+mid+'</div></div>';
   var meF='';
   for(i=0;i<3;i++){
-    if(i>=v.nf[me]){meF+='<button class="jz-f lk" data-ja="by"'+(can&&v.co[me]>=3?'':' disabled')+'>زمین سوم · ۳🪙</button>';continue;}
-    var o=v.fl[me][i],tks=jzTk(v,me,i);
-    var burn=my&&v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me);
-    var pk=(burn&&o&&!v.sn[me][i])||(M.jm==='hv'&&o)||(M.jm==='fz'&&!v.fe[me][i])||((evq==='rain'||evq==='dry')&&o)||evq==='gard';
-    meF+='<button class="jz-f'+(pk?' hm':'')+(M.sf===i?' fsel':'')+'" data-jf="'+i+'">'+(o?'<i>'+JZ[o.t].e+'</i><b>'+fa(o.n)+'</b><small>🪙'+fa(jzFValV(v,me,i))+'</small>':'<span class="jz-em">خالی</span>')+(tks?'<span class="jz-tks">'+tks+'</span>':'')+'</button>';
+    if(i>=v.nf[me]){meF+='<button class="jz-f lk" data-ja="by"'+(can&&v.co[me]>=3?'':' disabled')+'><span>🔒</span><small>زمین سوم · ۳🪙</small></button>';continue;}
+    meF+=plotHtml(me,i,true);
   }
   var meS=seatHtml(me,true);
-  var hdH='<div class="jz-hd">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){return jzCard(t,'hc'+(j===0?' nx':'')+((M.gs.hd.indexOf(j)>=0||(M.sc&&M.sc.s==='h'&&M.sc.i===j))?' sel':''),'data-jh="'+j+'"',true);}).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
+  var hn2=Math.min(v.hand.length,16),ov=hn2<=5?2:hn2<=8?12:hn2<=11?20:26;
+  var hdH='<div class="jz-hd" style="--ov:'+ov+'px">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){
+    var sl=M.sc&&M.sc.s==='h'&&M.sc.i===j,gs=M.gs.hd.indexOf(j)>=0,fits=my&&v.ph==='p'&&!v.of;
+    var dim=fits&&j!==0,r=(j-(hn2-1)/2)*(hn2>8?1.4:2.4);
+    return jzCard(t,'hc'+(j===0&&my&&v.ph==='p'?' nx':'')+((sl||gs)?' sel':'')+(dim?' dim':''),'data-jh="'+j+'" style="--r:'+r.toFixed(1)+'deg;z-index:'+(j===0?5:1+j)+'"',true);
+  }).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
   h+='<div class="jzt n'+M.n+'"><div class="jzt-t">'+seatT+'</div>'+(seatL?'<div class="jzt-l">'+seatL+'</div>':'')+'<div class="jzt-c">'+midH+'</div>'+(seatR?'<div class="jzt-r">'+seatR+'</div>':'')+'<div class="jzt-m">'+meS+'<div class="jz-mf">'+meF+'</div></div></div>'+hdH;
   var acts='';
   if(can){
