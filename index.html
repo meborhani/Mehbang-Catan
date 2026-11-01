@@ -734,6 +734,33 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-f.lk{font-size:clamp(10px,2.8dvh,12px);color:var(--ink-dim);border-style:dashed}
 .jz-hd{display:flex;flex-wrap:nowrap;gap:3px;overflow:hidden;min-height:clamp(26px,8.5dvh,38px)}
 .jz-ac{display:flex;gap:5px;justify-content:center;align-items:center;flex-wrap:nowrap}.jz-ac .btn{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:clamp(26px,8dvh,34px);padding:1px 6px;font-size:clamp(10px,2.8dvh,13px)}
+
+.jzt{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2.2fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:3px;align-items:stretch}
+.jzt-t{grid-column:1/-1;grid-row:1;display:flex;gap:3px;justify-content:center}
+.jzt-t>.jz-s{flex:1;min-width:0;max-width:34%}
+.jzt-l{grid-column:1;grid-row:2;display:flex;align-items:center}.jzt-r{grid-column:3;grid-row:2;display:flex;align-items:center}
+.jzt-l>.jz-s,.jzt-r>.jz-s{flex:1}
+.jzt-c{grid-column:2;grid-row:2;display:flex;align-items:center;justify-content:center;min-height:0;background:radial-gradient(ellipse,#1f6b3a,#14502b);border:2px solid #6b4310;border-radius:40px;padding:4px}
+.jzt-c .jz-mid{flex-direction:column;gap:3px;min-height:0;width:100%}
+.jzt-c .jz-fu{flex-wrap:wrap;justify-content:center;min-width:0}
+.jzt.n2 .jzt-c,.jzt.n3 .jzt-c{grid-column:1/-1}
+.jzt.n2 .jzt-t,.jzt.n3 .jzt-t{max-width:100%}
+.jzt-m{grid-column:1/-1;grid-row:3;display:flex;flex-direction:column;gap:2px}
+.jz-s{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:2px;display:flex;flex-direction:column;gap:2px;min-width:0;font-size:clamp(8.5px,2.3dvh,11.5px);line-height:1.2}
+.jz-s.on{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember) inset}
+.jz-sh{display:flex;justify-content:space-between;gap:3px;align-items:center;min-width:0}
+.jz-sh b{display:flex;gap:2px;align-items:center;min-width:0}.jz-sh b span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jz-sh small{color:var(--ink-dim);white-space:nowrap}
+.jz-sf{display:flex;gap:2px;justify-content:center}
+.jz-ft{position:relative;flex:1;min-width:0;max-width:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #6b4310;border-inline:4px solid #d6c23c;border-radius:6px;background:repeating-linear-gradient(90deg,#c58a3c 0 6px,#a8702a 6px 8px);min-height:clamp(26px,8.5dvh,40px);color:#fff;text-shadow:0 1px 2px #000b}
+.jz-ft i{font-style:normal;font-size:clamp(12px,3.8dvh,19px);line-height:1}.jz-ft b{font-size:clamp(9px,2.5dvh,12px);line-height:1}.jz-ft small{font-size:clamp(7px,2dvh,9px);line-height:1}
+.jz-ft.em{opacity:.55}
+.jz-mf{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.jz-mf .jz-f{height:clamp(40px,13dvh,62px);flex-direction:row;gap:6px;overflow:hidden}.jz-mf .jz-f i{font-size:clamp(18px,5.5dvh,28px)}.jz-hd{gap:clamp(4px,2vw,14px)}
+.jz-f.fsel{outline:3px solid #ffd35a;outline-offset:-1px;transform:translateY(-2px)}
+.jz-cd.hc{width:clamp(40px,13dvh,60px);height:clamp(40px,13.5dvh,58px);flex:none}
+.jz-hd{justify-content:center}
+.jz-cd.sel{outline:3px solid #ff9d2e;outline-offset:1px}
 .hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
 
 .pkw{position:absolute;inset:0;align-items:stretch;display:flex;flex-direction:column;padding:4px 8px;gap:3px}
@@ -4635,7 +4662,7 @@ function jzAccept(seat){
   x.of=null;
   return true;
 }
-function jzSpot(seat){var x=M.x,t=x.fu[0],i;if(t===undefined)return false;for(i=0;i<x.nf[seat];i++)if(jzOpen(seat,i,t))return true;return false;}
+function jzSpot(seat){var x=M.x,i,c;for(c=0;c<x.fu.length;c++)for(i=0;i<x.nf[seat];i++)if(jzOpen(seat,i,x.fu[c]))return true;return false;}
 function jzAct(seat,kind,m){
   var x=M.x,a=kind==='jz'&&m&&m.a;if(!a||M.over||M.wait||seat%1!==0||seat<0||seat>=M.n)return false;
   var ok=false;
@@ -4707,8 +4734,9 @@ function jzAct(seat,kind,m){
       ok=true;
     }else if(x.ph==='fu'){
       if(!x.fu.length)return false;
-      var t2=x.fu[0];if(!jzOpen(seat,f,t2))return false;
-      x.fu.shift();var fo2=x.fl[seat][f];x.fl[seat][f]=fo2?{t:t2,n:fo2.n+1}:{t:t2,n:1};
+      var ci=m.ci===undefined?0:m.ci;if(ci%1!==0||ci<0||ci>=x.fu.length)return false;
+      var t2=x.fu[ci];if(!jzOpen(seat,f,t2))return false;
+      x.fu.splice(ci,1);var fo2=x.fl[seat][f];x.fl[seat][f]=fo2?{t:t2,n:fo2.n+1}:{t:t2,n:1};
       if(!x.fu.length)jzFinish();
       ok=true;
     }
@@ -4821,10 +4849,11 @@ function jzAiStep(seat){
     jzAct(seat,'jz',{a:'sk'});return;
   }
   if(x.ph==='fu'){
-    var t3=x.fu[0],f3=jzHas(seat,t3);
-    if(f3<0)for(i=0;i<x.nf[seat];i++)if(!x.fl[seat][i]&&!x.sn[seat][i]){f3=i;break;}
+    var ci3=0,f3=-1,cc3;
+    for(cc3=0;cc3<x.fu.length&&f3<0;cc3++){f3=jzHas(seat,x.fu[cc3]);if(f3>=0)ci3=cc3;}
+    for(cc3=0;cc3<x.fu.length&&f3<0;cc3++)for(i=0;i<x.nf[seat];i++)if(!x.fl[seat][i]&&!x.sn[seat][i]){f3=i;ci3=cc3;break;}
     if(f3<0){jzAct(seat,'jz',{a:'bk',f:jzAiHarvestPick(seat,true)});return;}
-    jzAct(seat,'jz',{a:'pl',f:f3});return;
+    jzAct(seat,'jz',{a:'pl',f:f3,ci:ci3});return;
   }
   if(x.ph==='tr'){
     if(x.ao<2){
@@ -4866,7 +4895,7 @@ function jzTk(v,i,f){
   return o;
 }
 function jzTxt(cards){return cards.map(function(t){return JZ[t].e;}).join('');}
-function jzSpotV(v,seat){var t=v.fu[0],i;if(t===undefined)return true;for(i=0;i<v.nf[seat];i++)if(!v.sn[seat][i]&&(!v.fl[seat][i]||v.fl[seat][i].t===t))return true;return false;}
+function jzSpotV(v,seat){var i,c;if(!v.fu.length)return true;for(c=0;c<v.fu.length;c++)for(i=0;i<v.nf[seat];i++)if(!v.sn[seat][i]&&(!v.fl[seat][i]||v.fl[seat][i].t===v.fu[c]))return true;return false;}
 function jzTokV(v,seat){if(v.hh[seat]===seat)return seat;for(var j=0;j<M.n;j++)if(v.hh[j]===seat)return j;return -1;}
 function jzStatus(){
   var v=jzV(),me=M.me;
@@ -4893,16 +4922,23 @@ function jzHtml(){
   var evq=v.ev&&v.ev.pend.indexOf(me)>=0?v.ev.k:'';
   var my=M.turn===me&&!M.over&&!v.ev&&v.ph!=='hat';
   var can=!M.over&&!v.ev&&!M.wait;
-  var chips='';
-  for(i=0;i<M.n;i++){
-    var fs=[],held='';
-    for(f=0;f<v.nf[i];f++)fs.push(jzFm(v,i,f));
-    for(var j=0;j<M.n;j++)if(j!==i&&v.hh[j]===i)held+='🎩'+mgMark(j);
-    chips+='<div class="jz-pc'+(M.turn===i&&!M.over?' on':'')+'"><b>'+mgMark(i)+'<span>'+M.names[i]+(i===me?' (تو)':'')+'</span></b><small>🪙'+fa(v.co[i])+' ✋'+fa(v.hn[i])+(v.tr[i]?' <span class="jz-tk k5">🚜</span>':'')+(v.bl[i]?' 🏆'+fa(v.bl[i]):'')+(v.hh[i]!==i?' ⌀🎩':'')+held+'</small><small>'+fs.join(' ')+'</small></div>';
+  if(!(my&&(v.ph==='p'||v.ph==='fu'))){M.sf=-1;M.sc=null;}
+  if(M.sc&&((v.ph==='p'&&M.sc.s!=='h')||(v.ph==='fu'&&M.sc.s!=='f')||(M.sc.s==='f'&&M.sc.i>=v.fu.length)))M.sc=null;
+  function seatHtml(k,nof){
+    var held='',fs='',f2;
+    for(var j=0;j<M.n;j++)if(j!==k&&v.hh[j]===k)held+='🎩'+mgMark(j);
+    for(f2=0;f2<v.nf[k];f2++){
+      var o2=v.fl[k][f2],tk2=jzTk(v,k,f2);
+      fs+='<div class="jz-ft'+(o2?'':' em')+'">'+(o2?'<i>'+JZ[o2.t].e+'</i><b>'+fa(o2.n)+'</b><small>🪙'+fa(jzFValV(v,k,f2))+'</small>':'')+(tk2?'<span class="jz-tks">'+tk2+'</span>':'')+'</div>';
+    }
+    return '<div class="jz-s'+(M.turn===k&&!M.over?' on':'')+'"><div class="jz-sh"><b>'+mgMark(k)+'<span>'+esc2(M.names[k]||'')+'</span></b><small>🪙'+fa(v.co[k])+' ✋'+fa(v.hn[k])+(v.tr[k]?' <span class="jz-tk k5">🚜</span>':'')+(v.bl[k]?' 🏆'+fa(v.bl[k]):'')+(v.hh[k]!==k?' ⌀🎩':'')+held+'</small></div>'+(nof?'':'<div class="jz-sf">'+fs+'</div>')+'</div>';
   }
+  var oth=[];for(i=1;i<M.n;i++)oth.push((me+i)%M.n);
+  var seatL='',seatR='',seatT='';
+  if(M.n>=3){seatL=seatHtml(oth[0]);seatR=seatHtml(oth[oth.length-1]);oth.slice(1,-1).forEach(function(k){seatT+=seatHtml(k);});}
+  else oth.forEach(function(k){seatT+=seatHtml(k);});
   var evb=v.evn?JZE[v.evn].e+' '+JZE[v.evn].n:'—';
   h+='<div class="pk-top"><button class="btn sm" data-mg="back">بازگشت</button><span class="pk-ti">جالیز · دست '+fa(v.rd+1)+(v.fin?' (آخر)':'')+' · دسته '+fa(v.dn)+' · سوخته '+fa(v.dc)+' · 🌱'+fa(v.fs)+' · '+evb+'</span></div>';
-  h+='<div class="jz-pl" style="grid-template-columns:repeat('+M.n+',1fr)">'+chips+'</div>';
   var mid='';
   if(v.ev&&evq){
     var k=evq,nb=k==='crow'?(me+1)%M.n:((k==='snow'||k==='thief')?(me+M.n-1)%M.n:-1);
@@ -4926,16 +4962,19 @@ function jzHtml(){
     mid='<div class="jz-ty">'+[-1,-2].concat(JZ.map(function(c,t){return t;})).map(function(t){return '<button class="jz-t'+(M.wt===t?' sel':'')+'" data-jt="'+t+'">'+(t===-1?'∅':t===-2?'🎩':JZ[t].e)+'</button>';}).join('')+
       '<button class="jz-t'+(M.wj===2?' sel':'')+'" data-jj="'+(M.wj===2?1:2)+'">×'+fa(M.wj)+'</button></div>';
   }else mid='<div class="jz-of"><span>'+jzStatus()+'</span></div>';
-  h+='<div class="jz-mid"><div class="jz-fu">'+(v.fu.length?v.fu.map(function(t,j){return jzCard(t,'big'+(M.gs.fu.indexOf(j)>=0?' sel':'')+((my&&v.ph==='fu'&&j===0)?' nx':''),'data-jc="'+j+'"',true);}).join(''):'<span class="jz-em">رو شده‌ای نیست</span>')+'</div><div class="jz-rt">'+mid+'</div></div>';
-  h+='<div class="jz-fl">';
+  var fuH=v.fu.length?v.fu.map(function(t,j){return jzCard(t,'big'+((M.gs.fu.indexOf(j)>=0||(M.sc&&M.sc.s==='f'&&M.sc.i===j))?' sel':'')+((my&&v.ph==='fu'&&M.sc===null&&M.sf<0&&j===0)?' nx':''),'data-jc="'+j+'"',true);}).join(''):'<span class="jz-em">رو شده‌ای نیست</span>';
+  var midH='<div class="jz-mid"><div class="jz-fu">'+fuH+'</div><div class="jz-rt">'+mid+'</div></div>';
+  var meF='';
   for(i=0;i<3;i++){
-    if(i>=v.nf[me]){h+='<button class="jz-f lk" data-ja="by"'+(can&&v.co[me]>=3?'':' disabled')+'>زمین سوم · ۳🪙</button>';continue;}
+    if(i>=v.nf[me]){meF+='<button class="jz-f lk" data-ja="by"'+(can&&v.co[me]>=3?'':' disabled')+'>زمین سوم · ۳🪙</button>';continue;}
     var o=v.fl[me][i],tks=jzTk(v,me,i);
     var burn=my&&v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me);
     var pk=(burn&&o&&!v.sn[me][i])||(M.jm==='hv'&&o)||(M.jm==='fz'&&!v.fe[me][i])||((evq==='rain'||evq==='dry')&&o)||evq==='gard';
-    h+='<button class="jz-f'+(pk?' hm':'')+'" data-jf="'+i+'">'+(o?'<i>'+JZ[o.t].e+'</i><b>'+fa(o.n)+'</b><small>🪙'+fa(jzFValV(v,me,i))+'</small>':'<span class="jz-em">خالی</span>')+(tks?'<span class="jz-tks">'+tks+'</span>':'')+'</button>';
+    meF+='<button class="jz-f'+(pk?' hm':'')+(M.sf===i?' fsel':'')+'" data-jf="'+i+'">'+(o?'<i>'+JZ[o.t].e+'</i><b>'+fa(o.n)+'</b><small>🪙'+fa(jzFValV(v,me,i))+'</small>':'<span class="jz-em">خالی</span>')+(tks?'<span class="jz-tks">'+tks+'</span>':'')+'</button>';
   }
-  h+='</div><div class="jz-hd">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){return jzCard(t,'s'+(j===0?' nx':'')+(M.gs.hd.indexOf(j)>=0?' sel':''),'data-jh="'+j+'"',false);}).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
+  var meS=seatHtml(me,true);
+  var hdH='<div class="jz-hd">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){return jzCard(t,'hc'+(j===0?' nx':'')+((M.gs.hd.indexOf(j)>=0||(M.sc&&M.sc.s==='h'&&M.sc.i===j))?' sel':''),'data-jh="'+j+'"',true);}).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
+  h+='<div class="jzt n'+M.n+'"><div class="jzt-t">'+seatT+'</div>'+(seatL?'<div class="jzt-l">'+seatL+'</div>':'')+'<div class="jzt-c">'+midH+'</div>'+(seatR?'<div class="jzt-r">'+seatR+'</div>':'')+'<div class="jzt-m">'+meS+'<div class="jz-mf">'+meF+'</div></div></div>'+hdH;
   var acts='';
   if(can){
     acts+='<button class="btn sm'+(M.jm==='hv'?' primary':'')+'" data-ja="hm">برداشت</button>';
@@ -4967,16 +5006,22 @@ function jzClick(t){
     if(M.jm==='fz'&&can){M.jm=false;mgDo('jz',{a:'fz',f:f});mgRender();return true;}
     if(!my)return true;
     if(v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me)){if(v.fl[me][f]&&!v.sn[me][f])mgDo('jz',{a:'bk',f:f});else toast('یکی از زمین‌های پر را بزن تا برداشت شود');return true;}
-    if(v.ph==='p'||v.ph==='fu'){if(M.mode!=='guest'&&!jzActOk(f))toast('اینجا نمی‌شود کاشت؛ زمین دیگر یا «برداشت»');else mgDo('jz',{a:'pl',f:f});}
+    if(v.ph==='p'||v.ph==='fu'){
+      if(M.sc){jzPlant(f,M.sc);return true;}
+      M.sf=M.sf===f?-1:f;mgRender();
+    }
     return true;
   }
   if((el=t.closest('[data-jc]'))){
     var j=+el.dataset.jc;
     if(v.ph==='hat'&&v.hw===me&&!v.ev){mgDo('jz',{a:'hc',fi:j});return true;}
     if(my&&v.ph==='tr'&&!v.of){var p=M.gs.fu.indexOf(j);if(p>=0)M.gs.fu.splice(p,1);else M.gs.fu.push(j);mgRender();}
+    else if(my&&v.ph==='fu'&&!v.of){jzPickCard({s:'f',i:j});}
     return true;
   }
-  if((el=t.closest('[data-jh]'))){if(my&&v.ph==='tr'&&!v.of&&v.evn==='mkt'){var j2=+el.dataset.jh,p2=M.gs.hd.indexOf(j2);if(p2>=0)M.gs.hd.splice(p2,1);else M.gs.hd.push(j2);mgRender();}return true;}
+  if((el=t.closest('[data-jh]'))){
+    if(my&&v.ph==='p'&&!v.of){var j3=+el.dataset.jh;if(j3!==0)toast('اول باید کارت اول دستت را بکاری');else jzPickCard({s:'h',i:0});return true;}
+    if(my&&v.ph==='tr'&&!v.of&&v.evn==='mkt'){var j2=+el.dataset.jh,p2=M.gs.hd.indexOf(j2);if(p2>=0)M.gs.hd.splice(p2,1);else M.gs.hd.push(j2);mgRender();}return true;}
   if((el=t.closest('[data-jt]'))){M.wt=+el.dataset.jt;mgRender();return true;}
   if((el=t.closest('[data-jj]'))){M.wj=+el.dataset.jj;mgRender();return true;}
   if((el=t.closest('[data-ja]'))){
@@ -4994,8 +5039,18 @@ function jzClick(t){
   }
   return false;
 }
-function jzActOk(f){
-  var v=jzV(),t=v.ph==='fu'?v.fu[0]:v.hand[0];
+function jzPickCard(c){
+  if(M.sf>=0){jzPlant(M.sf,c);return;}
+  M.sc=(M.sc&&M.sc.s===c.s&&M.sc.i===c.i)?null:c;mgRender();
+}
+function jzPlant(f,c){
+  var ci=c.s==='f'?c.i:undefined;
+  if(M.mode!=='guest'&&!jzActOk(f,ci)){toast('اینجا نمی‌شود کاشت؛ زمین دیگری را انتخاب کن');return;}
+  M.sf=-1;M.sc=null;
+  mgDo('jz',ci===undefined?{a:'pl',f:f}:{a:'pl',f:f,ci:ci});mgRender();
+}
+function jzActOk(f,ci){
+  var v=jzV(),t=v.ph==='fu'?v.fu[ci||0]:v.hand[0];
   if(t===undefined)return false;
   if(f>=v.nf[M.me]||v.sn[M.me][f])return false;
   var o=v.fl[M.me][f];return !o||o.t===t;
