@@ -1,5 +1,5 @@
 /* offline cache for the game; the version stamp changes with every release */
-var VER='20261101063055',CORE='datis-core-'+VER,RUN='datis-run';
+var VER='20261101065026',CORE='datis-core-'+VER,RUN='datis-run';
 var FILES=['./','index.html','manifest.webmanifest','peerjs.min.js','icon-192.png','icon-512.png','icon-maskable.png','apple-touch-icon.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CORE).then(function(c){return c.addAll(FILES);}).then(function(){return self.skipWaiting();}));
