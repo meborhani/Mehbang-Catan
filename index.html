@@ -3943,10 +3943,25 @@ function mnAiChoose(seat){
 }
 
 /* ---- jaliz (Hoopa Jaliz rules, 3-7 players, landscape) ---- */
-var JZN=[['فلفل قرمز','🌶️'],['نخودفرنگی','🟢'],['کدو تنبل','🎃'],['هندوانه','🍉'],['خربزه','🍈'],['بادمجان','🍆'],['گوجه‌فرنگی','🍅'],['شلغم','🍠'],['هویج','🥕'],['لوبیا','🫘'],['پیاز','🧅'],['سیب‌زمینی','🥔'],['خیار','🥒']];
+var JZN=[['فلفل قرمز','🌶️'],['نخودفرنگی','🟢'],['بادمجان','🍆'],['گوجه‌فرنگی','🍅'],['هندوانه','🍉'],['خربزه','🍈'],['کدو تنبل','🎃'],['شلغم','🍠'],['هویج','🥕'],['لوبیا','🫘'],['پیاز','🧅'],['سیب‌زمینی','🥔'],['خیار','🥒']];
 function jzLerp(c,pts){var i=c<=13?0:1,a=pts[i],b=pts[i+1];return Math.round(a[1]+(b[1]-a[1])*(c-a[0])/(b[0]-a[0]));}
 /* product t has 6+t cards; coin thresholds (1..4 coins) interpolated from the known card values */
 var JZ=JZN.map(function(r,i){var c=6+i;return {n:r[0],e:r[1],c:c,b:[jzLerp(c,[[6,2],[13,3],[18,4]]),jzLerp(c,[[6,3],[13,5],[18,6]]),jzLerp(c,[[6,3],[13,7],[18,8]]),jzLerp(c,[[6,4],[13,8],[18,9]])]};});
+/* admin config: jaliz.json (next to index.html) overrides names, emojis and the coin table; unknown/invalid files are ignored */
+function jzApplyCfg(d){
+  if(!d||!Array.isArray(d.products)||d.products.length!==JZ.length)return false;
+  var ok=d.products.every(function(p){return p&&typeof p.n==='string'&&p.n.length>0&&p.n.length<=24&&typeof p.e==='string'&&p.e.length>0&&p.e.length<=8&&Array.isArray(p.b)&&p.b.length===4&&p.b.every(function(v,i){return v%1===0&&v>=0&&v<=40&&(i===0||v>=p.b[i-1]||!v);});});
+  if(!ok)return false;
+  d.products.forEach(function(p,i){JZ[i].n=p.n.replace(/[<>&"'`]/g,'');JZ[i].e=p.e.replace(/[<>&"'`]/g,'');JZ[i].b=p.b.slice();});
+  return true;
+}
+(function(){
+  try{jzApplyCfg(lsGet('mb_jzcfg',null));}catch(e){}
+  try{
+    if(!window.fetch||window.__TRANSPORT||location.protocol==='file:')return;
+    fetch('jaliz.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;}).then(function(d){if(d&&jzApplyCfg(d))lsSet('mb_jzcfg',d);}).catch(function(){});
+  }catch(e){}
+})();
 var JZE={
  crow:{n:'کلاغ',e:'🐦',h:'یک کارت از زمین‌های نفر بعدی (سمت چپ) را بسوزان'},
  gard:{n:'باغبان',e:'🌻',h:'اختیاری: کارت اول دستت را در یک زمین بکار'},

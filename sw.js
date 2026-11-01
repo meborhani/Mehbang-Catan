@@ -1,5 +1,5 @@
 /* offline cache for the game; the version stamp changes with every release */
-var VER='20261101100541',CORE='datis-core-'+VER,RUN='datis-run';
+var VER='20261101105339',CORE='datis-core-'+VER,RUN='datis-run';
 var FILES=['./','index.html','manifest.webmanifest','peerjs.min.js','mb-192.png','mb-512.png','mb-maskable.png','mb-apple.png'];
 self.addEventListener('install',function(e){
   e.waitUntil(caches.open(CORE).then(function(c){return c.addAll(FILES);}).then(function(){return self.skipWaiting();}));
@@ -17,6 +17,8 @@ self.addEventListener('fetch',function(e){
       e.respondWith(fetch(r).then(function(res){var cp=res.clone();caches.open(CORE).then(function(c){c.put('index.html',cp);});return res;}).catch(function(){return caches.match('index.html').then(function(m){return m||caches.match('./');});}));
       return;
     }
+    if(/\/jaliz\.json$/.test(u.pathname)){e.respondWith(fetch(r,{cache:'no-cache'}).then(function(res){var cp=res.clone();caches.open(CORE).then(function(c){c.put(r,cp);});return res;}).catch(function(){return caches.match(r);}));return;}
+    if(/\/jaliz\.json$/.test(u.pathname)){e.respondWith(fetch(r,{cache:'no-cache'}).then(function(res){var cp=res.clone();caches.open(CORE).then(function(c){c.put(r,cp);});return res;}).catch(function(){return caches.match(r);}));return;}
     e.respondWith(caches.match(r).then(function(m){return m||fetch(r).then(function(res){var cp=res.clone();caches.open(CORE).then(function(c){c.put(r,cp);});return res;});}));
     return;
   }
