@@ -1,6 +1,6 @@
 {
-  "name": "Mehbang Game",
-  "short_name": "Mehbang",
+  "name": "مهبانگ گیم",
+  "short_name": "مهبانگ گیم",
   "description": "مجموعه بازی‌های آنلاین: کتان، شطرنج، منچ، دوز و چهار در ردیف",
   "lang": "fa",
   "dir": "rtl",
@@ -8,11 +8,11 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#1b120a",
-  "theme_color": "#1b120a",
+  "background_color": "#05061a",
+  "theme_color": "#05061a",
   "icons": [
-    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
-    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
-    {"src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+    {"src": "mb-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "mb-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "mb-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
   ]
 }

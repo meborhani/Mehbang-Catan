@@ -2,16 +2,16 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#1b120a">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#05061a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Mehbang Game">
+<meta name="apple-mobile-web-app-title" content="مهبانگ گیم">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Mehbang Game</title>
+<link rel="icon" type="image/png" href="mb-192.png">
+<link rel="apple-touch-icon" href="mb-apple.png">
+<title>مهبانگ گیم</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -610,8 +610,58 @@ body[data-skin=cosmic] .btn:active{filter:brightness(1.3)}
 .tk{width:78%;height:78%;border-radius:50%;border:2px solid rgba(255,255,255,.75);box-shadow:0 2px 4px rgba(0,0,0,.5);display:block}
 .mn-dice{display:flex;gap:12px;align-items:center;justify-content:center}
 .die{display:grid;place-items:center;width:52px;height:52px;border-radius:12px;background:var(--ink);color:var(--void);font-size:28px}
-.mn-base{display:flex;gap:10px 14px;flex-wrap:wrap;justify-content:center;font-size:12px;color:var(--ink-dim)}
+.mn-base{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;justify-content:center;font-size:clamp(10.5px,1.7dvh,12px);color:var(--ink-dim);white-space:nowrap}
 .mn-base .mg-dot{display:inline-block;width:11px;height:11px;vertical-align:middle}
+
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none}
+.inp{font-size:16px}
+#hub,#mini{overflow:hidden;height:100dvh;overscroll-behavior:none}
+.hb-in{height:100%;box-sizing:border-box;min-height:0;display:flex;flex-direction:column;gap:clamp(5px,1.4dvh,12px);padding:max(10px,env(safe-area-inset-top)) 14px max(10px,env(safe-area-inset-bottom));align-content:normal;overflow:hidden}
+.hb-in>*{flex:none}
+.hb-h{font-size:clamp(24px,5.6dvh,34px);margin:0}
+.hb-s{font-size:clamp(11px,1.8dvh,13px);margin-bottom:0}
+.hb-in .btn{min-height:clamp(34px,5.4dvh,44px);padding:5px 10px}
+.hb-in .btn.big{min-height:clamp(38px,6dvh,48px);font-size:clamp(14px,2.2dvh,16px)}
+.hub .hb-card{flex:1 1 0;min-height:46px;max-height:92px;padding:6px 12px}
+.hub .hb-ic{width:clamp(36px,7dvh,54px);height:clamp(36px,7dvh,54px)}
+.hub .hb-card b{font-size:clamp(14px,2.3dvh,17px)}
+.hub .btn.big{flex:none}
+.mg-p{padding:5px 8px;font-size:clamp(12px,1.9dvh,14px)}
+.mg-st{font-size:clamp(13px,2.1dvh,16px);min-height:0}
+.mg-top h2{font-size:clamp(20px,3.6dvh,26px)}
+.mg-top .btn{min-height:34px}
+.gm .mg-bd,.gm .ch-bd,.gm .mn-bd{align-self:center}
+.mg-c{font-size:calc(var(--bw,300px)*.17)}
+.ch-c{font-size:calc(var(--bw,320px)*.105)}
+.mg-code{font-size:clamp(26px,5dvh,34px)}
+.die{width:clamp(38px,6dvh,52px);height:clamp(38px,6dvh,52px);font-size:clamp(20px,3.4dvh,28px)}
+@media (orientation:landscape) and (max-height:600px){
+ .hb-in{max-width:900px}
+ .hb-in.hub{display:grid;grid-template-columns:1fr 1fr;align-content:center}
+ .hb-in.hub .hb-h,.hb-in.hub .hb-s,.hb-in.hub>.btn{grid-column:1/-1}
+ .hb-in.gm{display:grid;grid-template-columns:auto 1fr;grid-auto-rows:min-content;align-content:center;column-gap:16px}
+ .hb-in.gm>*{grid-column:2}
+ .hb-in.gm .btn.sm{min-height:30px;padding:3px 8px;font-size:12px}
+ .hb-in.gm .mg-pl{gap:4px}.hb-in.gm .hb-s{display:none}.hb-in.gm .btn{white-space:nowrap}.hb-in.gm .mn-dice{gap:8px}
+ .hb-in.gm>.mg-bd,.hb-in.gm>.ch-bd,.hb-in.gm>.mn-bd{grid-column:1;grid-row:1/20}
+ .hb-in:not(.hub):not(.gm){display:grid;grid-template-columns:1fr 1fr;align-content:center}
+ .hb-in:not(.hub):not(.gm)>.mg-top,.hb-in:not(.hub):not(.gm)>.mg-st{grid-column:1/-1}
+}
+@media (orientation:landscape) and (max-height:600px){
+ #introIn{width:min(900px,100%);display:grid !important;grid-template-columns:1fr 1fr;column-gap:18px;row-gap:clamp(4px,1.2dvh,8px);align-content:center;padding-top:6px;padding-bottom:6px}
+ #introIn>.over,#introIn>.hero,#introIn>#resume,#introIn>#btnHub{grid-column:1/-1}
+ #introIn .hero{font-size:clamp(26px,9dvh,40px) !important;padding:0}#introIn .hero br{display:none}
+ #introIn .btn,#introIn .btn.big{min-height:36px;font-size:14px}
+ #introIn .online{padding:6px}
+}
+@media (max-height:700px) and (orientation:portrait){
+ #introIn{gap:clamp(4px,1dvh,8px)}
+ #introIn .btn.big{min-height:40px;font-size:15px}#introIn .btn,#introIn .btn.sm{min-height:34px}
+ #introIn .two .btn{min-height:40px}
+ #introIn .seg-n button,#introIn .seg-d button{min-height:34px;padding-block:4px}
+ #introIn .online{padding:6px}
+ #introIn .over{display:none}
+}
 </style>
 </head>
 <body>
@@ -3789,10 +3839,11 @@ function mgNew(g,mode,n){
 function chWhite(){return M.rn%2;}
 function chColOf(seat){return seat===chWhite()?0:1;}
 function chPos(){return {b:M.b,cs:M.x.cs,ep:M.x.ep,hm:M.x.hm};}
+function chKey(b,turn,cs,ep){return b.join(',')+'|'+turn+'|'+cs.map(Number).join('')+'|'+ep;}
 function mgReset(){
-  var g=M.g,i;M.over=false;M.res=null;M.line=[];M.sel=-1;M.promo=null;M.b=[];
+  var g=M.g,i;M.rep={};M.rs=0;M.over=false;M.res=null;M.line=[];M.sel=-1;M.promo=null;M.b=[];
   if(g.type==='grid'){for(i=0;i<g.w*g.h;i++)M.b.push(-1);M.turn=M.rn%2;M.x=null;}
-  else if(g.type==='chess'){M.b=CH_START.slice();M.x={cs:[true,true,true,true],ep:-1,hm:0,last:null};M.turn=chWhite();}
+  else if(g.type==='chess'){M.b=CH_START.slice();M.x={cs:[true,true,true,true],ep:-1,hm:0,last:null};M.turn=chWhite();M.rep[chKey(M.b,M.turn,M.x.cs,-1)]=1;}
   else{M.b=[];M.x={tok:[],die:0,ph:'roll',tries:0};for(i=0;i<M.n;i++)M.x.tok.push([-1,-1,-1,-1]);M.turn=M.rn%M.n;}
 }
 function mgClose(){
@@ -3806,7 +3857,7 @@ function mgClose(){
 }
 function showHub(){
   mgClose();VIEW='hub';
-  document.title='Mehbang Game';
+  document.title='مهبانگ گیم';
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#hub').hidden=false;
   presenceStart();
 }
@@ -3819,7 +3870,7 @@ function mgIcon(id){
   return '<svg viewBox="0 0 36 36"><polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5" fill="var(--e0)" stroke="var(--line)" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="var(--ember)"/></svg>';
 }
 function renderHub(){
-  var h='<div class="hb-in"><h1 class="hb-h" dir="ltr">Mehbang Game</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  var h='<div class="hb-in hub"><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -3832,8 +3883,8 @@ function mgOpen(k){
   var g=MGS[k];mgNew(g,'menu');
   $('#mini').hidden=false;presenceStart();mgRender();
 }
-function mgShell(inner){
-  return '<div class="hb-in"><div class="mg-top"><h2>'+M.g.name+'</h2><button class="btn sm" data-mg="back">بازگشت</button></div>'+inner+'</div>';
+function mgShell(inner,cls){
+  return '<div class="hb-in'+(cls?' '+cls:'')+'"><div class="mg-top"><h2>'+M.g.name+'</h2><button class="btn sm" data-mg="back">بازگشت</button></div>'+inner+'</div>';
 }
 function mgMark(j){
   var g=M.g;
@@ -3916,17 +3967,41 @@ function mgRender(){
     if(g.type==='manch'){
       var canRoll=!M.over&&M.turn===M.me&&M.x.ph==='roll';
       extra='<div class="mn-dice"><b class="die">'+(M.x.die?fa(M.x.die):'–')+'</b><button class="btn primary" data-mg="roll"'+(canRoll?'':' disabled')+'>تاس بریز</button></div>'+
-        '<div class="mn-base">'+M.x.tok.map(function(tk,s){var n=tk.filter(function(p){return p===-1;}).length,fin=tk.filter(function(p){return p>=40;}).length;return '<span>'+mgMark(s)+' '+fa(n)+' در پایگاه · '+fa(fin)+' در خانه</span>';}).join('')+'</div>'+
+        '<div class="mn-base">'+M.x.tok.map(function(tk,s){var n=tk.filter(function(p){return p===-1;}).length,fin=tk.filter(function(p){return p>=40;}).length;return '<span>'+mgMark(s)+' '+fa(n)+' پایگاه · '+fa(fin)+' خانه</span>';}).join('')+'</div>'+
         (!M.over&&M.turn===M.me&&M.x.ph==='move'&&M.x.tok[M.me].indexOf(-1)>=0&&M.x.die===6?'<div class="mg-r"><button class="btn" data-bt="1">بیرون آوردن مهره از پایگاه</button></div>':'');
     }
     h=mgShell('<div class="mg-pl">'+pls+'</div><div class="mg-st" id="mgSt">'+mgStatus()+'</div>'+mgBoardHtml()+extra+
-      '<div class="mg-r">'+(canAgain?'<button class="btn primary" data-mg="again">دوباره</button>':'')+
+      '<div class="mg-r">'+(!M.over&&g.max===2&&M.mode!=='menu'?'<button class="btn sm" data-mg="resign">تسلیم</button>':'')+(canAgain?'<button class="btn primary" data-mg="again">دوباره</button>':'')+
       (M.over&&M.mode==='guest'&&!M.left?'<div class="hb-s" style="margin:0">منتظر شروع دوباره توسط میزبان…</div>':'')+'</div>'+
-      (M.mode==='host'||M.mode==='guest'?'<div class="mg-r">'+MG_SAY.map(function(s,j){return '<button class="btn sm" data-say="'+j+'">'+s+'</button>';}).join('')+'</div>':''));
+      (M.mode==='host'||M.mode==='guest'?'<div class="mg-r">'+MG_SAY.map(function(s,j){return '<button class="btn sm" data-say="'+j+'">'+s+'</button>';}).join('')+'</div>':''),'gm');
   }
-  el.innerHTML='';el.insertAdjacentHTML('beforeend',h);
+  el.innerHTML='';el.insertAdjacentHTML('beforeend',h);mgFit();
 }
 
+function mgFit(){
+  var el=$('#mini');if(!M||el.hidden)return;
+  var inn=el.querySelector('.hb-in.gm'),bd=inn&&inn.querySelector('.mg-bd,.ch-bd,.mn-bd');if(!bd)return;
+  var cs=getComputedStyle(inn),vw=window.innerWidth,vh=window.innerHeight;
+  var land=!!(window.matchMedia&&matchMedia('(orientation:landscape) and (max-height:600px)').matches);
+  bd.style.width='200px';
+  var ratio=bd.offsetHeight/200||1,w;
+  var padX=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight),padY=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+  if(land){w=Math.min(vh-padY-4,(vw-padX)*.56)/ratio;}
+  else{
+    var gap=parseFloat(cs.rowGap)||0,tot=padY,n=0;
+    Array.prototype.forEach.call(inn.children,function(c){if(c!==bd){tot+=c.offsetHeight;n++;}});
+    tot+=n*gap;
+    w=Math.min(vw-padX,470,(vh-tot-4)/ratio);
+  }
+  w=Math.max(110,Math.floor(w));
+  bd.style.width=w+'px';bd.style.setProperty('--bw',w+'px');
+}
+window.addEventListener('resize',function(){mgFit();});
+window.addEventListener('orientationchange',function(){setTimeout(mgFit,250);});
+['gesturestart','gesturechange'].forEach(function(ev){document.addEventListener(ev,function(e){e.preventDefault();});});
+document.addEventListener('touchmove',function(e){if(e.touches&&e.touches.length>1)e.preventDefault();},{passive:false});
+document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault();},{passive:false});
+document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.key==='+'||e.key==='-'||e.key==='='||e.key==='0'))e.preventDefault();});
 /* ---- networking ---- */
 function mgSend(seat,m){var l=M.links[seat];if(l)l.send(m);}
 function mgView(seat){
@@ -3978,7 +4053,11 @@ function mgAct(seat,kind,m){
       if(chInCheck(np,oc)){M.over=true;M.res=seat;M.wins[seat]++;}
       else{M.over=true;M.res='draw';}
     }else if(np.hm>=100||chInsufficient(np.b)){M.over=true;M.res='draw';}
-    else M.turn=1-M.turn;
+    else{
+      M.turn=1-M.turn;
+      var rk=chKey(np.b,M.turn,np.cs,np.ep);M.rep[rk]=(M.rep[rk]||0)+1;
+      if(M.rep[rk]>=3){M.over=true;M.res='draw';}
+    }
     ok=true;
   }else{
     if(kind==='rl')ok=mnRollFor(seat);
@@ -3986,6 +4065,10 @@ function mgAct(seat,kind,m){
   }
   if(ok){try{if(navigator.vibrate&&M.turn===M.me)navigator.vibrate(15);}catch(e){}mgAfter();}
   return ok;
+}
+function mgResign(seat){
+  if(!M||M.over||M.wait||M.n!==2)return;
+  M.over=true;M.res=1-seat;M.wins[1-seat]++;M.sel=-1;M.promo=null;mgAfter();
 }
 function mgDo(kind,m){
   if(!M||M.over||M.wait||M.turn!==M.me)return;
@@ -4041,6 +4124,8 @@ function mgHost(){
         if(cur.g.max===2)mgBegin();else mgRender();
       }else if(seat>0&&(d.t==='mv'||d.t==='rl')){
         mgAct(seat,d.t,d.m);
+      }else if(seat>0&&d.t==='rs'){
+        mgResign(seat);
       }else if(seat>0&&d.t==='say'){
         if(typeof d.x==='number'&&d.x>=0&&d.x<MG_SAY.length)toast(cur.names[seat]+': '+MG_SAY[d.x]);
       }
@@ -4167,6 +4252,12 @@ $('#mini').addEventListener('click',function(e){
   else if(k==='join')mgJoin($('#mgCode').value);
   else if(k==='start'){if(M.wait)mgBegin();}
   else if(k==='roll')mgDo('rl');
+  else if(k==='resign'){
+    if(M.over)return;
+    if(!M.rs||Date.now()-M.rs>3500){M.rs=Date.now();a.textContent='مطمئنی؟ دوباره بزن';setTimeout(function(){if(M&&a.isConnected&&M.rs&&Date.now()-M.rs>=3400)a.textContent='تسلیم';},3600);return;}
+    M.rs=0;
+    if(M.mode==='guest'){M.link&&M.link.send({t:'rs'});}else mgResign(M.me);
+  }
   else if(k==='inv')openPeople();
   else if(k==='copy'){try{navigator.clipboard.writeText(M.code).then(function(){toast('کد کپی شد');},function(){toast('کد: '+M.code);});}catch(x){toast('کد: '+M.code);}}
   else if(k==='again'){
