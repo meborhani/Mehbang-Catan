@@ -540,6 +540,24 @@ body[data-skin=cosmic] .btn:active{filter:brightness(1.3)}
 .tip{position:fixed;z-index:75;max-width:min(80vw,300px);display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:12px;background:var(--panel-2);border:1px solid var(--ember);box-shadow:0 6px 22px #000a;font-size:12.5px;pointer-events:none;animation:sayIn .18s ease-out}
 .tip b{color:var(--ember)}
 .tip span{display:flex;align-items:center;gap:6px}
+
+/* ---- people ---- */
+.pdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#5b6770;flex:none}
+.pdot.on{background:#34d36b;box-shadow:0 0 8px #34d36b}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--panel-2);border-radius:12px}
+.pn{display:flex;flex-direction:column;min-width:0;flex:1}
+.pn b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pn small{color:var(--ink-dim);font-size:11px}
+.pb{display:flex;gap:6px;flex:none}
+.pb .btn.small{min-height:30px;padding:4px 9px;font-size:12px}
+.mycode{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--panel-2);border-radius:12px;font-size:12.5px}
+.mycode b{margin-inline-start:auto;font-family:ui-monospace,Menlo,monospace;letter-spacing:.08em;font-size:17px;color:var(--ember)}
+.addrow{display:flex;gap:8px}
+.addrow .inp{flex:1;min-width:0}
+.sub.small{font-size:11px}
+.tabs.sm button{font-size:11.5px;padding:6px 2px}
+.rpt.rk td.nmc{display:table-cell}
+.rpt.rk td.nmc .pdot{margin-inline-end:6px}
 </style>
 </head>
 <body>
@@ -590,7 +608,7 @@ body[data-skin=cosmic] .btn:active{filter:brightness(1.3)}
       <button class="tgb" data-tg="snd" aria-label="صدا"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 4V5L7 9z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="tgb" data-tg="vib" aria-label="ویبره"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 8v8M20 8v8M1.5 10.5v3M22.5 10.5v3"/></svg></button>
     </div>
-    <div class="two"><button class="btn sm" id="btnSet">تنظیمات و تم</button><button class="btn sm" id="btnRules">قوانین</button></div>
+    <div class="two" style="grid-template-columns:repeat(3,1fr)"><button class="btn sm" id="btnSet">تنظیمات و تم</button><button class="btn sm" id="btnPeople">افراد</button><button class="btn sm" id="btnRules">قوانین</button></div>
   </div>
 </div>
 
@@ -1476,7 +1494,7 @@ function endBody(tab,selId){
   return h;
 }
 function showEnd(){
-  recClear();
+  recClear();recordGame();
   var tab='a',selId=S.winner!=null?S.winner:0;
   var sh=openSheet('<h3>'+(S.winner==null?'پایان بازی':S.players[S.winner].name+' برنده شد')+'</h3>'+
     '<div class="tabs"><button class="on" data-tab="a">امتیازها</button><button data-tab="b">منابع</button><button data-tab="c">آمار بازی</button></div><div id="endBody" class="endbody"></div>'+
@@ -2621,7 +2639,7 @@ function rid(){var a='abcdefghjkmnpqrstuvwxyz23456789',o='';for(var i=0;i<12;i++
 function serializeGame(){
   return {v:1,n:S.players.length,my:MY,diff:S.diff,board:boardSnapshot(),round:S.round,cur:S.cur,phase:S.phase,mode:S.mode,dice:S.dice,
     setupS:S.setupS||0,deck:S.deck.slice(),bld:Array.from(S.bld.entries()),fil:Array.from(S.fil.entries()),longest:S.longest,dark:S.dark,lens:S.lens,entropy:S.entropy,hist:S.hist,bhBy:S.bhBy,bhRound:S.bhRound,bhN:S.bhN,elapsed:Date.now()-S.t0,
-    players:S.players.map(function(p){return {name:p.name,ai:p.ai,hum:!!p.hum,token:p.token,kicked:p.kicked,stats:p.stats,res:p.res.slice(),cards:p.cards,fresh:p.fresh,played:p.played,playedCard:p.playedCard,novaUsed:p.novaUsed,idle:p.idle};})};
+    players:S.players.map(function(p){return {name:p.name,ai:p.ai,hum:!!p.hum,token:p.token,uid:p.uid||null,kicked:p.kicked,stats:p.stats,res:p.res.slice(),cards:p.cards,fresh:p.fresh,played:p.played,playedCard:p.playedCard,novaUsed:p.novaUsed,idle:p.idle};})};
 }
 var saveT=null;
 function scheduleSave(force){
@@ -2653,7 +2671,7 @@ function restoreState(g){
   g.players.forEach(function(q,i){
     var p=S.players[i];
     p.res=q.res;p.cards=q.cards;p.fresh=q.fresh||{};p.played=q.played;p.playedCard=q.playedCard;p.novaUsed=q.novaUsed;p.idle=q.idle||0;
-    p.hum=!!q.hum;p.token=q.token||null;p.kicked=!!q.kicked;p.stats=q.stats||newStats();
+    p.hum=!!q.hum;p.token=q.token||null;p.uid=q.uid||null;p.kicked=!!q.kicked;p.stats=q.stats||newStats();
   });
   S.mode='idle';
 }
@@ -2733,7 +2751,7 @@ function continueRestore(){
   mainLoop(S,resumeInfo(g)).catch(function(e){console.error(e);});
 }
 function sendInit(i){
-  toSeat(i,{t:'init',you:i,n:S.players.length,players:S.players.map(function(q){return {name:q.name,ai:q.ai};}),board:boardSnapshot()});
+  toSeat(i,{t:'init',you:i,n:S.players.length,players:S.players.map(function(q){return {name:q.name,ai:q.ai,uid:q.uid||null};}),board:boardSnapshot()});
 }
 function onJoinLate(link){
   link.onmessage=function(m){
@@ -2742,7 +2760,7 @@ function onJoinLate(link){
     if(!p){link.send({t:'reject',reason:'بازی شروع شده است.'});setTimeout(function(){link.close();},300);return;}
     var old=NET.links[p.id];
     if(old&&old!==link){old.onclose=null;try{old.close();}catch(e){}}
-    p.ai=false;p.remote=true;NET.links[p.id]=link;
+    p.ai=false;p.remote=true;NET.links[p.id]=link;if(cleanUid(m.uid))p.uid=cleanUid(m.uid);
     link.onmessage=function(mm){hostMsg(p.id,mm);};
     link.onclose=function(){if(NET.links[p.id]===link)onLeave(p.id);};
     link.send({t:'welcome',seat:p.id,token:p.token});
@@ -2782,6 +2800,226 @@ function onHostLost(link){
 }
 window.addEventListener('pagehide',function(){try{saveCheckpoint(false);}catch(e){}});
 document.addEventListener('visibilitychange',function(){if(document.hidden){try{saveCheckpoint(false);}catch(e){}}});
+
+/* ---------- people: friends, presence and ranking (no server needed) ---------- */
+var PK={prof:'datis_prof',fr:'datis_friends',rec:'datis_recent',g:'datis_games'};
+function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var UID_CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newUid(){var o='';for(var i=0;i<8;i++)o+=UID_CH[rint(UID_CH.length)];return o;}
+function cleanUid(x){x=String(x||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return x.length===8?x:null;}
+var PROF=(function(){var p=lsGet(PK.prof,null);if(!p||!cleanUid(p.id)){p={id:newUid()};lsSet(PK.prof,p);}return p;})();
+var FR=lsGet(PK.fr,[]),REC=lsGet(PK.rec,[]),PM={};
+function saveFR(){lsSet(PK.fr,FR);}
+function frFind(id){for(var i=0;i<FR.length;i++)if(FR[i].id===id)return FR[i];return null;}
+function myName(){return cleanName(loadName())||'بازیکن';}
+function ni(x){x=Math.floor(+x);return (x>0&&x<1e6)?x:0;}
+function cleanStats(s){
+  var o={};['all','wk','mo'].forEach(function(k){var v=s&&s[k]||{};o[k]={g:ni(v.g),w:ni(v.w),p:ni(v.p)};});
+  return o;
+}
+function myStats(onlineOnly){
+  var g=lsGet(PK.g,[]).filter(function(x){return !onlineOnly||x.o;}),now=Date.now();
+  function agg(f){var r={g:0,w:0,p:0};g.forEach(function(x){if(f(x)){r.g++;r.w+=x.w;r.p+=x.p;}});return r;}
+  return {all:agg(function(){return true;}),wk:agg(function(x){return now-x.t<7*864e5;}),mo:agg(function(x){return now-x.t<30*864e5;})};
+}
+function recordGame(){
+  if(!S||MY==null||S.recd||!S.players[MY])return;
+  S.recd=true;
+  var g=lsGet(PK.g,[]);
+  g.push({t:Date.now(),w:S.winner===MY?1:0,p:totalPoints(S.players[MY]),n:S.players.length,o:ROLE==='solo'?0:1});
+  lsSet(PK.g,g.slice(-400));
+}
+function addRecent(list){
+  list.forEach(function(x){
+    var id=cleanUid(x.uid||x.id);if(!id||id===PROF.id)return;
+    var old=null;REC=REC.filter(function(r){if(r.id===id){old=r;return false;}return true;});
+    REC.unshift({id:id,name:cleanName(x.name)||'بازیکن',t:Date.now(),stats:old&&old.stats,seen:old&&old.seen});
+  });
+  REC=REC.slice(0,30);lsSet(PK.rec,REC);
+}
+function relTo(id){var e=frFind(id);return !e?'none':(e.st==='fr'?'fr':(e.st==='in'?'in':'out'));}
+function handleHi(id,m){
+  PM[id]={on:true,t:Date.now()};
+  var name=cleanName(m.name)||'بازیکن',e=frFind(id),rc=null,R=m.rel;
+  REC.forEach(function(r){if(r.id===id)rc=r;});
+  if(R==='out'){
+    if(!e){e={id:id,name:name,st:'in'};FR.push(e);toast(name+' درخواست دوستی فرستاد');}
+    else if(e.st==='out')e.st='fr';
+  }else if(R==='fr'){
+    if(e&&(e.st==='out'||e.st==='in'))e.st='fr';
+  }else if(R==='none'){
+    if(e&&e.st==='fr'){FR=FR.filter(function(x){return x!==e;});e=null;}
+  }
+  var st=m.stats?cleanStats(m.stats):null;
+  if(e){e.name=name;if(st)e.stats=st;e.seen=Date.now();}
+  if(rc){rc.name=name;if(st)rc.stats=st;rc.seen=Date.now();lsSet(PK.rec,REC);}
+  saveFR();peopleDraw();
+}
+var PRES={peer:null,tries:0};
+function presenceStart(){
+  if(PRES.peer||!onlineAvailable())return;
+  try{
+    PRES.peer=transport().host('u'+PROF.id,presenceIn,function(){},function(err){
+      PRES.peer=null;
+      if(err&&err.type==='unavailable-id')setTimeout(presenceStart,45000);
+      else if(PRES.tries++<3)setTimeout(presenceStart,15000);
+    });
+  }catch(e){PRES.peer=null;}
+}
+function presenceIn(link){
+  link.onmessage=function(m){
+    if(!m||m.t!=='hi')return;
+    var id=cleanUid(m.id);if(!id||id===PROF.id)return;
+    handleHi(id,m);
+    link.send({t:'hi',id:PROF.id,name:myName(),rel:relTo(id),stats:myStats(true)});
+    if(m.inv)handleInvite(id,m.inv);
+    setTimeout(function(){try{link.close();}catch(e){}},1500);
+  };
+}
+function probe(id,done,extra){
+  var fin=false,h=null,tm=setTimeout(function(){end(false);},window.__FAST?1500:7000);
+  function end(ok){
+    if(fin)return;fin=true;clearTimeout(tm);
+    try{if(h)h.close();}catch(e){}
+    if(done)done(ok);
+  }
+  try{
+    h=transport().join('u'+id,function(link){
+      link.onmessage=function(m){if(m&&m.t==='hi'){handleHi(id,m);end(true);}};
+      var msg={t:'hi',id:PROF.id,name:myName(),rel:relTo(id),stats:myStats(true)};
+      if(extra)for(var k in extra)msg[k]=extra[k];
+      link.send(msg);
+    },function(){end(false);});
+  }catch(e){end(false);}
+}
+function probeAll(ids,done){
+  var q=ids.slice(0,25),act=0,i=0,left=q.length;
+  if(!left){if(done)done();return;}
+  function next(){
+    while(act<3&&i<q.length){
+      (function(id){
+        act++;
+        probe(id,function(ok){
+          act--;left--;
+          if(!ok)PM[id]={on:false,t:Date.now()};
+          peopleDraw();
+          if(left===0){if(done)done();}else next();
+        });
+      })(q[i++]);
+    }
+  }
+  next();
+}
+function handleInvite(id,inv){
+  var code=String(inv&&inv.code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(code.length!==5)return;
+  var e=frFind(id),nm=e?e.name:'یک دوست';
+  if(S&&!S.over){toast(nm+' تو را به اتاق '+code+' دعوت کرد.');return;}
+  var sh=openSheet('<h3>دعوت به بازی</h3><p class="sub"></p><button class="btn primary wide" data-join>ورود به اتاق '+code+'</button><button class="btn wide" data-close>بعداً</button>');
+  sh.querySelector('.sub').textContent=nm+' تو را به یک اتاق بازی دعوت کرد.';
+  sh.addEventListener('click',function(ev){
+    if(ev.target.closest('[data-join]')){closeSheet();joinRoom(code,cleanName(loadName())||'مهمان',null);}
+    else if(ev.target.closest('[data-close]'))closeSheet();
+  });
+}
+function isOn(id){var m=PM[id];return !!m&&m.on&&Date.now()-m.t<(window.__FAST?60000:75000);}
+function contacts(){
+  var seen={},out=[];
+  FR.forEach(function(f){seen[f.id]=1;out.push(f);});
+  REC.forEach(function(r){if(!seen[r.id]){seen[r.id]=1;out.push({id:r.id,name:r.name,st:'rec',stats:r.stats,seen:r.seen});}});
+  return out;
+}
+var PEO={tab:'on',rk:'all',timer:null};
+function fmtCode(id){return id.slice(0,4)+'-'+id.slice(4);}
+function pRow(c,btns){
+  return '<div class="prow" data-id="'+c.id+'"><i class="pdot'+(isOn(c.id)?' on':'')+'"></i><div class="pn"><b></b><small>'+(c.st==='fr'?'دوست':(c.st==='out'?'در انتظار پذیرش':(c.st==='in'?'درخواست دوستی':'هم‌بازی')))+(isOn(c.id)?' · آنلاین':'')+'</small></div><div class="pb">'+btns+'</div></div>';
+}
+function peopleHtml(){
+  var h='',hosting=!!(NET.lobbyOn&&ROLE==='host'&&NET.code);
+  if(PEO.tab==='on'){
+    var on=contacts().filter(function(c){return c.st!=='in'&&isOn(c.id);});
+    h+=on.length?on.map(function(c){return pRow(c,(hosting?'<button class="btn small" data-inv="'+c.id+'">دعوت</button>':'')+(c.st==='rec'?'<button class="btn small" data-add="'+c.id+'">افزودن دوست</button>':''));}).join(''):'<p class="sub">فعلاً کسی از دوستان و هم‌بازی‌هایت آنلاین نیست.</p>';
+    h+='<p class="sub small">آنلاین‌ها از بین دوستان و کسانی که با آن‌ها بازی کرده‌ای نشان داده می‌شوند و هر ۲۰ ثانیه تازه می‌شوند.</p><button class="btn wide" data-refresh>بروزرسانی</button>';
+  }else if(PEO.tab==='fr'){
+    var req=FR.filter(function(f){return f.st==='in';}),fl=FR.filter(function(f){return f.st!=='in';});
+    h+='<div class="mycode"><span>کد دوستی من</span><b dir="ltr">'+fmtCode(PROF.id)+'</b><button class="btn small" data-copy>کپی</button></div>';
+    h+='<div class="addrow"><input id="frCode" class="inp code" dir="ltr" maxlength="9" placeholder="کد دوست" autocomplete="off" autocapitalize="characters"><button class="btn small primary" data-addcode>افزودن</button></div>';
+    if(req.length)h+='<div class="sub">درخواست‌ها</div>'+req.map(function(c){return pRow(c,'<button class="btn small primary" data-acc="'+c.id+'">قبول</button><button class="btn small" data-del="'+c.id+'">رد</button>');}).join('');
+    h+='<div class="sub">دوستان</div>'+(fl.length?fl.map(function(c){return pRow(c,(hosting&&c.st==='fr'?'<button class="btn small" data-inv="'+c.id+'">دعوت</button>':'')+'<button class="btn small" data-del="'+c.id+'">حذف</button>');}).join(''):'<p class="sub">هنوز دوستی اضافه نکرده‌ای. کد خودت را به دوستانت بده یا کد آن‌ها را وارد کن.</p>');
+  }else{
+    var per=PEO.rk==='wk'?'wk':(PEO.rk==='mo'?'mo':'all'),rows=[],mine=myStats(true);
+    rows.push({name:loadName()||'من',me:true,s:mine[per],id:PROF.id});
+    contacts().forEach(function(c){
+      if(PEO.rk==='fr'&&c.st!=='fr')return;
+      if(c.st==='in'||!c.stats)return;
+      rows.push({name:c.name,s:c.stats[per],id:c.id});
+    });
+    rows.forEach(function(r){r.r=r.s.w*10+r.s.p;});
+    rows.sort(function(a,b){return b.r-a.r||b.s.w-a.s.w||b.s.p-a.s.p;});
+    h+='<div class="tabs sm">'+[['all','کلی'],['wk','هفتگی'],['mo','ماهانه'],['fr','بین دوستان']].map(function(x){return '<button data-rk="'+x[0]+'" class="'+(PEO.rk===x[0]?'on':'')+'">'+x[1]+'</button>';}).join('')+'</div>';
+    h+='<table class="rpt rk"><tr><th>#</th><th></th><th>بازی</th><th>برد</th><th>امتیاز</th></tr>'+rows.map(function(r,i){
+      return '<tr data-id="'+r.id+'" class="'+(r.me?'sel':'')+'"><td>'+fa(i+1)+'</td><td class="nmc"><i class="pdot'+(r.me||isOn(r.id)?' on':'')+'"></i><span data-nm></span></td><td>'+fa(r.s.g)+'</td><td>'+fa(r.s.w)+'</td><td><b>'+fa(r.r)+'</b></td></tr>';}).join('')+'</table>';
+    h+='<p class="sub small">فقط بازی‌های آنلاین حساب می‌شود. هر برد ۱۰ امتیاز + مجموع امتیازهای بازی. آمار هر نفر هنگام آخرین آنلاین‌شدنش بروز شده است. (بدون سرور، رده‌بندی همهٔ کاربران ممکن نیست؛ این جدول بین تو، دوستان و هم‌بازی‌هایت است.)</p>';
+  }
+  return h;
+}
+function fillNames(root){
+  /* names come from other players: insert as text, never as markup */
+  var cs=contacts(),byId={};
+  cs.forEach(function(c){byId[c.id]=c;});
+  byId[PROF.id]={name:loadName()||'من'};
+  Array.prototype.forEach.call(root.querySelectorAll('[data-id]'),function(r){
+    var c=byId[r.dataset.id],el=r.querySelector('.pn b,[data-nm]');
+    if(c&&el)el.textContent=c.name;
+  });
+}
+function peopleDraw(){
+  var b=document.getElementById('peopleBody');if(!b)return;
+  var a=document.activeElement;if(a&&a.id==='frCode')return;
+  b.innerHTML=peopleHtml();fillNames(b);
+  Array.prototype.forEach.call(document.querySelectorAll('#peopleSheet [data-pt]'),function(x){x.classList.toggle('on',x.dataset.pt===PEO.tab);});
+}
+function peopleRefresh(){probeAll(contacts().filter(function(c){return c.st!=='in';}).map(function(c){return c.id;}));}
+function openPeople(){
+  presenceStart();
+  var sh=openSheet('<h3>افراد</h3><div class="tabs"><button data-pt="on">افراد آنلاین</button><button data-pt="fr">دوستان</button><button data-pt="rk">رده‌بندی</button></div><div id="peopleBody" class="endbody"></div><button class="btn wide" data-close>بستن</button>');
+  sh.id='peopleSheet';
+  peopleDraw();peopleRefresh();
+  clearInterval(PEO.timer);
+  PEO.timer=setInterval(function(){if(!document.getElementById('peopleBody')){clearInterval(PEO.timer);return;}peopleRefresh();},window.__FAST?4000:20000);
+  sh.addEventListener('click',function(e){
+    var t=e.target,x;
+    if((x=t.closest('[data-pt]'))){PEO.tab=x.dataset.pt;peopleDraw();return;}
+    if((x=t.closest('[data-rk]'))){PEO.rk=x.dataset.rk;peopleDraw();return;}
+    if(t.closest('[data-refresh]')){peopleRefresh();toast('در حال بررسی…');return;}
+    if(t.closest('[data-copy]')){
+      try{navigator.clipboard.writeText(PROF.id);toast('کد دوستی کپی شد');}catch(er){toast('کد: '+PROF.id);}return;
+    }
+    if(t.closest('[data-addcode]')){
+      var id=cleanUid(document.getElementById('frCode').value);
+      if(!id){toast('کد دوستی ۸ حرف است');return;}
+      if(id===PROF.id){toast('این کد خودت است');return;}
+      var ex=frFind(id);
+      if(ex){toast(ex.st==='fr'?'او قبلاً دوست توست':'قبلاً ثبت شده');return;}
+      FR.push({id:id,name:'دوست جدید',st:'out'});saveFR();
+      document.getElementById('frCode').value='';peopleDraw();
+      probe(id,function(ok){toast(ok?'درخواست فرستاده شد':'او فعلاً آنلاین نیست. وقتی هر دو آنلاین باشید و این صفحه باز باشد، درخواست می‌رسد.');peopleDraw();});
+      return;
+    }
+    if((x=t.closest('[data-acc]'))){var f=frFind(x.dataset.acc);if(f){f.st='fr';saveFR();peopleDraw();probe(f.id);}return;}
+    if((x=t.closest('[data-del]'))){FR=FR.filter(function(f){return f.id!==x.dataset.del;});saveFR();peopleDraw();return;}
+    if((x=t.closest('[data-add]'))){
+      var rid2=x.dataset.add;if(!frFind(rid2)){var rr=REC.filter(function(r){return r.id===rid2;})[0];FR.push({id:rid2,name:rr?rr.name:'بازیکن',st:'out',stats:rr&&rr.stats});saveFR();probe(rid2,function(){peopleDraw();});toast('درخواست فرستاده شد');}peopleDraw();return;
+    }
+    if((x=t.closest('[data-inv]'))){
+      probe(x.dataset.inv,function(ok){toast(ok?'دعوت فرستاده شد':'او آنلاین نیست');},{inv:{code:NET.code}});return;
+    }
+    if(t.closest('[data-close]'))closeSheet();
+  });
+}
+$('#btnPeople').addEventListener('click',openPeople);
+setTimeout(presenceStart,window.__FAST?50:1500);
 /* ---------- navigation: back button goes home, and you can come back ---------- */
 var VIEW='intro';
 function goSession(){
@@ -3015,6 +3253,7 @@ function clientInit(m){
   NET.started=true;NET.lobbyOn=false;NET.fxSeen=undefined;NET.kicked=false;ROLE='client';MY=m.you;
   S=newState(m.n,false,m.players.map(function(c){return {name:c.name,ai:c.ai,remote:false};}));
   buildBoard(m.board);
+  addRecent(m.players.filter(function(c,ix){return !c.ai&&ix!==m.you&&c.uid;}));
   hideRejoin();
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#toasts').innerHTML='';
   if(VIEW!=='session')goSession();
@@ -3084,7 +3323,7 @@ function onJoin(link){
   L.players.push(entry);
   link.onmessage=function(m){
     if(m&&m.t==='hello'&&!NET.started){
-      var nm=cleanName(m.name);
+      var nm=cleanName(m.name);entry.uid=cleanUid(m.uid);
       if(nm){while(L.players.some(function(x){return x!==entry&&x.name===nm;}))nm+='۲';entry.name=nm.slice(0,13);}
       lobbyBroadcast();
     }
@@ -3110,7 +3349,8 @@ function startOnline(){
   }
   NET.started=true;NET.lobbyOn=false;ROLE='host';MY=0;
   S=newState(n,false,cfg);
-  S.players.forEach(function(p,i){if(!p.ai){p.hum=true;if(i>0)p.token=L.players[i].token;}});S.diff=L.diff!=null?L.diff:DIFF;
+  S.players.forEach(function(p,i){if(!p.ai){p.hum=true;if(i>0){p.token=L.players[i].token;p.uid=L.players[i].uid||null;}else p.uid=PROF.id;}});
+  addRecent(S.players.filter(function(p,i){return i>0&&p.uid;}));S.diff=L.diff!=null?L.diff:DIFF;
   initBoard();
   NET.links={};
   L.players.forEach(function(e,i){
@@ -3121,7 +3361,7 @@ function startOnline(){
   });
   var snap=boardSnapshot();
   Object.keys(NET.links).forEach(function(i){
-    toSeat(+i,{t:'init',you:+i,n:n,players:cfg.map(function(c){return {name:c.name,ai:c.ai};}),board:snap});
+    toSeat(+i,{t:'init',you:+i,n:n,players:cfg.map(function(c,ix){return {name:c.name,ai:c.ai,uid:(S.players[ix]&&S.players[ix].uid)||null};}),board:snap});
   });
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#toasts').innerHTML='';
   render();syncNow();
@@ -3146,8 +3386,8 @@ function connectClient(first){
     NET.hostLink=link;ROLE='client';
     link.onmessage=clientMsg;
     link.onclose=function(){onHostLost(link);};
-    var hn=0,hi=setInterval(function(){if(NET.you!=null||hn++>10||NET.hostLink!==link){clearInterval(hi);return;}link.send({t:'hello',name:cli.name,token:cli.token});},1500);
-    link.send({t:'hello',name:cli.name,token:cli.token});
+    var hn=0,hi=setInterval(function(){if(NET.you!=null||hn++>10||NET.hostLink!==link){clearInterval(hi);return;}link.send({t:'hello',name:cli.name,token:cli.token,uid:PROF.id});},1500);
+    link.send({t:'hello',name:cli.name,token:cli.token,uid:PROF.id});
   },function(err){
     if(linked||!first)return;
     clearTimeout(tm);var t=err&&err.type;
