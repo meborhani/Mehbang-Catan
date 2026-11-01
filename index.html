@@ -3623,11 +3623,13 @@ $('#lobby').addEventListener('click',function(e){
 var ECO_ON=!((window.__TRANSPORT&&!window.__ECO)||(navigator.webdriver&&!/[?&]eco/.test(location.search)));
 var ECO_FEE=5,ECO_DAILY=50;
 function ecoDay(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-var ECO=(function(){var e=lsGet('mb_eco',null);if(!e||typeof e.b!=='number'||e.b<0||e.b>1e9)e={b:ECO_DAILY,d:ecoDay(),first:1};return e;})();
-function ecoSave(){lsSet('mb_eco',{b:ECO.b,d:ECO.d});}
+var ACCT=(function(){var a=lsGet('mb_acc',null);if(!a||typeof a.token!=='string'||a.token.length!==48||typeof a.name!=='string')return null;return {token:a.token,name:a.name.replace(/[^a-z0-9_\u0600-\u06FF]/gi,'').slice(0,16)};})();
+var ECO=(function(){var e=lsGet(ACCT?'mb_eco_acc':'mb_eco',null);if(!e||typeof e.b!=='number'||e.b<0||e.b>1e9)e=ACCT?{b:0,d:'',srv:0}:{b:ECO_DAILY,d:ecoDay(),first:1};return e;})();
+function ecoSave(){lsSet(ACCT?'mb_eco_acc':'mb_eco',{b:ECO.b,d:ECO.d,srv:ECO.srv|0});accPush();}
 function ecoPaint(){Array.prototype.forEach.call(document.querySelectorAll('[data-coin]'),function(e){e.textContent='🪙 '+fa(ECO.b);});}
 function ecoDaily(){
   if(!ECO_ON)return;
+  if(ACCT){accRefresh();ecoPaint();return;}
   if(ECO.first){delete ECO.first;ecoSave();toast('خوش آمدی! ۵۰ سکهٔ هدیه گرفتی');}
   else if(ECO.d!==ecoDay()){ECO.d=ecoDay();ECO.b+=ECO_DAILY;ecoSave();toast('هدیهٔ امروز: ۵۰ سکه 🎁');}
   ecoPaint();
@@ -3649,14 +3651,108 @@ function ecoCharge(fee){
 function ecoNeed(g,cfg){return g.type==='poker'?(cfg.bl||1)*20:(g.type==='tavla'?((M&&M.stake)||10):ECO_FEE);}
 function ecoPayClamp(fee){if(!ECO_ON)return;ECO.b=Math.max(0,ECO.b-fee);ecoSave();ecoPaint();}
 /* optional Supabase link: registers the player's name/id and receives coins granted from the admin panel (config in sb-config.js) */
+function sbOk(){var c=window.MB_SB;return !!(c&&c.url&&c.key&&window.fetch&&!(window.__TRANSPORT&&!window.__SB));}
 function sbCall(fn,args){
   var c=window.MB_SB;
   return fetch(c.url.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':c.key,'Authorization':'Bearer '+c.key,'Content-Type':'application/json'},body:JSON.stringify(args)})
-    .then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){try{return JSON.parse(t);}catch(e){return null;}});
+    .then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}if(!r.ok){var er=new Error((j&&j.message)||'خطا');er.http=r.status;throw er;}return j;});});
+}
+/* ---------- accounts: username + password, coin balance kept on the server ---------- */
+var ACC_BUSY=false,ACC_T=0,ACC_PG='';
+function accGame(){return (typeof M!=='undefined'&&M&&M.g&&M.g.id)||'catan';}
+function accPush(){
+  if(!ACCT||!ECO_ON||!sbOk())return;
+  ACC_PG=accGame();clearTimeout(ACC_T);ACC_T=setTimeout(accFlush,500);
+}
+function accSaveLocal(){lsSet('mb_eco_acc',{b:ECO.b,d:ECO.d,srv:ECO.srv|0});}
+function accExpired(){
+  if(!ACCT)return;
+  ACCT=null;lsSet('mb_acc',null);accGuestLoad();ecoPaint();toast('نشست حساب تمام شد؛ دوباره وارد شو');
+  if(typeof renderHub==='function'&&!$('#hub').hidden)renderHub();ecoPaint();
+}
+function accFlush(){
+  if(!ACCT||ACC_BUSY||!sbOk())return;
+  var d=ECO.b-(ECO.srv|0);if(!d)return;
+  ACC_BUSY=true;var sent=(ECO.srv|0)+d,me=ACCT;
+  sbCall('mb_sync',{p_token:me.token,p_delta:d,p_game:ACC_PG||'catan'}).then(function(r){
+    ACC_BUSY=false;
+    if(ACCT!==me)return;
+    if(!r){accExpired();return;}
+    ECO.b=Math.max(0,r.bal+(ECO.b-sent));ECO.srv=r.bal;accSaveLocal();ecoPaint();
+    if(ECO.b!==ECO.srv)accPush();
+  }).catch(function(){ACC_BUSY=false;setTimeout(accFlush,15000);});
+}
+function accRefresh(){
+  if(!ACCT||!sbOk())return;
+  var me=ACCT;
+  sbCall('mb_me',{p_token:me.token}).then(function(r){
+    if(ACCT!==me)return;
+    if(!r){accExpired();return;}
+    var up=r.bal-(ECO.srv|0);
+    ECO.b=Math.max(0,r.bal+(ECO.b-(ECO.srv|0)));ECO.srv=r.bal;ECO.d=ecoDay();accSaveLocal();ecoPaint();
+    if(r.daily)toast('هدیهٔ امروز: ۵۰ سکه 🎁');else if(up>0)toast('🎁 '+fa(up)+' سکه به حسابت اضافه شد');
+    accFlush();
+  }).catch(function(){});
+}
+function accGuestLoad(){
+  var g=lsGet('mb_eco',null);
+  if(!g||typeof g.b!=='number'||g.b<0||g.b>1e9)g={b:ECO_DAILY,d:ecoDay()};
+  ECO.b=g.b;ECO.d=g.d;ECO.srv=0;delete ECO.first;
+}
+function accEnter(r){
+  ACCT={token:r.token,name:String(r.name).replace(/[^a-z0-9_\u0600-\u06FF]/gi,'').slice(0,16)};
+  lsSet('mb_acc',{token:ACCT.token,name:ACCT.name});
+  ECO.b=r.bal|0;ECO.srv=r.bal|0;ECO.d=ecoDay();delete ECO.first;accSaveLocal();ecoPaint();
+  if(r.daily)toast('هدیهٔ امروز: ۵۰ سکه 🎁');
+  if(!$('#hub').hidden)renderHub();ecoPaint();
+}
+function accLogout(){
+  var me=ACCT;if(!me)return;
+  if(sbOk())sbCall('mb_logout',{p_token:me.token}).catch(function(){});
+  ACCT=null;lsSet('mb_acc',null);lsSet('mb_eco_acc',null);accGuestLoad();ecoPaint();
+  if(!$('#hub').hidden)renderHub();ecoPaint();
+}
+window.__eco={ECO:ECO,charge:ecoCharge,pay:ecoPayClamp,acc:function(){return ACCT;}};
+function accClose(){var e=document.getElementById('acc');if(e)e.remove();}
+function accOpen(){
+  accClose();
+  var o=document.createElement('div');o.id='acc';
+  o.style.cssText='position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.62);display:flex;align-items:center;justify-content:center;padding:12px';
+  var c=document.createElement('div');
+  c.style.cssText='background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:14px;width:min(340px,100%);display:flex;flex-direction:column;gap:8px;direction:rtl;font-size:14px;max-height:100%;overflow:hidden';
+  o.appendChild(c);
+  function el(t,txt,st){var e=document.createElement(t);if(txt)e.textContent=txt;if(st)e.style.cssText=st;c.appendChild(e);return e;}
+  var cl=el('button','بستن','align-self:flex-start');cl.className='btn sm';cl.onclick=accClose;
+  if(ACCT){
+    el('b','👤 '+ACCT.name,'font-size:17px');
+    el('div','موجودی: '+fa(ECO.b)+' سکه','color:var(--ember);font-weight:700');
+    el('div','سکه‌های تو روی سرور ذخیره است و در هر دستگاه با ورود به همین حساب همان را می‌بینی.','color:var(--dim);font-size:12.5px');
+    var lo=el('button','خروج از حساب');lo.className='btn';lo.onclick=function(){accLogout();accClose();};
+  }else{
+    el('b','ورود / ثبت‌نام','font-size:17px');
+    var u=el('input');u.className='inp';u.placeholder='نام کاربری (۳ تا ۱۶ حرف)';u.maxLength=16;u.autocomplete='username';u.setAttribute('autocapitalize','none');
+    var pw=el('input');pw.className='inp';pw.type='password';pw.placeholder='رمز (حداقل ۶ نویسه)';pw.maxLength=72;pw.autocomplete='current-password';pw.dir='ltr';
+    var msg=el('div','','color:var(--ember);min-height:1.3em;font-size:13px');
+    var row=el('div','','display:flex;gap:8px');
+    var b1=document.createElement('button');b1.className='btn';b1.textContent='ورود';b1.style.flex='1';
+    var b2=document.createElement('button');b2.className='btn';b2.textContent='ثبت‌نام';b2.style.flex='1';
+    row.appendChild(b1);row.appendChild(b2);
+    el('div','بدون حساب هم می‌شود بازی کرد، اما سکه‌ها فقط روی همین دستگاه می‌مانند. با ثبت‌نام، نام کاربری و موجودی سکه‌ات روی سرور مهبانگ ذخیره می‌شود و ادمین آن‌ها را می‌بیند. حساب جدید با ۵۰ سکه شروع می‌شود.','color:var(--dim);font-size:12px;line-height:1.5');
+    function go(fn){
+      if(!sbOk()){msg.textContent='اتصال به سرور در دسترس نیست';return;}
+      msg.textContent='…';b1.disabled=b2.disabled=true;
+      sbCall(fn,{p_user:u.value,p_pass:pw.value}).then(function(r){accEnter(r);accClose();toast('خوش آمدی '+ACCT.name);})
+        .catch(function(e){b1.disabled=b2.disabled=false;msg.textContent=e&&e.http?e.message:'ارتباط با سرور برقرار نشد';});
+    }
+    b1.onclick=function(){go('mb_login');};b2.onclick=function(){go('mb_signup');};
+    pw.addEventListener('keydown',function(e){if(e.key==='Enter')go('mb_login');});
+  }
+  o.addEventListener('click',function(e){if(e.target===o)accClose();});
+  document.body.appendChild(o);
 }
 function sbSync(){
   var c=window.MB_SB;
-  if(!c||!c.url||!c.key||!window.fetch||(window.__TRANSPORT&&!window.__SB)||!ECO_ON&&!window.__SB)return;
+  if(ACCT||!c||!c.url||!c.key||!window.fetch||(window.__TRANSPORT&&!window.__SB)||!ECO_ON&&!window.__SB)return;
   if(Date.now()-lsGet('mb_sbt',0)<120000)return;
   lsSet('mb_sbt',Date.now());
   sbCall('mb_register',{p_uid:PROF.id,p_name:cleanName(loadName())})
@@ -3664,7 +3760,7 @@ function sbSync(){
     .then(function(n){n=+n|0;if(n>0&&n<=100000){ECO.b+=n;ecoSave();ecoPaint();toast('🎁 '+fa(n)+' سکه هدیه از مهبانگ گرفتی');}})
     .catch(function(){lsSet('mb_sbt',0);});
 }
-document.addEventListener('visibilitychange',function(){if(!document.hidden)sbSync();});
+document.addEventListener('visibilitychange',function(){if(!document.hidden){sbSync();accRefresh();}});
 setTimeout(sbSync,1500);
 /* ---------- game hub: small online two-player games ---------- */
 var MGS={
@@ -5095,7 +5191,7 @@ function mgIcon(id){
   return '<svg viewBox="0 0 36 36"><polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5" fill="var(--e0)" stroke="var(--line)" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="var(--ember)"/></svg>';
 }
 function renderHub(){
-  var h='<div class="hb-in hub"><div class="hb-coin" data-coin></div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  var h='<div class="hb-in hub"><div style="grid-column:1/-1;display:flex;gap:8px;justify-content:center;align-items:center"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 10px;font-size:13px">'+(ACCT?'👤 '+ACCT.name:'👤 ورود / ثبت‌نام')+'</button></div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -5511,7 +5607,7 @@ function mgInvInfo(){return M&&M.wait&&M.code?{code:M.code,g:M.g.id}:{code:NET.c
 $('#hub').addEventListener('click',function(e){
   var c=e.target.closest('[data-hg]');if(!c)return;
   var k=c.dataset.hg;
-  if(k==='catan')hubCatan();else if(k==='people')openPeople();else mgOpen(k);
+  if(k==='catan')hubCatan();else if(k==='people')openPeople();else if(k==='acct')accOpen();else mgOpen(k);
 });
 $('#mini').addEventListener('click',function(e){
   var t=e.target;if(!M)return;
