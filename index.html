@@ -1803,18 +1803,19 @@ function produce(n){
 async function handleSeven(p,st){
   S.hotNum=null;
   log('قطعی برق! هر کس بیش از ۷ قطعه دارد نیمی را از دست می‌دهد.');
-  for(var i=0;i<S.players.length;i++){
-    var q=S.players[i],tot=sum(q.res);
-    if(tot>7){
-      var n=Math.floor(tot/2);
-      if(q.ai){for(var k=0;k<n;k++)q.res[argmax(q.res)]--;}
-      else{
-        var d=await askSeat(q,'pick',{title:'قطعی برق: '+fa(n)+' قطعه را کنار بگذار',n:n,limit:q.res.slice()},timerOn()?40000:0);
-        d.forEach(function(c,j){q.res[j]-=c;});
-      }
+  /* everyone with too many pieces decides at the same time; each person has their own 60 seconds,
+     and if they do not choose, random pieces are burned when their time ends */
+  var jobs=S.players.map(function(q){
+    var tot=sum(q.res);
+    if(tot<=7)return Promise.resolve();
+    var n=Math.floor(tot/2);
+    if(q.ai){for(var k=0;k<n;k++)q.res[argmax(q.res)]--;q.stats.disc+=n;log(q.name+' '+fa(n)+' قطعه را از دست داد.');return Promise.resolve();}
+    return askSeat(q,'pick',{title:'قطعی برق: '+fa(n)+' قطعه را کنار بگذار',n:n,limit:q.res.slice()},timerOn()?60000*tScale():0).then(function(d){
+      d.forEach(function(c,j){q.res[j]-=c;});
       q.stats.disc+=n;log(q.name+' '+fa(n)+' قطعه را از دست داد.');
-    }
-  }
+    });
+  });
+  await Promise.all(jobs);
   render();
   if(stale(st))return;
   await moveBlackHole(p,st);
