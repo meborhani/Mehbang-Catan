@@ -688,6 +688,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-hd{display:flex;flex-wrap:wrap;gap:3px;max-height:clamp(70px,13dvh,100px);overflow:hidden;align-content:flex-start}
 .jz-ac{gap:6px}.jz-ac .btn{min-width:0;flex:1}
 @media (orientation:landscape) and (max-height:600px){.hb-in.gm.jzg{display:flex;flex-direction:column}.hb-in.gm.jzg>*{grid-column:auto}}
+.hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
 </style>
 </head>
 <body>
@@ -2420,7 +2421,7 @@ $('#segN').addEventListener('click',function(e){
   chosenN=+b.dataset.n;
   Array.prototype.forEach.call($('#segN').children,function(x){x.classList.toggle('on',x===b);});
 });
-$('#go').addEventListener('click',function(){startGame(chosenN,false);});
+$('#go').addEventListener('click',function(){if(!ecoCharge())return;startGame(chosenN,false);});
 $('#watch').addEventListener('click',function(){startGame(4,true);});
 
 /* ---------- themes ---------- */
@@ -2817,7 +2818,7 @@ function restoreState(g){
 }
 function resumeInfo(g){return {phase:g.phase,cur:g.cur,mode:g.mode,setupS:g.setupS};}
 function isReload(){try{var n=performance.getEntriesByType('navigation')[0];return !!n&&n.type==='reload';}catch(e){return false;}}
-function resumeSaved(){
+function resumeSaved(){NET.paidOnce=true;
   var r=recLoad();if(!r)return;
   closeSheet();
   if(r.type==='solo'){
@@ -3213,7 +3214,7 @@ function leaveOnline(){
   try{if(NET.hostLink){NET.hostLink.onclose=null;NET.hostLink.close();}}catch(e){}
   try{if(NET.peer)NET.peer.close();}catch(e){}
   clearTimeout(TMR);NET.localPend=null;NET.links={};NET.pending.clear();NET.hostLink=null;NET.lobby=null;NET.lv=null;NET.started=false;NET.you=null;NET.peer=null;NET.lobbyOn=false;
-  ROLE='solo';NET.leaving=false;
+  ROLE='solo';NET.leaving=false;NET.paidOnce=false;
 }
 
 /* ---------- online rooms: host-authoritative, WebRTC through PeerJS ---------- */
@@ -3385,7 +3386,7 @@ function clientMsg(m){
   }
   if(m.t==='reject'){recClear();clearTimeout(NET.rejoinT);NET.rejoinT=null;hideRejoin();lobbyError(m.reason||'ورود ممکن نشد.');return;}
   if(m.t==='lobby'){NET.lv={code:m.code,names:m.names,n:m.n,isHost:false,restoring:!!m.restoring};renderLobby();return;}
-  if(m.t==='init'){clientInit(m);return;}
+  if(m.t==='init'){if(!NET.paidOnce&&!NET.restore){NET.paidOnce=true;ecoPayClamp(ECO_FEE);}clientInit(m);return;}
   if(!S||ROLE!=='client')return;
   if(m.t==='state'){applyState(m.s);return;}
   if(m.t==='chat'){showSay(m.from,m.k,m.i|0,m.r|0);return;}
@@ -3489,6 +3490,7 @@ function onJoin(link){
 function startOnline(){
   if(NET.restore){continueRestore();return;}
   var L=NET.lobby;if(!L||NET.started)return;
+  if(!ecoCharge())return;
   var humans=L.players.length,n=Math.max(L.n,humans,2);
   var used={};L.players.forEach(function(e){used[e.name]=1;});
   var pool=['رضا','مهسا','کیان','نگار','سینا','آیدا','پویا','نیلوفر'].filter(function(x){return !used[x];});
@@ -3549,7 +3551,7 @@ function loadName(){try{return localStorage.getItem('datis_name')||'';}catch(e){
 if(!onlineAvailable()){$('#onlineBox').innerHTML='<div class="sub">بازی آنلاین به اتصال اینترنت و بارگذاری کتابخانهٔ اتصال نیاز دارد.</div>';}
 else{
   $('#mkRoom').addEventListener('click',function(){hostLobby(cleanName(loadName())||'میزبان');});
-  $('#joinRoom').addEventListener('click',function(){joinRoom($('#joinCode').value,cleanName(loadName())||'مهمان',null);});
+  $('#joinRoom').addEventListener('click',function(){if(!ecoCan())return;joinRoom($('#joinCode').value,cleanName(loadName())||'مهمان',null);});
 }
 $('#lobby').addEventListener('click',function(e){
   var t=e.target;
@@ -3563,6 +3565,34 @@ $('#lobby').addEventListener('click',function(e){
   if(t.closest('[data-start]')){startOnline();return;}
   if(t.closest('[data-leave]')){leaveOnline();S=null;showIntro();}
 });
+/* ---------- Mehbang coins: shared balance, daily gift, entry fees ---------- */
+var ECO_ON=!(window.__TRANSPORT||(navigator.webdriver&&!/[?&]eco/.test(location.search)));
+var ECO_FEE=5,ECO_DAILY=50;
+function ecoDay(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
+var ECO=(function(){var e=lsGet('mb_eco',null);if(!e||typeof e.b!=='number'||e.b<0||e.b>1e9)e={b:ECO_DAILY,d:ecoDay(),first:1};return e;})();
+function ecoSave(){lsSet('mb_eco',{b:ECO.b,d:ECO.d});}
+function ecoPaint(){Array.prototype.forEach.call(document.querySelectorAll('[data-coin]'),function(e){e.textContent='🪙 '+fa(ECO.b);});}
+function ecoDaily(){
+  if(!ECO_ON)return;
+  if(ECO.first){delete ECO.first;ecoSave();toast('خوش آمدی! ۵۰ سکهٔ هدیه گرفتی');}
+  else if(ECO.d!==ecoDay()){ECO.d=ecoDay();ECO.b+=ECO_DAILY;ecoSave();toast('هدیهٔ امروز: ۵۰ سکه 🎁');}
+  ecoPaint();
+}
+function ecoCan(fee){
+  if(!ECO_ON)return true;
+  fee=fee==null?ECO_FEE:fee;
+  if(ECO.b>=fee)return true;
+  toast('سکهٔ کافی نداری؛ ورود '+fa(fee)+' سکه است و موجودی تو '+fa(ECO.b)+'. فردا ۵۰ سکهٔ جدید می‌گیری.');
+  return false;
+}
+function ecoCharge(fee){
+  if(!ECO_ON)return true;
+  fee=fee==null?ECO_FEE:fee;
+  if(!ecoCan(fee))return false;
+  ECO.b-=fee;ecoSave();ecoPaint();toast(fa(fee)+' سکه ورودی کم شد · '+fa(ECO.b)+' مانده');
+  return true;
+}
+function ecoPayClamp(fee){if(!ECO_ON)return;ECO.b=Math.max(0,ECO.b-fee);ecoSave();ecoPaint();}
 /* ---------- game hub: small online two-player games ---------- */
 var MGS={
   ttt:{id:'ttt',type:'grid',name:'دوز',sub:'سه نشان در یک ردیف',w:3,h:3,k:3,grav:false,max:2},
@@ -4171,7 +4201,7 @@ function showHub(){
   mgClose();VIEW='hub';
   document.title='مهبانگ گیم';
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#hub').hidden=false;
-  presenceStart();
+  presenceStart();ecoDaily();
 }
 function hubCatan(){$('#hub').hidden=true;applyTheme(loadTheme(),true);showIntro();}
 function mgIcon(id){
@@ -4183,7 +4213,7 @@ function mgIcon(id){
   return '<svg viewBox="0 0 36 36"><polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5" fill="var(--e0)" stroke="var(--line)" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="var(--ember)"/></svg>';
 }
 function renderHub(){
-  var h='<div class="hb-in hub"><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  var h='<div class="hb-in hub"><div class="hb-coin" data-coin></div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -4408,6 +4438,7 @@ function mgAuto(){
 }
 function g_delay(){return M&&M.g.type==='manch'?650:450;}
 function mgBegin(){
+  if(!ecoCharge())return;
   if(M.mode==='menu')M.mode='host';
   M.wait=false;M.glob=false;M.rn=0;
   for(var i=0;i<M.n;i++)if(!M.names[i]){M.names[i]='رایانه'+(M.n>2?' '+fa(i):'');M.ai[i]=true;}
@@ -4514,6 +4545,7 @@ function mgJoin(code){
       cur.res=d.res==='draw'?'draw':(d.res===0||(d.res>0&&d.res<n)?d.res|0:null);
       cur.line=d.line.filter(function(v){return typeof v==='number'&&v>=0&&v<cur.b.length;});
       cur.rn=+d.rn|0;if(cur.rn!==oldRn||!wasOver){cur.sel=-1;cur.promo=null;}
+      if(cur.paidRn!==cur.rn){cur.paidRn=cur.rn;ecoPayClamp(ECO_FEE);}
       var u1=cleanUid(d.uid);if(u1)addRecent([{uid:u1,name:cur.names[0]}]);
       mgRender();mgRecord();
     };
@@ -4573,12 +4605,13 @@ $('#mini').addEventListener('click',function(e){
   if(k==='back'){mgClose();return;}
   if(k==='ai'){
     var g=M.g,n=g.max>2?M.pn:2;
+    if(!ecoCharge())return;
     mgNew(g,'ai',n);M.me=0;M.names[0]=cleanName(loadName())||'تو';
     for(var i=1;i<n;i++){M.names[i]='رایانه'+(n>2?' '+fa(i):'');M.ai[i]=true;}
     M.rn=0;mgReset();mgAfter();
   }
   else if(k==='mk')mgHost();
-  else if(k==='join')mgJoin($('#mgCode').value);
+  else if(k==='join'){if(ecoCan())mgJoin($('#mgCode').value);}
   else if(k==='start'){if(M.wait)mgBegin();}
   else if(k==='roll')mgDo('rl');
   else if(k==='resign'){
@@ -4591,6 +4624,7 @@ $('#mini').addEventListener('click',function(e){
   else if(k==='copy'){try{navigator.clipboard.writeText(M.code).then(function(){toast('کد کپی شد');},function(){toast('کد: '+M.code);});}catch(x){toast('کد: '+M.code);}}
   else if(k==='again'){
     if(M.mode==='guest')return;
+    if(!ecoCharge())return;
     M.rn++;mgReset();mgAfter();
   }
 });
@@ -4600,7 +4634,7 @@ function mgSay(j){
 }
 $('#btnHub').addEventListener('click',showHub);
 if(window.__TRANSPORT)window.__mg={M:function(){return M;},JZ:JZ,kick:function(){mgAuto();}};
-renderHub();
+renderHub();ecoPaint();
 if(!(navigator.webdriver&&!/[?&]hub/.test(location.search))&&!window.__TRANSPORT&&!recLoad()){showHub();}
 DIFF=loadDiff();paintDiff();paintFeel();
 applyTheme(loadTheme(),true);
