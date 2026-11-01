@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1b120a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="کتان">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>کارخانه داتیس</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -613,8 +621,8 @@ body[data-skin=cosmic] .btn:active{filter:brightness(1.3)}
 </div>
 
 <div id="lobby" hidden><div class="intro-in" id="lobbyIn"></div></div>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script>window.Peer||document.write('<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"><\/script>')</script>
+<script src="peerjs.min.js"></script>
+<script>window.Peer||document.write('<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"><\/script>')</script>
 <script>
 (function(){
 'use strict';
@@ -2412,6 +2420,7 @@ function applyTheme(key,noSave){
   buildTx();
   document.body.dataset.skin=TH.key;document.documentElement.dataset.skin=TH.key;
   document.title=TH.brand;
+  var tcm=document.querySelector('meta[name=theme-color]');if(tcm)tcm.setAttribute('content',TH.void);
   var br=document.querySelector('.brand');if(br)br.innerHTML=TH.brand+'<small>'+TH.tag+'</small>';
   $('#hero').innerHTML=TH.hero.join('<br>');
   
@@ -2445,12 +2454,17 @@ function openSettings(){
     '<div class="sub">تم بازی. فقط ظاهر و نام‌ها عوض می‌شود و قوانین یکی است. هر بازیکن تم خودش را می‌بیند.</div><div class="themes">'+
     ['orig','datis','cosmic','ww'].map(function(k){return THEMES.filter(function(t){return t.key===k;})[0];}).map(function(t){return '<button class="th'+(t===TH?' on':'')+'" data-th="'+t.key+'"><span class="thi">'+[0,1,2,3,4].map(function(i){return '<svg class="ico" width="22" height="22" viewBox="0 0 24 24" style="color:'+t.RH[i]+'"><use href="#ic_'+t.key+i+'"/></svg>';}).join('')+'</span><b>'+t.name+'</b></button>';}).join('')+
     '</div><div><div class="sub stg-lbl">سختی هوش مصنوعی</div><div class="seg-d"><button data-d="0">آسان</button><button data-d="1">متوسط</button><button data-d="2">سخت</button></div></div><div class="three"><button class="btn sm" data-tg="mus"></button><button class="btn sm" data-tg="snd"></button><button class="btn sm" data-tg="vib"></button></div><p class="sub">نام از بازی بعد اعمال می‌شود.</p><button class="btn primary wide" data-close>تأیید</button>';
+  var cbtn=sh.querySelector('[data-close]');
+  if(cbtn&&!isStandalone()){
+    cbtn.insertAdjacentHTML('beforebegin','<div class="inst"><div class="sub stg-lbl">نصب برنامه</div>'+(DEFI?'<button class="btn wide" data-install>نصب روی صفحهٔ اصلی</button>':'<p class="sub small">در Chrome اندروید: منو ⋮ ← «نصب برنامه» یا «افزودن به صفحهٔ اصلی». در iPhone: دکمهٔ اشتراک ← «Add to Home Screen».</p>')+'</div>');
+  }
   var inp=sh.querySelector('#setName');inp.value=loadName();paintDiff();
   inp.addEventListener('input',function(){saveName(cleanName(inp.value));});
   paintFeel();
   sh.addEventListener('click',function(e){
     var b=e.target.closest('[data-th]');
     if(b){applyTheme(b.dataset.th);Array.prototype.forEach.call(sh.querySelectorAll('[data-th]'),function(x){x.classList.toggle('on',x===b);});return;}
+    if(e.target.closest('[data-install]')&&DEFI){DEFI.prompt();DEFI.userChoice.then(function(){DEFI=null;closeSheet();});return;}
     if(e.target.closest('[data-close]'))closeSheet();
   });
 }
@@ -2800,6 +2814,15 @@ function onHostLost(link){
 }
 window.addEventListener('pagehide',function(){try{saveCheckpoint(false);}catch(e){}});
 document.addEventListener('visibilitychange',function(){if(document.hidden){try{saveCheckpoint(false);}catch(e){}}});
+
+/* ---------- installable app (PWA) ---------- */
+var DEFI=null;
+function isStandalone(){try{return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}catch(e){return false;}}
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();DEFI=e;});
+window.addEventListener('appinstalled',function(){DEFI=null;});
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)&&!window.__TRANSPORT){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+}
 
 /* ---------- people: friends, presence and ranking (no server needed) ---------- */
 var PK={prof:'datis_prof',fr:'datis_friends',rec:'datis_recent',g:'datis_games'};
