@@ -97,7 +97,7 @@ button:disabled{cursor:default}
 .hlE{stroke:var(--ember);stroke-width:.13;stroke-linecap:round;stroke-opacity:.6;animation:pulse 1.1s ease-in-out infinite}
 .hit{cursor:pointer}
 .spin{transform-box:fill-box;transform-origin:center;animation:spin 14s linear infinite}
-.ntext{font-family:var(--font-body);font-weight:700;font-variant-numeric:tabular-nums}
+.ntext{font-family:var(--font-body);font-weight:900;font-size:.35px;font-variant-numeric:tabular-nums}
 
 .log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--ink-dim);min-height:68px}
 .log li:first-child{color:var(--ink)}
@@ -317,7 +317,7 @@ body{position:fixed;inset:0;width:100%}
   .pl{padding:2px 5px}.pl-pt{font-size:17px}.nm{font-size:11px}
   .status{min-height:22px}.msg{font-size:11.5px;line-height:1.25}.die{width:22px;height:22px;font-size:12px}
   .dock{min-height:0;gap:3px}.rc{padding:2px 1px}.rc b{font-size:13px}.rc span{display:none}.rc svg{width:14px;height:14px}
-  .bb{padding:3px 2px;flex-direction:row;gap:4px}.bb .cost{display:none}.bb{font-size:10.5px}
+  .bb{padding:2px 1px;flex-direction:column;gap:1px;justify-content:center}.bb .cost{display:flex;line-height:0}.bb .cost svg{width:13px;height:13px}.bb{font-size:10.5px}
   .rowA .btn{font-size:12px}.rowC .btn{min-height:28px;font-size:11.5px}
   .brand{font-size:18px}.top{min-height:0}
   #status{grid-area:status}.dock{grid-area:dock;align-self:end}
@@ -375,7 +375,7 @@ body{position:fixed;inset:0;width:100%}
 .fx-puff{animation:puffA 1.4s ease-out both}
 .fx-pop{animation:popA 2s ease-out both}
 .fx-coin{animation:flyA 1.2s .5s ease-out both}
-.die.dface{background:none;width:32px;height:32px;padding:0}
+.die.dface{background:none;width:clamp(36px,10.5dvh,52px);height:clamp(36px,10.5dvh,52px);padding:0}
 .die.dface svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 2px #0008)}
 .dsum{font-weight:700;font-size:14px;color:var(--ink)}
 .hstrip{display:flex;justify-content:center;gap:6px}
@@ -479,6 +479,8 @@ body[data-skin=orig] .board::before{inset:0 -44px;background:url("data:image/svg
 @keyframes seaw{to{transform:translateX(44px)}}
 body[data-skin=orig] .board::after{inset:auto auto 3% -70px;width:64px;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='44' viewBox='0 0 64 44'%3E%3Cpath d='M6 30h52l-8 10H14z' fill='%238a5a2b' stroke='%233a2411' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M32 4v26' stroke='%233a2411' stroke-width='2'/%3E%3Cpath d='M34 6l18 20H34z' fill='%23fff3d0' stroke='%233a2411' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M30 10L16 26h14z' fill='%23f1c46a' stroke='%233a2411' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat 0 0/64px 44px;will-change:transform;animation:sail 46s linear infinite;opacity:.9}
 @keyframes sail{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 140px))}}
+body[data-skin=datis] .led,body[data-skin=datis] .halo,body[data-skin=datis] .march,body[data-skin=datis] .pulse,body[data-skin=ww] .led,body[data-skin=ww] .halo,body[data-skin=ww] .march,body[data-skin=ww] .pulse{animation:none !important}
+body[data-skin=datis] .board::before{display:none !important}
 body[data-skin=orig] #intro::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(30% 12% at 20% 18%,#ffffff12 0%,transparent 70%),radial-gradient(34% 12% at 75% 30%,#ffffff0e 0%,transparent 70%);animation:cloud 40s linear infinite alternate}
 @keyframes cloud{from{transform:translateX(-12%)}to{transform:translateX(12%)}}
 /* datis: scanner sweep and data pulses on the board */
@@ -691,15 +693,27 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-rt{flex:1;min-width:0}
 .jz-cd{border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:0;color:var(--ink);cursor:pointer;display:grid;place-items:center;width:clamp(30px,10dvh,46px);height:clamp(32px,11dvh,48px);font-size:clamp(17px,5dvh,26px);line-height:1}
 .jz-cd.s{width:clamp(22px,7dvh,32px);height:clamp(26px,8.5dvh,38px);font-size:clamp(13px,4dvh,20px);flex:none}
-.jz-cd{position:relative;overflow:hidden;background:linear-gradient(160deg,#fffdf4,#f1e3b8);color:#2b1d06;border:1.5px solid #b48a2e;box-shadow:0 1px 3px rgba(0,0,0,.45)}
+.jz-cd{position:relative;overflow:hidden;background:linear-gradient(170deg,hsl(var(--ch,40) 70% 88%),hsl(var(--ch,40) 60% 72%));color:#2b1d06;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.55);font-family:inherit}
 .jz-ce{font-style:normal;line-height:1}
-.jz-cn{position:absolute;top:1px;left:2px;font-style:normal;font-weight:800;font-size:clamp(7px,2.1dvh,10px);line-height:1;background:#7a4a10;color:#ffe9a8;border-radius:6px;padding:1px 3px}
-.jz-cd.big{width:clamp(56px,19dvh,72px);height:clamp(46px,16dvh,60px);grid-template-rows:auto auto;place-items:center;align-content:center;gap:0;padding-top:1px}
-.jz-cd.big .jz-ce{font-size:clamp(14px,4.4dvh,20px)}
-.jz-ct{display:grid;grid-template-columns:1fr 1fr;gap:0 4px;font-size:clamp(6px,1.9dvh,8.5px);font-weight:700;line-height:1.15;direction:ltr;white-space:nowrap}
-.jz-ct u{text-decoration:none;color:#8a2a10}
+.jz-cn{font-style:normal;font-weight:800;line-height:1;background:hsl(var(--ch,40) 55% 38%);color:#fff;border-radius:3px;display:grid;place-items:center}
+.jz-cd.s .jz-cn{position:absolute;bottom:0;left:0;font-size:clamp(7px,2.1dvh,10px);padding:1px 3px;border-radius:0 4px 0 0}
+.jz-cd.big{width:clamp(58px,19dvh,76px);height:clamp(48px,16.5dvh,64px);display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:0;gap:0}
+.jz-nm{display:block;width:100%;background:hsl(var(--ch,40) 60% 36%);color:#fff;font-size:clamp(6.5px,2dvh,9px);line-height:1.35;text-align:center;white-space:nowrap;overflow:hidden}
+.jz-cd.big .jz-ce{font-size:clamp(14px,4.6dvh,22px);flex:1;display:grid;place-items:center}
+.jz-bt{display:flex;align-items:center;gap:2px;width:100%;padding:0 2px 1px;box-sizing:border-box;direction:ltr}
+.jz-bt .jz-cn{font-size:clamp(7px,2.2dvh,10px);min-width:clamp(10px,3dvh,14px);height:clamp(10px,3dvh,14px)}
+.jz-cs{display:flex;flex:1;justify-content:space-around;gap:1px}
+.jz-co{display:flex;flex-direction:column;align-items:center;line-height:1}
+.jz-co i{width:clamp(6px,1.9dvh,9px);height:clamp(5px,1.5dvh,7px);border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe98a,#d99a10);border:1px solid #9a6a08;display:block}
+.jz-co small{font-size:clamp(6px,1.8dvh,8.5px);font-weight:800;color:#3a2506}
 .jz-cd.s{grid-template-rows:auto;align-content:center}
 .jz-cd.sel{background:linear-gradient(160deg,#ffd35a,#ff9d2e)}
+.jz-f{background:repeating-linear-gradient(90deg,#c58a3c 0 9px,#a8702a 9px 12px) !important;border:2px solid #6b4310 !important;border-inline:6px solid #d6c23c !important;position:relative}
+.jz-f .jz-em{color:#f6e2b4}
+.jz-f b,.jz-f small{color:#fff;text-shadow:0 1px 2px #000b}
+.jz-tks{position:absolute;top:1px;inset-inline-end:1px;display:flex;gap:1px}
+.jz-tk{display:inline-grid;place-items:center;width:clamp(12px,3.6dvh,17px);height:clamp(12px,3.6dvh,17px);border-radius:50%;font-size:clamp(7px,2.2dvh,10px);line-height:1;border:1.5px solid #fff;box-shadow:0 1px 2px #000a;vertical-align:middle}
+.jz-tk.k1{background:#d9cfa8}.jz-tk.k2{background:#7cc4f0}.jz-tk.k3{background:#cfe3ff}.jz-tk.k4{background:#8fd9a0}.jz-tk.k5{background:#b58ae0}
 .jz-cd.nx{border-color:var(--ember);box-shadow:0 0 0 1px var(--ember)}
 .jz-em{color:var(--ink-dim);font-size:clamp(10px,2.6dvh,12px);align-self:center}
 .jz-of{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:clamp(10px,2.7dvh,13px);border:1px dashed var(--ember);border-radius:10px;padding:2px 6px;line-height:1.3}
@@ -747,6 +761,10 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .pk-ch{color:#fff;font-weight:800;font-size:clamp(9px,2.4dvh,14px)}
 .pk-s.me .pk-n{font-size:clamp(9px,2.2dvh,12px)}.pk-s.me .pk-ch{font-size:clamp(11px,2.9dvh,17px);color:#ffe08a}
 .pk-s .pk-cd{position:absolute;top:8%;z-index:0;gap:0}
+.pk-s.rvl .pk-cd{left:50% !important;right:auto !important;top:30%;transform:translateX(-50%);z-index:7}
+.pk-s.rvl .pc.md{width:clamp(26px,6.4dvh,38px);font-size:clamp(12px,3dvh,19px)}
+.pk-s.rvl .pk-cd .pc{box-shadow:0 2px 8px #000c}
+.pk-s.rvl.fd{opacity:1}
 .pk-s.cr .pk-cd{left:62%}.pk-s.cl2 .pk-cd{right:62%}
 .pk-s .pk-cd .pc+.pc{margin-inline-start:-18%}
 .pk-s.me .pk-cd{top:0}
@@ -871,7 +889,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
     <div class="online" id="onlineBox">
       <div class="join">
         <button class="btn sm" id="mkRoom">ساخت اتاق</button>
-        <input id="joinCode" class="inp code" maxlength="5" placeholder="کد اتاق" dir="ltr" autocomplete="off" autocapitalize="characters">
+        <input id="joinCode" class="inp code" maxlength="5" placeholder="کد اتاق ۵ رقمی" dir="ltr" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
         <button class="btn sm" id="joinRoom">ورود</button>
       </div>
     </div>
@@ -909,7 +927,7 @@ var ERAS=[
   {name:'ستارگان',desc:'نخستین ستاره‌ها می‌درخشند و عناصر سنگین ساخته می‌شوند. وقت ساختن حیات است.'}
 ];
 var DIRS=[[1,0],[1,-1],[0,-1],[-1,0],[-1,1],[0,1]];
-var WIN=12;
+var WIN=11;
 var COST={fil:[1,1,0,0,0],star:[1,1,1,1,0],gal:[0,0,0,2,3],planet:[1,0,1,0,2],buy:[0,0,1,1,1]};
 var LIM={star:5,gal:4,fil:15};
 var CARD={
@@ -1194,7 +1212,7 @@ function newState(n,spectate,cfg){
       cards:{gravity:0,strong:0,em:0,planck:0,fine:0},fresh:{},played:0,playedCard:false,novaUsed:false,idle:0,acted:false,timedOut:false,hum:false,token:null,kicked:false,stats:newStats()});
   }
   return {players:players,tiles:new Map(),verts:new Map(),edges:new Map(),bld:new Map(),fil:new Map(),bh:'0,0',
-    round:1,era:0,cur:0,phase:'setup',mode:'idle',dice:null,rolling:false,hotNum:null,newTile:null,flip:false,
+    round:1,era:0,cur:0,order:null,phase:'setup',mode:'idle',dice:null,rolling:false,hotNum:null,newTile:null,flip:false,
     deck:makeDeck(n>=5),R:n>=5?3:2,cen:[0,0],vb:[-5,-5,10,10],entropy:0,longest:null,dark:null,lens:[],log:[],sel:null,busy:false,over:false,winner:null,
     waitRoll:null,waitEnd:null,ports:[],portAt:new Map(),tEnd:0,tmo:false,diff:1,fxId:0,fxTile:null,hist:[0,0,0,0,0,0,0,0,0,0,0,0,0],bhBy:null,bhRound:0,bhN:0,t0:Date.now(),t1:0};
 }
@@ -1274,6 +1292,7 @@ function renderStatus(){
   var msg='',cancel=false;
   if(S.sel){msg=S.sel.hint;cancel=S.sel.cancel;}
   else if(S.over)msg='بازی پایان یافت.';
+  else if(S.phase==='order')msg='تعیین ترتیب بازی با تاس… '+S.players[S.cur].name;
   else if(S.phase==='setup')msg='چیدمان آغازین. نوبت '+S.players[S.cur].name+'.';
   else{
     var p=S.players[S.cur];
@@ -1603,8 +1622,8 @@ function renderDock(){
   var h='<div class="rowA">'+RS.map(function(n,i){return '<div class="rc">'+ico(i,18)+'<b>'+fa(m.res[i])+'</b><span>'+n+'</span></div>';}).join('')+
     '<button class="btn primary" data-act="'+(canRoll?'roll':'end')+'" '+((canRoll||can)?'':'disabled')+'>'+(S.mode==='needRoll'&&mine?'ریختن تاس':'پایان نوبت')+'</button></div>';
   var defs=[['fil','کابل شبکه'],['star','درایو'],['gal','تابلو فرمان'],['buy','کارت ('+fa(S.deck.length)+')']];
-  h+='<div class="bld">'+defs.map(function(d){return '<button class="bb" data-act="'+d[0]+'" '+(ok[d[0]]?'':'disabled')+'><span>'+d[1]+'</span><span class="cost">'+costHTML(COST[d[0]],9)+'</span></button>';}).join('')+'</div>';
-  h+='<div class="rowC"><button class="btn" data-act="trade" '+(can?'':'disabled')+'>برون‌سپاری</button><button class="btn" data-act="ptrade" '+(can?'':'disabled')+'>معامله</button><button class="btn" data-act="cards" '+((mine&&!S.busy&&!S.sel)?'':'disabled')+'>کارت‌ها'+(ncards?' ('+fa(ncards)+')':'')+'</button><button class="btn" data-act="chat">گفتگو</button></div>';
+  h+='<div class="bld">'+defs.map(function(d){return '<button class="bb" data-act="'+d[0]+'" '+(ok[d[0]]?'':'disabled')+'><span>'+d[1]+'</span><span class="cost">'+costHTML(COST[d[0]],15)+'</span></button>';}).join('')+'</div>';
+  h+='<div class="rowC"><button class="btn" data-act="trade" '+(can?'':'disabled')+'>برون‌سپاری</button><button class="btn" data-act="ptrade" '+(can?'':'disabled')+'>معامله</button><button class="btn" data-act="cards" '+((!mine||(!S.busy&&!S.sel))?'':'disabled')+'>کارت‌ها'+(ncards?' ('+fa(ncards)+')':'')+'</button><button class="btn" data-act="chat">گفتگو</button></div>';
   el.innerHTML=h;
 }
 
@@ -1677,7 +1696,7 @@ function pickResources(o){
 }
 function rulesHTML(){
   return '<ol class="rules">'+
-  '<li><b>هدف:</b> اولین کسی که در نوبت خودش به ۱۲ امتیاز برسد برنده است. هر درایو ۱ امتیاز، هر تابلو فرمان ۲، بلندترین شبکه (دست‌کم ۵ تکه) ۲، بزرگ‌ترین ارتش (دست‌کم ۳ سرباز) ۲ و هر کارت «امتیاز» ۱ امتیاز پنهان.</li>'+
+  '<li><b>هدف:</b> اولین کسی که در نوبت خودش به ۱۱ امتیاز برسد برنده است. هر درایو ۱ امتیاز، هر تابلو فرمان ۲، بلندترین شبکه (دست‌کم ۵ تکه) ۲، بزرگ‌ترین ارتش (دست‌کم ۳ سرباز) ۲ و هر کارت «امتیاز» ۱ امتیاز پنهان.</li>'+
   '<li><b>نوبت:</b> تاس بریز. هر درایوی که کنار کاشیِ هم‌شماره باشد یک قطعه می‌گیرد و هر تابلو فرمان دو قطعه.</li>'+
   '<li><b>عدد ۷ (قطعی برق):</b> هر کس بیش از ۷ قطعه دارد نیمی را از دست می‌دهد. تو «خرابی» را روی یک کاشی می‌گذاری؛ آن کاشی تولید نمی‌کند و از یکی از همسایه‌هایش یک قطعه می‌دزدی.</li>'+
   '<li><b>ساخت:</b><div class="costs">'+
@@ -2148,7 +2167,7 @@ function kickPlayer(p){
   var seat=p.id,l=NET.links[seat];
   log(p.name+' به‌خاطر بی‌تحرکی از بازی حذف شد و هوش مصنوعی جایش را گرفت.');
   toSeat(seat,{t:'kicked'});
-  p.ai=true;p.remote=false;p.kicked=true;p.token=null;NET.links[seat]=null;
+  p.ai=true;p.remote=false;p.kicked=true;NET.links[seat]=null;
   if(l){l.onclose=null;setTimeout(function(){l.close();},400);}
   NET.pending.forEach(function(pd){if(pd.seat===seat)pd.fin(defaultAnswer(pd.kind,pd.payload));});
 }
@@ -2191,9 +2210,47 @@ async function endRound(st){
   render();
   await sleep(300);
 }
+async function orderPhase(st){
+  /* everyone rolls two dice; ties re-roll among themselves until the order is fully decided */
+  var N=S.players.length,ids=[],i;
+  for(i=0;i<N;i++)ids.push(i);
+  S.phase='order';S.mode='idle';
+  async function rank(group,depth){
+    var res=[];
+    for(var k=0;k<group.length;k++){
+      if(stale(st))return null;
+      var p=S.players[group[k]],a=1+rint(6),b=1+rint(6);
+      S.cur=p.id;
+      for(var f=0;f<4;f++){S.dice=[1+rint(6),1+rint(6)];S.rolling=true;render();await sleep(70);}
+      S.dice=[a,b];S.rolling=false;render();
+      log(p.name+' تاس ریخت: '+fa(a)+' + '+fa(b)+' = '+fa(a+b)+(depth?' (دوباره)':''));
+      await sleep(560);
+      res.push({id:p.id,v:a+b});
+    }
+    var by={};res.forEach(function(r){(by[r.v]=by[r.v]||[]).push(r.id);});
+    var vs=Object.keys(by).map(Number).sort(function(x,y){return y-x;}),out=[];
+    for(var j=0;j<vs.length;j++){
+      var g=by[vs[j]];
+      if(g.length===1)out.push(g[0]);
+      else{
+        if(stale(st))return null;
+        log('مساوی شد؛ '+g.map(function(id){return S.players[id].name;}).join('، ')+' دوباره تاس می‌ریزند.');
+        var sub=await rank(g,depth+1);if(!sub)return null;
+        out=out.concat(sub);
+      }
+    }
+    return out;
+  }
+  var o=await rank(ids,0);
+  if(!o||stale(st))return false;
+  S.order=o;S.cur=o[0];S.dice=null;
+  log('ترتیب بازی: '+o.map(function(id){return S.players[id].name;}).join(' ← '));
+  render();await sleep(900);
+  return true;
+}
 async function setupPhase(st,from){
-  var N=S.players.length,ord=[];
-  for(var i=0;i<N;i++)ord.push(i);
+  var N=S.players.length,ord=(S.order||[]).slice();
+  if(ord.length!==N){ord=[];for(var i=0;i<N;i++)ord.push(i);}
   var seq=ord.concat(ord.slice().reverse());
   S.phase='setup';
   for(var s=from||0;s<seq.length;s++){
@@ -2222,15 +2279,17 @@ async function setupPhase(st,from){
   S.phase='play';
 }
 async function mainLoop(st,rs){
+  if(!rs&&!S.order){if(!(await orderPhase(st)))return;}
+  if(!S.order||S.order.length!==S.players.length){S.order=S.players.map(function(p){return p.id;});}
   if(!rs||rs.phase==='setup'){await setupPhase(st,rs?rs.setupS:0);}
   else S.phase='play';
   if(stale(st))return;
   if(!rs)log('بازی شروع شد. موفق باشی!');
-  var startI=(rs&&rs.phase==='play')?rs.cur:0,rmode=(rs&&rs.phase==='play')?rs.mode:null;
+  var startI=(rs&&rs.phase==='play')?Math.max(0,S.order.indexOf(rs.cur)):0,rmode=(rs&&rs.phase==='play')?rs.mode:null;
   while(!stale(st)){
     for(var i=startI;i<S.players.length;i++){
       if(stale(st))return;
-      await turn(S.players[i],st,i===startI?rmode:null);
+      await turn(S.players[S.order[i]],st,i===startI?rmode:null);
     }
     startI=0;rmode=null;
     if(stale(st))return;
@@ -2443,7 +2502,7 @@ document.addEventListener('pointerdown',function(e){if(!e.target.closest('[data-
 
 /* ---------- ready-made chat: trade talk and banter ---------- */
 var CHAT_T=['معامله می‌کنیم؟','یک به یک قبول؟','نه، پیشنهادت کمه','قبول! بده بیاد','یه کم صبر کن فکر کنم','دو به یک حساب کنیم؟','فعلاً چیزی ندارم','این آخرین پیشنهادمه!'];
-var CHAT_O=['خرابی را یک جای دیگر ببر!','مواظب امتیازت باش 😏','شانس آوردی!','این دور مال منه 😎','بازی تازه شروع شده!','به‌به، چه کابل شبکه‌ای! 👏','زود باش، نوبتت را بازی کن ⏳','با تو که حال نمی‌ده 😂','آفرین، بازی قشنگی بود','قبل از اینکه ببری، من می‌برم!','ای بابا، باز خرابی آمد سراغم 😭','دمت گرم، حریف خوبی هستی'];
+var CHAT_O=['خرابی را یک جای دیگر ببر!','مواظب امتیازت باش 😏','شانس آوردی!','این دور مال منه 😎','بازی تازه شروع شده!','به‌به، چه کابل شبکه‌ای! 👏','زود باش، نوبتت را بازی کن ⏳','با تو که حال نمی‌ده 😂','آفرین، بازی قشنگی بود','قبل از اینکه ببری، من می‌برم!','ای بابا، باز خرابی آمد سراغم 😭','دمت گرم، حریف خوبی هستی','جمعش کن بابا','معاملات مشکوک','دهنت سرویسه','چی شد؟؟؟','حالتو می‌گیرم','بذار منبع گیرم بیاد نشونت می‌دم','راهشو ببند','از سر راهم برو کنار','مسجد جا این کارا نیست!'];
 function chatText(k,i,r){
   if(k==='m')return CHAT_T[i];
   if(k==='o')return CHAT_O[i];
@@ -2604,22 +2663,22 @@ var ICONS={
 };
 var THEMES=[
  {key:'datis',name:'داتیس',brand:'کارخانه داتیس',hero:['کارخانه','داتیس'],tag:'درایو و تابلو فرمان بساز',
-  lead:'ورق آهن، پلاستیک و قطعات جمع کن، درایو نصب کن، کابل شبکه بکش و تابلو فرمان بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  lead:'ورق آهن، پلاستیک و قطعات جمع کن، درایو نصب کن، کابل شبکه بکش و تابلو فرمان بساز. هر که زودتر به ۱۱ امتیاز برسد برنده است.',
   acc:'#FFB000',ink:'#1A1000',void:'#0A0F14',des:'#FFB347',
   RN:RN.slice(),RS:RS.slice(),RH:RH.slice(),
   t:{star:'درایو',gal:'تابلو فرمان',fil:'کابل شبکه',filing:'شبکه',rob:'خرابی',evt:'قطعی برق',port:'برون‌سپاری',army:'ارتش',c0:'سرباز',c1:'ساخت راه',c2:'برکت',c3:'انحصار',c4:'امتیاز'}},
  {key:'orig',name:'بازی اصلی',brand:'سیطره کتان',hero:['سیطره','کتان'],tag:'خانه، جاده و شهر بساز',
-  lead:'چوب، آجر، گوسفند، گندم و سنگ جمع کن، خانه بساز، جاده بکش و شهر بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  lead:'چوب، آجر، گوسفند، گندم و سنگ جمع کن، خانه بساز، جاده بکش و شهر بساز. هر که زودتر به ۱۱ امتیاز برسد برنده است.',
   acc:'#F2B84B',ink:'#1F1400',void:'#0D140E',des:'#E7C98A',
   RN:['چوب','آجر','گوسفند','گندم','سنگ'],RS:['چوب','آجر','گوسفند','گندم','سنگ'],RH:['#5DBB63','#E2704F','#C8E6A0','#F4CF4A','#A9B4C4'],
   t:{star:'خانه',gal:'شهر',fil:'جاده',filing:'جاده‌کشی',rob:'دزد',evt:'حملهٔ دزد',port:'بندر',army:'سپاه',c0:'شوالیه',c1:'ساخت راه',c2:'سال فراوانی',c3:'انحصار',c4:'امتیاز'}},
  {key:'cosmic',name:'مهبانگ',brand:'مهبانگ',hero:['مهبانگ'],tag:'ستاره و کهکشان بساز',
-  lead:'هیدروژن، آهن ستاره‌ای و ماده تاریک جمع کن، ستاره بساز، مسیر نور بکش و کهکشان بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  lead:'هیدروژن، آهن ستاره‌ای و ماده تاریک جمع کن، ستاره بساز، مسیر نور بکش و کهکشان بساز. هر که زودتر به ۱۱ امتیاز برسد برنده است.',
   acc:'#A99BFF',ink:'#0E0A24',void:'#080A18',des:'#C9C3FF',
   RN:['هیدروژن','آهن ستاره‌ای','گرد کیهانی','پلاسما','ماده تاریک'],RS:['هیدروژن','آهن ستاره‌ای','گرد کیهانی','پلاسما','ماده تاریک'],RH:['#6EC8FF','#FF9A5C','#C79BFF','#FF6F91','#8F9BFF'],
   t:{star:'ستاره',gal:'کهکشان',fil:'مسیر نور',filing:'مسیرکشی',rob:'سیاه‌چاله',evt:'طوفان کیهانی',port:'پل کیهانی',army:'ناوگان',c0:'گرانش',c1:'نیروی قوی',c2:'تابش',c3:'فروپاشی',c4:'ثابت کیهانی'}},
  {key:'ww',name:'جنگ جهانی',brand:'جنگ جهانی',hero:['جنگ','جهانی'],tag:'پادگان و قرارگاه بساز',
-  lead:'نفت، فولاد، غذا، مهمات و اورانیوم جمع کن، پادگان بساز، خط ارتباطی بکش و قرارگاه بساز. هر که زودتر به ۱۲ امتیاز برسد برنده است.',
+  lead:'نفت، فولاد، غذا، مهمات و اورانیوم جمع کن، پادگان بساز، خط ارتباطی بکش و قرارگاه بساز. هر که زودتر به ۱۱ امتیاز برسد برنده است.',
   acc:'#C9D26A',ink:'#141800',void:'#0C0F0A',des:'#D5CBA0',
   RN:['نفت','فولاد','غذا','مهمات','اورانیوم'],RS:['نفت','فولاد','غذا','مهمات','اورانیوم'],RH:['#C79A58','#9FB3C8','#9CCB6B','#E3B341','#7CF29A'],
   t:{star:'پادگان',gal:'قرارگاه',fil:'خط ارتباطی',filing:'خط‌کشی',rob:'بمباران',evt:'حملهٔ هوایی',port:'بندر تدارکات',army:'ارتش',c0:'تانک',c1:'مهندسان',c2:'کمک متفقین',c3:'محاصره',c4:'نشان افتخار'}}
@@ -2920,7 +2979,7 @@ function recSave(r){try{r.t=Date.now();localStorage.setItem(RK,JSON.stringify(r)
 function recClear(){try{localStorage.removeItem(RK);}catch(e){}}
 function rid(){var a='abcdefghjkmnpqrstuvwxyz23456789',o='';for(var i=0;i<12;i++)o+=a[rint(a.length)];return o;}
 function serializeGame(){
-  return {v:1,n:S.players.length,my:MY,diff:S.diff,board:boardSnapshot(),round:S.round,cur:S.cur,phase:S.phase,mode:S.mode,dice:S.dice,
+  return {v:1,n:S.players.length,my:MY,diff:S.diff,board:boardSnapshot(),round:S.round,cur:S.cur,phase:S.phase,mode:S.mode,dice:S.dice,order:S.order,
     setupS:S.setupS||0,deck:S.deck.slice(),bld:Array.from(S.bld.entries()),fil:Array.from(S.fil.entries()),longest:S.longest,dark:S.dark,lens:S.lens,entropy:S.entropy,hist:S.hist,bhBy:S.bhBy,bhRound:S.bhRound,bhN:S.bhN,elapsed:Date.now()-S.t0,
     players:S.players.map(function(p){return {name:p.name,ai:p.ai,hum:!!p.hum,token:p.token,uid:p.uid||null,kicked:p.kicked,stats:p.stats,res:p.res.slice(),cards:p.cards,fresh:p.fresh,played:p.played,playedCard:p.playedCard,novaUsed:p.novaUsed,idle:p.idle};})};
 }
@@ -2949,7 +3008,7 @@ function restoreState(g){
   S=newState(g.n,false,g.players.map(function(p){return {name:p.name,ai:p.ai,remote:false};}));
   S.diff=g.diff;
   buildBoard(g.board);
-  S.round=g.round;S.cur=g.cur;S.phase=g.phase;S.dice=g.dice;S.setupS=g.setupS;S.deck=g.deck.slice();
+  S.round=g.round;S.cur=g.cur;S.phase=g.phase;S.dice=g.dice;S.order=Array.isArray(g.order)&&g.order.length===g.players.length?g.order.slice():null;S.setupS=g.setupS;S.deck=g.deck.slice();
   S.bld=new Map(g.bld);S.fil=new Map(g.fil);S.longest=g.longest;S.dark=g.dark;S.lens=g.lens||[];S.entropy=g.entropy||0;S.hist=g.hist||S.hist;S.bhBy=g.bhBy==null?null:g.bhBy;S.bhRound=g.bhRound||0;S.bhN=g.bhN||0;S.t0=Date.now()-(g.elapsed||0);
   g.players.forEach(function(q,i){
     var p=S.players[i];
@@ -3003,7 +3062,7 @@ function onJoinRestore(link){
   var R=NET.restore;
   link.onmessage=function(m){
     if(!m||m.t!=='hello')return;
-    var i=-1;R.g.players.forEach(function(p,k){if(k>0&&p.hum&&!p.kicked&&p.token&&p.token===m.token)i=k;});
+    var i=-1;R.g.players.forEach(function(p,k){if(k>0&&p.hum&&p.token&&p.token===m.token)i=k;});
     if(i<1){link.send({t:'reject',reason:'این اتاق مالِ یک بازیِ ذخیره‌شده است و فقط بازیکن‌های همان بازی می‌توانند وارد شوند.'});setTimeout(function(){link.close();},300);return;}
     if(R.links[i]){R.links[i].onclose=null;R.links[i].close();}
     R.links[i]=link;NET.lv.connected[i]=true;
@@ -3039,11 +3098,11 @@ function sendInit(i){
 function onJoinLate(link){
   link.onmessage=function(m){
     if(!m||m.t!=='hello')return;
-    var p=null;S.players.forEach(function(q){if(q.id>0&&q.hum&&!q.kicked&&q.token&&q.token===m.token)p=q;});
+    var p=null;S.players.forEach(function(q){if(q.id>0&&q.hum&&q.token&&q.token===m.token)p=q;});
     if(!p){link.send({t:'reject',reason:'بازی شروع شده است.'});setTimeout(function(){link.close();},300);return;}
     var old=NET.links[p.id];
     if(old&&old!==link){old.onclose=null;try{old.close();}catch(e){}}
-    p.ai=false;p.remote=true;NET.links[p.id]=link;if(cleanUid(m.uid))p.uid=cleanUid(m.uid);
+    p.ai=false;p.remote=true;p.kicked=false;p.idle=0;NET.links[p.id]=link;if(cleanUid(m.uid))p.uid=cleanUid(m.uid);
     link.onmessage=function(mm){hostMsg(p.id,mm);};
     link.onclose=function(){if(NET.links[p.id]===link)onLeave(p.id);};
     link.send({t:'welcome',seat:p.id,token:p.token});
@@ -3065,13 +3124,13 @@ function startRejoin(){
   var n=0;
   (function attempt(){
     if(NET.linkOk)return;
-    if(++n>40){NET.rejoinT=null;hideRejoin();
+    if(++n>150){NET.rejoinT=null;hideRejoin();
       var sh=openSheet('<h3>اتصال دوباره ممکن نشد</h3><p class="sub">میزبان پیدا نشد. شاید صفحه‌اش بسته شده.</p><button class="btn primary wide" data-again>تلاش دوباره</button><button class="btn wide" data-home>صفحهٔ اصلی</button>',{dismiss:false});
       sh.addEventListener('click',function(e){if(e.target.closest('[data-again]')){closeSheet();startRejoin();}else if(e.target.closest('[data-home]')){closeSheet();recClear();leaveOnline();S=null;showIntro();}});
       return;}
     try{if(NET.peer)NET.peer.close();}catch(e){}
     connectClient(false);
-    NET.rejoinT=setTimeout(attempt,4500);
+    NET.rejoinT=setTimeout(attempt,3500);
   })();
 }
 function onHostLost(link){
@@ -3079,8 +3138,25 @@ function onHostLost(link){
   NET.linkOk=false;
   if(S&&S.over||NET.kicked||NET.leaving)return;
   if(S&&NET.started)startRejoin();
+  else if(NET.cli&&(NET.lobRetry=(NET.lobRetry||0)+1)<=8){lobbyError('اتصال قطع شد؛ دوباره وصل می‌شوم…');setTimeout(function(){if(NET.cli&&!NET.started&&!NET.linkOk&&!NET.leaving)connectClient(true);},2500);}
   else lobbyError('ارتباط با میزبان قطع شد.');
 }
+var hidAt=0;
+function mgNudge(force){try{if(M&&M.mode==='guest'&&M.nudge)M.nudge(force);}catch(e){}}
+function nudgeRejoin(force){
+  try{
+    if(!(ROLE==='client'&&NET.cli&&S&&NET.started&&!NET.kicked&&!S.over))return;
+    if(NET.linkOk&&!force)return;
+    if(force&&NET.hostLink){var hl=NET.hostLink;NET.hostLink=null;NET.linkOk=false;try{hl.onclose=null;hl.close();}catch(e){}}
+    clearTimeout(NET.rejoinT);NET.rejoinT=null;startRejoin();
+  }catch(e){}
+}
+window.addEventListener('online',function(){nudgeRejoin(true);mgNudge(true);});
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){hidAt=Date.now();return;}
+  var gone=hidAt?Date.now()-hidAt:0;hidAt=0;
+  setTimeout(function(){nudgeRejoin(gone>4000);mgNudge(gone>4000);},400);
+});
 window.addEventListener('pagehide',function(){try{saveCheckpoint(false);}catch(e){}});
 document.addEventListener('visibilitychange',function(){if(document.hidden){try{saveCheckpoint(false);}catch(e){}}});
 
@@ -3097,11 +3173,11 @@ if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)&&!window.__
 var PK={prof:'datis_prof',fr:'datis_friends',rec:'datis_recent',g:'datis_games'};
 function lsGet(k,d){try{var v=JSON.parse(localStorage.getItem(k));return v==null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-var UID_CH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-function newUid(){var o='';for(var i=0;i<8;i++)o+=UID_CH[rint(UID_CH.length)];return o;}
-function cleanUid(x){x=String(x||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return x.length===8?x:null;}
+function dg(x){return String(x==null?'':x).replace(/[۰-۹]/g,function(c){return String(c.charCodeAt(0)-1776);}).replace(/[٠-٩]/g,function(c){return String(c.charCodeAt(0)-1632);});}
+function newUid(){var o='';for(var i=0;i<5;i++)o+=rint(10);return o;}
+function cleanUid(x){x=dg(x).replace(/[^0-9]/g,'');return x.length===5?x:null;}
 var PROF=(function(){var p=lsGet(PK.prof,null);if(!p||!cleanUid(p.id)){p={id:newUid()};lsSet(PK.prof,p);}return p;})();
-var FR=lsGet(PK.fr,[]),REC=lsGet(PK.rec,[]),PM={};
+var FR=lsGet(PK.fr,[]).filter(function(f){return f&&cleanUid(f.id);}),REC=lsGet(PK.rec,[]).filter(function(f){return f&&cleanUid(f.id);}),PM={};
 function saveFR(){lsSet(PK.fr,FR);}
 function frFind(id){for(var i=0;i<FR.length;i++)if(FR[i].id===id)return FR[i];return null;}
 function myName(){return cleanName(loadName())||'بازیکن';}
@@ -3116,12 +3192,31 @@ function myStats(onlineOnly){
   function agg(f){var r={g:0,w:0,p:0};g.forEach(function(x){if(f(x)){r.g++;r.w+=x.w;r.p+=x.p;}});return r;}
   return {all:agg(function(){return true;}),wk:agg(function(x){return now-x.t<7*864e5;}),mo:agg(function(x){return now-x.t<30*864e5;})};
 }
+function histAdd(e){
+  var h=lsGet('mb_hist',[]);h.push(e);lsSet('mb_hist',h.slice(-80));
+}
+function histOpen(){
+  var h=lsGet('mb_hist',[]).slice().reverse(),w=0,l=0,d=0,net=0,rows='';
+  h.forEach(function(e){if(e.r==='w')w++;else if(e.r==='l')l++;else d++;if(typeof e.net==='number')net+=e.net;});
+  h.slice(0,40).forEach(function(e){
+    var dt='';try{dt=new Date(e.t).toLocaleString('fa-IR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});}catch(x){}
+    var rc=e.r==='w'?'#3fbf6a':(e.r==='l'?'#e0524d':'#c9a227'),rt=e.r==='w'?'برد':(e.r==='l'?'باخت':'مساوی');
+    var ops=(e.ops||[]).slice(0,4).map(function(x){return esc2(String(x).slice(0,12));}).join('، ');
+    rows+='<div class="hrow" style="display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2)">'+
+      '<b style="min-width:42px;text-align:center;color:#fff;background:'+rc+';border-radius:8px;padding:2px 6px;font-size:12px">'+rt+'</b>'+
+      '<div style="flex:1;min-width:0;font-size:12.5px"><b>'+esc2(String(e.g||'بازی'))+'</b> · '+fa(e.n||2)+' نفره · '+(e.o?'آنلاین':'با رایانه')+(ops?'<br><small style="color:var(--ink-dim)">با '+ops+'</small>':'')+'</div>'+
+      '<div style="text-align:left;font-size:11.5px;color:var(--ink-dim);white-space:nowrap">'+dt+(typeof e.net==='number'&&e.net?'<br><b style="color:'+(e.net>0?'#3fbf6a':'#e0524d')+'">'+(e.net>0?'+':'')+fa(e.net)+' 🪙</b>':'')+'</div></div>';
+  });
+  var hs=openSheet('<h3>سوابق بازی‌ها</h3><div class="sub" style="text-align:center">'+fa(h.length)+' بازی · '+fa(w)+' برد · '+fa(l)+' باخت'+(d?' · '+fa(d)+' مساوی':'')+(net?' · سکه: '+(net>0?'+':'')+fa(net):'')+'</div><div class="endbody" style="max-height:62dvh;overflow:auto">'+(rows||'<div class="sub" style="text-align:center">هنوز بازی‌ای ثبت نشده. بعد از هر بازی اینجا می‌آید.</div>')+'</div><button class="btn wide" data-close>بستن</button>');
+  hs.addEventListener('click',function(e){if(e.target.closest('[data-close]'))closeSheet();});
+}
 function recordGame(){
   if(!S||MY==null||S.recd||!S.players[MY])return;
   S.recd=true;
   var g=lsGet(PK.g,[]);
   g.push({t:Date.now(),w:S.winner===MY?1:0,p:totalPoints(S.players[MY]),n:S.players.length,o:ROLE==='solo'?0:1});
   lsSet(PK.g,g.slice(-400));
+  if(!S.spectate)histAdd({t:Date.now(),g:'سیطره کتان · '+TH.name,r:S.winner===MY?'w':'l',n:S.players.length,o:ROLE==='solo'?0:1,ops:S.players.filter(function(q){return q.id!==MY;}).map(function(q){return q.name;})});
 }
 function addRecent(list){
   list.forEach(function(x){
@@ -3206,7 +3301,7 @@ function probeAll(ids,done){
   next();
 }
 function handleInvite(id,inv){
-  var code=String(inv&&inv.code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+  var code=dg(inv&&inv.code||'').replace(/[^0-9]/g,'');
   if(code.length!==5)return;
   var e=frFind(id),nm=e?e.name:'یک دوست';
   var gid=inv&&MGS[inv.g]?inv.g:null;
@@ -3226,7 +3321,7 @@ function contacts(){
   return out;
 }
 var PEO={tab:'on',rk:'all',timer:null};
-function fmtCode(id){return id.slice(0,4)+'-'+id.slice(4);}
+function fmtCode(id){return id;}
 function pRow(c,btns){
   return '<div class="prow" data-id="'+c.id+'"><span class="pav" data-av></span><i class="pdot'+(isOn(c.id)?' on':'')+'"></i><div class="pn"><b></b><small>'+(c.st==='fr'?'دوست':(c.st==='out'?'در انتظار پذیرش':(c.st==='in'?'درخواست دوستی':'هم‌بازی')))+(isOn(c.id)?' · آنلاین':'')+'</small></div><div class="pb">'+btns+'</div></div>';
 }
@@ -3239,7 +3334,7 @@ function peopleHtml(){
   }else if(PEO.tab==='fr'){
     var req=FR.filter(function(f){return f.st==='in';}),fl=FR.filter(function(f){return f.st!=='in';});
     h+='<div class="mycode"><span>کد دوستی من</span><b dir="ltr">'+fmtCode(PROF.id)+'</b><button class="btn small" data-copy>کپی</button></div>';
-    h+='<div class="addrow"><input id="frCode" class="inp code" dir="ltr" maxlength="9" placeholder="کد دوست" autocomplete="off" autocapitalize="characters"><button class="btn small primary" data-addcode>افزودن</button></div>';
+    h+='<div class="addrow"><input id="frCode" class="inp code" dir="ltr" maxlength="5" placeholder="کد دوست (۵ رقم)" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><button class="btn small primary" data-addcode>افزودن</button></div>';
     if(req.length)h+='<div class="sub">درخواست‌ها</div>'+req.map(function(c){return pRow(c,'<button class="btn small primary" data-acc="'+c.id+'">قبول</button><button class="btn small" data-del="'+c.id+'">رد</button>');}).join('');
     h+='<div class="sub">دوستان</div>'+(fl.length?fl.map(function(c){return pRow(c,(hosting&&c.st==='fr'?'<button class="btn small" data-inv="'+c.id+'">دعوت</button>':'')+'<button class="btn small" data-del="'+c.id+'">حذف</button>');}).join(''):'<p class="sub">هنوز دوستی اضافه نکرده‌ای. کد خودت را به دوستانت بده یا کد آن‌ها را وارد کن.</p>');
   }else{
@@ -3294,7 +3389,7 @@ function openPeople(){
     }
     if(t.closest('[data-addcode]')){
       var id=cleanUid(document.getElementById('frCode').value);
-      if(!id){toast('کد دوستی ۸ حرف است');return;}
+      if(!id){toast('کد دوستی ۵ رقم است');return;}
       if(id===PROF.id){toast('این کد خودت است');return;}
       var ex=frFind(id);
       if(ex){toast(ex.st==='fr'?'او قبلاً دوست توست':'قبلاً ثبت شده');return;}
@@ -3363,8 +3458,7 @@ function leaveOnline(){
 }
 
 /* ---------- online rooms: host-authoritative, WebRTC through PeerJS ---------- */
-var CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-function genCode(){var c='';for(var i=0;i<5;i++)c+=CODE_CHARS[rint(CODE_CHARS.length)];return c;}
+function genCode(){var c='';for(var i=0;i<5;i++)c+=rint(10);return c;}
 function cleanName(s){return String(s||'').replace(/[<>&"'`\\]/g,'').replace(/\s+/g,' ').trim().slice(0,12);}
 var ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'stun:global.stun.twilio.com:3478'},
   {urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'}]};
@@ -3540,7 +3634,7 @@ function clientMsg(m){
     return;
   }
   if(m.t==='closeAsk'){if(S.sel)S.sel=null;closeSheet();render();return;}
-  if(m.t==='kicked'){NET.kicked=true;var ksh=openSheet('<h3>از بازی حذف شدی</h3><p class="sub">دو نوبت پشت‌سرهم هیچ کاری نکردی، برای همین هوش مصنوعی جایت را گرفت.</p><button class="btn primary wide" data-home>بازگشت به صفحهٔ اصلی</button>',{dismiss:false});ksh.addEventListener('click',function(e){if(e.target.closest('[data-home]')){closeSheet();leaveOnline();S=null;NET.kicked=false;showIntro();}});return;}
+  if(m.t==='kicked'){NET.kicked=true;var ksh=openSheet('<h3>هوش مصنوعی جایت بازی می‌کند</h3><p class="sub">چند نوبت کاری نکردی (شاید تماس یا قطع اینترنت). هر وقت خواستی می‌توانی جایت را پس بگیری.</p><button class="btn primary wide" data-back>بازگشت به بازی</button><button class="btn wide" data-home>خروج</button>',{dismiss:false});ksh.addEventListener('click',function(e){if(e.target.closest('[data-back]')){closeSheet();NET.kicked=false;NET.linkOk=false;try{if(NET.hostLink){NET.hostLink.onclose=null;NET.hostLink.close();}}catch(x){}NET.hostLink=null;clearTimeout(NET.rejoinT);NET.rejoinT=null;startRejoin();}else if(e.target.closest('[data-home]')){closeSheet();leaveOnline();S=null;NET.kicked=false;showIntro();}});return;}
   if(m.t==='toast'){toast(m.msg);return;}
   if(m.t==='ptradeResult'){if(NET.onTradeResult)NET.onTradeResult(m.results);return;}
 }
@@ -3665,8 +3759,8 @@ function startOnline(){
   mainLoop(S).catch(function(e){console.error(e);});
 }
 function joinRoom(code,name,token){
-  code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(code.length!==5){toast('کد اتاق ۵ حرف است');return;}
+  code=dg(code).replace(/[^0-9]/g,'');
+  if(code.length!==5){toast('کد اتاق ۵ رقم است');return;}
   if(ROLE!=='solo'||NET.lobbyOn)leaveOnline();
   S=null;MY=null;closeSheet();NET.lobbyOn=true;
   NET.started=false;NET.lv={code:code,names:[],n:2,isHost:false};
@@ -4284,10 +4378,11 @@ function mnAiChoose(seat){
 }
 
 /* ---- jaliz (Hoopa Jaliz rules, 3-7 players, landscape) ---- */
-var JZN=[['فلفل قرمز','🌶️'],['نخودفرنگی','🟢'],['بادمجان','🍆'],['گوجه‌فرنگی','🍅'],['هندوانه','🍉'],['خربزه','🍈'],['کدو تنبل','🎃'],['شلغم','🍠'],['هویج','🥕'],['لوبیا','🫘'],['پیاز','🧅'],['سیب‌زمینی','🥔'],['خیار','🥒']];
+var JZN=[['فلفل قرمز','🌶️'],['نخودفرنگی','🟢'],['بادمجان','🍆'],['گوجه‌فرنگی','🍅'],['هندوانه','🍉'],['خربزه','🍈'],['کدو تنبل','🎃'],['شلغم','🍠'],['هویج','🥕'],['لوبیا','🫘'],['پیاز','🧅'],['سیب‌زمینی','🥔'],['خیار چمبر','🥒']];
 function jzLerp(c,pts){var i=c<=13?0:1,a=pts[i],b=pts[i+1];return Math.round(a[1]+(b[1]-a[1])*(c-a[0])/(b[0]-a[0]));}
 /* product t has 6+t cards; coin thresholds (1..4 coins) interpolated from the known card values */
-var JZ=JZN.map(function(r,i){var c=6+i;return {n:r[0],e:r[1],c:c,b:[jzLerp(c,[[6,2],[13,3],[18,4]]),jzLerp(c,[[6,3],[13,5],[18,6]]),jzLerp(c,[[6,3],[13,7],[18,8]]),jzLerp(c,[[6,4],[13,8],[18,9]])]};});
+var JZ_B={"6":[2,4,0,0],"7":[2,3,5,0],"8":[2,4,5,0],"9":[2,4,6,0],"10":[3,4,5,7],"11":[3,5,6,7],"12":[3,5,6,8],"13":[3,5,7,8],"14":[4,5,7,8],"15":[4,6,7,8],"16":[4,6,7,9],"17":[4,6,8,9],"18":[4,6,8,10]};
+var JZ=JZN.map(function(r,i){var c=6+i;return {n:r[0],e:r[1],c:c,b:JZ_B[c].slice()};});
 /* admin config: jaliz.json (next to index.html) overrides names, emojis and the coin table; unknown/invalid files are ignored */
 function jzApplyCfg(d){
   if(!d||!Array.isArray(d.products)||d.products.length!==JZ.length)return false;
@@ -4739,10 +4834,19 @@ function jzView(seat){
 }
 function jzV(){return M.mode==='guest'?M.x:jzView(M.me);}
 function jzCard(t,cls,attr,big){
-  var c=JZ[t],b=c.b,tb='';
-  for(var k=0;k<4;k++)tb+='<span><u>'+fa(b[k])+'</u>→'+fa(k+1)+'🪙</span>';
-  return '<button class="jz-cd '+cls+'" '+attr+' title="'+c.n+' — '+fa(c.c)+' کارت">'+
-    '<i class="jz-ce">'+c.e+'</i><em class="jz-cn">'+fa(c.c)+'</em>'+(big?'<span class="jz-ct">'+tb+'</span>':'')+'</button>';
+  var c=JZ[t],h=(t*47+20)%360,co='';
+  c.b.forEach(function(v){if(v)co+='<span class="jz-co"><i></i><small>'+fa(v)+'</small></span>';});
+  return '<button class="jz-cd '+cls+'" '+attr+' style="--ch:'+h+'" title="'+c.n+' — '+fa(c.c)+' کارت">'+
+    (big?'<b class="jz-nm">'+c.n+'</b>':'')+'<i class="jz-ce">'+c.e+'</i>'+
+    (big?'<span class="jz-bt"><em class="jz-cn">'+fa(c.c)+'</em><span class="jz-cs">'+co+'</span></span>':'<em class="jz-cn">'+fa(c.c)+'</em>')+'</button>';
+}
+function jzTk(v,i,f){
+  var o='';
+  if(v.fe[i][f])o+='<span class="jz-tk k1" title="کود">🛍️</span>';
+  if(v.rt[i][f])o+='<span class="jz-tk k2" title="باران">🌧️</span>';
+  if(v.sn[i][f])o+='<span class="jz-tk k3" title="برف">❄️</span>';
+  if(v.br[i][f])o+='<span class="jz-tk k4" title="اصلاح نژاد">🧪</span>';
+  return o;
 }
 function jzTxt(cards){return cards.map(function(t){return JZ[t].e;}).join('');}
 function jzSpotV(v,seat){var t=v.fu[0],i;if(t===undefined)return true;for(i=0;i<v.nf[seat];i++)if(!v.sn[seat][i]&&(!v.fl[seat][i]||v.fl[seat][i].t===t))return true;return false;}
@@ -4777,7 +4881,7 @@ function jzHtml(){
     var fs=[],held='';
     for(f=0;f<v.nf[i];f++)fs.push(jzFm(v,i,f));
     for(var j=0;j<M.n;j++)if(j!==i&&v.hh[j]===i)held+='🎩'+mgMark(j);
-    chips+='<div class="jz-pc'+(M.turn===i&&!M.over?' on':'')+'"><b>'+mgMark(i)+'<span>'+M.names[i]+(i===me?' (تو)':'')+'</span></b><small>🪙'+fa(v.co[i])+' ✋'+fa(v.hn[i])+(v.tr[i]?' 🚜':'')+(v.bl[i]?' 🏆'+fa(v.bl[i]):'')+(v.hh[i]!==i?' ⌀🎩':'')+held+'</small><small>'+fs.join(' ')+'</small></div>';
+    chips+='<div class="jz-pc'+(M.turn===i&&!M.over?' on':'')+'"><b>'+mgMark(i)+'<span>'+M.names[i]+(i===me?' (تو)':'')+'</span></b><small>🪙'+fa(v.co[i])+' ✋'+fa(v.hn[i])+(v.tr[i]?' <span class="jz-tk k5">🚜</span>':'')+(v.bl[i]?' 🏆'+fa(v.bl[i]):'')+(v.hh[i]!==i?' ⌀🎩':'')+held+'</small><small>'+fs.join(' ')+'</small></div>';
   }
   var evb=v.evn?JZE[v.evn].e+' '+JZE[v.evn].n:'—';
   h+='<div class="pk-top"><button class="btn sm" data-mg="back">بازگشت</button><span class="pk-ti">جالیز · دست '+fa(v.rd+1)+(v.fin?' (آخر)':'')+' · دسته '+fa(v.dn)+' · سوخته '+fa(v.dc)+' · 🌱'+fa(v.fs)+' · '+evb+'</span></div>';
@@ -4809,10 +4913,10 @@ function jzHtml(){
   h+='<div class="jz-fl">';
   for(i=0;i<3;i++){
     if(i>=v.nf[me]){h+='<button class="jz-f lk" data-ja="by"'+(can&&v.co[me]>=3?'':' disabled')+'>زمین سوم · ۳🪙</button>';continue;}
-    var o=v.fl[me][i],mk=(v.fe[me][i]?'🌱':'')+(v.rt[me][i]?'💧':'')+(v.sn[me][i]?'❄️':'')+(v.br[me][i]?'🧬':'');
+    var o=v.fl[me][i],tks=jzTk(v,me,i);
     var burn=my&&v.ph==='fu'&&v.fu.length&&!jzSpotV(v,me);
     var pk=(burn&&o&&!v.sn[me][i])||(M.jm==='hv'&&o)||(M.jm==='fz'&&!v.fe[me][i])||((evq==='rain'||evq==='dry')&&o)||evq==='gard';
-    h+='<button class="jz-f'+(pk?' hm':'')+'" data-jf="'+i+'">'+(o?'<i>'+JZ[o.t].e+'</i><b>'+fa(o.n)+'</b><small>🪙'+fa(jzFValV(v,me,i))+' '+mk+'</small>':'<span class="jz-em">خالی '+mk+'</span>')+'</button>';
+    h+='<button class="jz-f'+(pk?' hm':'')+'" data-jf="'+i+'">'+(o?'<i>'+JZ[o.t].e+'</i><b>'+fa(o.n)+'</b><small>🪙'+fa(jzFValV(v,me,i))+'</small>':'<span class="jz-em">خالی</span>')+(tks?'<span class="jz-tks">'+tks+'</span>':'')+'</button>';
   }
   h+='</div><div class="jz-hd">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){return jzCard(t,'s'+(j===0?' nx':'')+(M.gs.hd.indexOf(j)>=0?' sel':''),'data-jh="'+j+'"',false);}).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
   var acts='';
@@ -5137,7 +5241,8 @@ function pkHtml(){
       else if(live&&v.la&&v.la[i]&&PK_TAG[v.la[i]])tg=PK_TAG[v.la[i]];
     }
     var nm=M.names[i]||'',ini=M.ai[i]?'🤖':(Array.from(nm)[0]||'؟');
-    seats+='<div class="pk-s'+(isMe?' me cr':'')+(isMe?'':(lx<50?' cr':' cl2'))+(M.turn===i&&live?' on':'')+(v.fold[i]?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
+    var rvl=!isMe&&hc&&v.has[i]&&(v.st==='show'||(v.rv&&v.rv[i]));
+    seats+='<div class="pk-s'+(rvl?' rvl':'')+(isMe?' me cr':'')+(isMe?'':(lx<50?' cr':' cl2'))+(M.turn===i&&live?' on':'')+(v.fold[i]?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
       (tg?'<span class="pk-tag t-'+tg[1]+'">'+tg[0]+'</span>':'')+
       '<div class="pk-cd">'+cards+'</div>'+
       '<div class="pk-av">'+avHtml(mgAv(i),nm,M.ai[i],0)+(v.dealer===i?'<em class="pk-dl">D</em>':'')+'</div>'+
@@ -5169,7 +5274,7 @@ function pkHtml(){
   }
   if(!M.over&&!M.rzo){
     if(M.me===0&&!v.poll&&!v.ea)ctl+='<button class="btn" data-pa="pp">رأی‌گیری پایان</button>';
-    if(v.st==='show'&&v.has[me]&&!(v.rv&&v.rv[me])&&!M.ai[me])ctl+='<button class="btn" data-pa="sh">نمایش دستم</button>';
+    if(v.st==='show'&&v.has[me]&&!(v.rv&&v.rv[me])&&!M.ai[me]&&M.shNo!==v.hn)ctl+='<span class="pk-q">دستت را به بقیه نشان بدهی؟</span><button class="btn primary" data-pa="sh">نشان بده</button><button class="btn" data-pa="shn">نه</button>';
     if(M.me===0&&v.st==='show')ctl+='<button class="btn primary" data-pa="nx">دست بعد</button>';
   }
   var end='';
@@ -5190,6 +5295,7 @@ function pkClick(t){
     if(a==='ro'){M.rzo=true;mgRender();return true;}
     if(a==='f'||a==='c'){M.rzo=false;mgDo('pk',{a:a});return true;}
     if(a==='r'){M.rzo=false;mgDo('pk',{a:'r',to:M.rz});return true;}
+    if(a==='shn'){M.shNo=pkV().hn;mgRender();return true;}
     if(a==='pp'||a==='nx'||a==='sh'){mgDo('pk',{a:a});return true;}
     if(a==='pvy'||a==='pvn'){mgDo('pk',{a:'pv',v:a==='pvy'});return true;}
   }
@@ -5430,7 +5536,7 @@ function tvClick(t){
 /* ---- room state ---- */
 function mgNew(g,mode,n){
   clearTimeout(M&&M.t);
-  M={g:g,mode:mode,n:n||(g.max>2?(g.type==='manch'?4:(g.type==='poker'?4:3)):2),me:0,names:[],wins:[],ai:[],rn:0,over:false,res:null,line:[],links:{},link:null,srv:null,code:null,wait:false,glob:false,msg:'',t:null,left:false,recd:-1,turn:0,b:[],x:null,sel:-1,promo:null,pn:g.type==='jaliz'?3:(g.type==='poker'?4:4),gs:{fu:[],hd:[]},wt:-1,wj:1,jm:false,pkcfg:{end:'hands',lim:10,bl:1,buy:100},tvNet:[0,0],pkc:!!lsGet('mb_pkc',0),rz:0,rzo:false,bal:[],av:[],stake:10,tsel:undefined,tvPaid:-1};
+  M={g:g,mode:mode,n:n||(g.max>2?(g.type==='manch'?4:(g.type==='poker'?4:3)):2),me:0,names:[],wins:[],ai:[],rn:0,over:false,res:null,line:[],links:{},link:null,srv:null,code:null,wait:false,glob:false,msg:'',t:null,left:false,recd:-1,turn:0,b:[],x:null,sel:-1,promo:null,pn:g.type==='jaliz'?3:(g.type==='poker'?4:4),gs:{fu:[],hd:[]},wt:-1,wj:1,jm:false,pkcfg:{end:'hands',lim:10,bl:1,buy:100},tvNet:[0,0],pkc:!!lsGet('mb_pkc',0),rz:0,rzo:false,bal:[],av:[],tok:[],stake:10,tsel:undefined,tvPaid:-1};
   for(var i=0;i<M.n;i++){M.names.push('');M.wins.push(0);M.ai.push(false);}
   return M;
 }
@@ -5449,7 +5555,7 @@ function mgReset(){
 }
 function mgClose(){
   if(M){
-    clearTimeout(M.t);
+    clearTimeout(M.t);clearTimeout(M.goneT);clearTimeout(M.rt);M.rec=false;if(M.mode==='guest')lsSet('mb_mgrj',null);
     Object.keys(M.links).forEach(function(s){var l=M.links[s];if(l){l.onclose=null;l.close();}});
     if(M.link){M.link.onclose=null;M.link.close();}
     if(M.srv)M.srv.close();
@@ -5475,7 +5581,7 @@ function mgIcon(id){
   return '<svg viewBox="0 0 36 36"><polygon points="18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5" fill="var(--e0)" stroke="var(--line)" stroke-width="2"/><circle cx="18" cy="18" r="5" fill="var(--ember)"/></svg>';
 }
 function renderHub(){
-  var h='<div class="hb-in hub"><div style="grid-column:1/-1;display:flex;gap:8px;justify-content:center;align-items:center"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 10px;font-size:13px">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button></div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  var h='<div class="hb-in hub"><div style="grid-column:1/-1;display:flex;gap:8px;justify-content:center;align-items:center"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 10px;font-size:13px">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button><button class="btn sm" data-hg="hist" style="min-height:0;padding:3px 10px;font-size:13px">📜 سوابق</button>'+(mgrjOk()?'<button class="btn sm primary" data-hg="mgrj" style="min-height:0;padding:3px 10px;font-size:13px">↩ بازگشت به بازی قبلی</button>':'')+'</div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -5499,6 +5605,7 @@ function mgMark(j){
   return '<i class="mg-dot" style="background:'+MN_COL[mnCorner(j)]+'"></i>';
 }
 function mgStatus(){
+  if(M.gone!=null&&!M.over)return 'حریف قطع شد؛ منتظر بازگشتش…';
   if(M.over){
     if(M.res==='draw')return 'مساوی شد';
     if(M.res==='left')return 'حریف از بازی خارج شد؛ برنده تویی';
@@ -5572,7 +5679,7 @@ function mgRender(){
       (g.type==='poker'?pkCfgHtml():'')+(g.type==='tavla'?'<div class="mg-r"><span class="hb-s">مبلغ شرط هر دست (سکه)</span>'+[5,10,20,50].map(function(v){return '<button class="btn sm'+(M.stake===v?' primary':'')+'" data-tk="'+v+'">'+fa(v)+'</button>';}).join('')+'</div>'+pkBuyRow()+'<div class="hb-s">برنده شرط را از بازنده می‌گیرد؛ مارس ×۲ و مارس سنگین ×۳. هر نفر در کل این نشست بیشتر از سقف ورودی (و موجودی‌اش) نمی‌بازد.</div>':'')+
       '<button class="btn primary big" data-mg="ai">بازی با هوش مصنوعی</button>'+
       '<button class="btn big" data-mg="mk">ساخت اتاق آنلاین</button>'+
-      '<div class="mg-r"><input id="mgCode" class="inp code" maxlength="5" placeholder="کد اتاق" dir="ltr" autocomplete="off" autocapitalize="characters"><button class="btn" data-mg="join">ورود به اتاق</button></div>'+
+      '<div class="mg-r"><input id="mgCode" class="inp code" maxlength="5" placeholder="کد اتاق ۵ رقمی" dir="ltr" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><button class="btn" data-mg="join">ورود به اتاق</button></div>'+
       (M.msg?'<div class="mg-st">'+M.msg+'</div>':''),g.land?'lm2':'');
   }else if(M.wait||M.glob){
     var seats='';
@@ -5652,12 +5759,21 @@ function mgSync(){
   Object.keys(M.links).forEach(function(s){if(M.links[s])M.links[s].send(mgView(+s));});
 }
 function mgLob(){
-  Object.keys(M.links).forEach(function(s){if(M.links[s])M.links[s].send({t:'lob',g:M.g.id,you:+s,n:M.n,names:M.names,av:mgAvArr(),uid:PROF.id});});
+  Object.keys(M.links).forEach(function(s){if(M.links[s])M.links[s].send({t:'lob',g:M.g.id,you:+s,n:M.n,names:M.names,av:mgAvArr(),uid:PROF.id,tk:(M.tok&&M.tok[+s])||undefined});});
 }
 function mgRecord(){
+  if(M&&M.mode==='guest'&&M.over)lsSet('mb_mgrj',null);
   if(!M||(M.mode!=='host'&&M.mode!=='guest')||!M.over||M.recd===M.rn)return;
   M.recd=M.rn;
   var humans=0;M.ai.forEach(function(a){if(!a)humans++;});
+  (function(){
+    var rr=M.res==='draw'?'d':((M.res===M.me||M.res==='left')?'w':'l'),net;
+    try{
+      if(M.g.type==='poker'&&M.x&&M.x.ch&&M.x.st0)net=(M.x.ch[M.me]|0)-(M.x.st0[M.me]|0);
+      else if(M.g.type==='tavla'&&M.x&&M.x.dl)net=M.x.dl[M.me]|0;
+    }catch(e){}
+    histAdd({t:Date.now(),g:M.g.name,r:rr,n:M.n,o:humans>1?1:0,net:net,ops:M.names.filter(function(x,i){return i!==M.me;})});
+  })();
   if(humans<2&&M.res!=='left')return;
   var w=(M.res===M.me||M.res==='left')?1:0,p=w?3:(M.res==='draw'?1:0);
   var g=lsGet(PK.g,[]);
@@ -5748,15 +5864,36 @@ function mgBegin(){
   for(var i=0;i<M.n;i++)if(!M.names[i]){M.names[i]='رایانه'+(M.n>2?' '+fa(i):'');M.ai[i]=true;}
   mgReset();mgAfter();
 }
-function mgLeaveSeat(seat){
+function mgForfeit2(){
+  if(!M||M.over)return;
+  if(M.g.type==='tavla'&&M.mode==='host'){M.x.pts=M.x.pts;M.over=true;M.res=0;M.wins[0]++;tvSettle(0);mgAfter();return;}
+  M.over=true;M.res='left';mgAfter();
+}
+function mgLeaveSeat(seat,link){
   if(!M)return;
+  if(link&&M.links[seat]!==link)return;
   M.links[seat]=null;
   if(M.wait){M.names[seat]='';mgLob();mgRender();return;}
   if(M.over){M.left=true;mgRender();return;}
   if(M.n===2){
-    if(M.g.type==='tavla'&&M.mode==='host'){M.x.pts=M.x.pts;M.over=true;M.res=0;M.wins[0]++;tvSettle(0);mgAfter();return;}
-    M.over=true;M.res='left';mgAfter();return;}
-  M.ai[seat]=true;M.names[seat]+=' (رایانه)';mgAfter();
+    /* a 2-player game waits for the opponent to come back before it counts as a forfeit */
+    if(window.__TRANSPORT){mgForfeit2();return;}
+    var cur=M;M.gone=seat;clearTimeout(M.goneT);
+    M.goneT=setTimeout(function(){if(M!==cur||cur.gone!==seat)return;cur.gone=null;mgForfeit2();},75000);
+    mgRender();return;
+  }
+  if(M.names[seat].indexOf(' (رایانه)')<0){M.ai[seat]=true;M.names[seat]+=' (رایانه)';}
+  mgAfter();
+}
+function mgReclaim(s,link,d){
+  var cur=M;if(!cur||cur.over)return;
+  var old=cur.links[s];if(old&&old!==link){old.onclose=null;try{old.close();}catch(e){}}
+  cur.links[s]=link;cur.ai[s]=false;cur.names[s]=String(cur.names[s]||'').replace(/ \(رایانه\)$/,'');
+  var a=avI(d.av);if(a!==-1)cur.av[s]=a;
+  clearTimeout(cur.goneT);cur.goneT=null;cur.gone=null;
+  link.onclose=function(){if(M===cur)mgLeaveSeat(s,link);};
+  toast(cur.names[s]+' به بازی برگشت');
+  mgLob();mgAfter();
 }
 function mgHost(){
   var cur=M,code=genCode(),nm=cleanName(loadName())||'میزبان';
@@ -5769,12 +5906,16 @@ function mgHost(){
       for(s in cur.links)if(cur.links[s]===link)seat=+s;
       if(d.t==='hi'&&seat<0){
         if(d.g!==cur.g.id){link.send({t:'no',why:'این اتاق برای بازی دیگری است'});return;}
-        if(!cur.wait){link.send({t:'no',why:'بازی شروع شده است'});return;}
+        if(!cur.wait){
+          var rs=-1;for(s=1;s<cur.n;s++)if(d.tk&&cur.tok[s]&&cur.tok[s]===d.tk)rs=s;
+          if(rs<0){link.send({t:'no',why:'بازی شروع شده است'});return;}
+          mgReclaim(rs,link,d);return;
+        }
         for(s=1;s<cur.n;s++)if(!cur.names[s])break;
         if(s>=cur.n){link.send({t:'no',why:'اتاق پر است'});return;}
-        cur.links[s]=link;cur.names[s]=cleanName(d.name)||'مهمان';cur.av[s]=avI(d.av);cur.bal[s]=Math.max(0,Math.min(1e6,+d.bal|0))||100;
+        cur.links[s]=link;cur.tok[s]=rid();cur.names[s]=cleanName(d.name)||'مهمان';cur.av[s]=avI(d.av);cur.bal[s]=Math.max(0,Math.min(1e6,+d.bal|0))||100;
         var uid=cleanUid(d.uid);if(uid)addRecent([{uid:uid,name:cur.names[s]}]);
-        link.onclose=function(){if(M===cur)mgLeaveSeat(s);};
+        link.onclose=function(){if(M===cur)mgLeaveSeat(s,link);};
         mgLob();
         if(cur.g.max===2)mgBegin();else mgRender();
       }else if(seat>0&&(d.t==='mv'||d.t==='rl'||d.t==='jz'||d.t==='pk'||d.t==='tv')){
@@ -5789,32 +5930,53 @@ function mgHost(){
     if(M===cur){cur.wait=false;cur.mode='menu';cur.msg='ساخت اتاق ناموفق بود؛ دوباره تلاش کن';mgRender();}
   });
 }
-function mgJoin(code){
-  code=String(code||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(code.length!==5){M.msg='کد ۵ نویسه‌ای را درست وارد کن';mgRender();return;}
+function mgJoin(code,tk0){
+  code=dg(code).replace(/[^0-9]/g,'');
+  if(code.length!==5){M.msg='کد ۵ رقمی را درست وارد کن';mgRender();return;}
   if(!onlineAvailable()){M.msg='بازی آنلاین به اینترنت نیاز دارد';mgRender();return;}
   var cur=M,nm=cleanName(loadName())||'مهمان',got=false;
+  if(tk0){cur.tk=tk0;cur.noPay=true;}
   cur.msg='در حال اتصال…';mgRender();
   function fail(t){if(M===cur){cur.msg=t;cur.mode='menu';cur.glob=false;cur.link=null;mgRender();}}
+  function giveUp(){
+    cur.rec=false;
+    if(cur.over)cur.left=true;else{
+      if(cur.g.id==='tavla'&&ECO_ON){ECO.b+=cur.stake||10;ecoSave();ecoPaint();}
+      cur.over=true;cur.res='left';cur.left=true;cur.glob=false;mgRecord();}
+    mgRender();
+  }
+  function recon(){
+    if(cur.rec)return;
+    cur.rec=true;cur.rcn=0;toast('اتصال قطع شد؛ دوباره وصل می‌شوم…');
+    (function again(){
+      if(M!==cur||cur.over||!cur.rec)return;
+      if(++cur.rcn>30){giveUp();return;}
+      try{if(cur.srv)cur.srv.close();}catch(e){}
+      attempt();
+      cur.rt=setTimeout(again,3000);
+    })();
+  }
+  cur.nudge=function(force){if(!force||M!==cur||cur.over||!got)return;if(cur.rec){clearTimeout(cur.rt);cur.rec=false;}if(force&&cur.link){var l=cur.link;cur.link=null;l.onclose=null;try{l.close();}catch(e){}}recon();};
+  function attempt(){
   cur.srv=transport().join(code,function(link){
     if(M!==cur)return;
     cur.link=link;
     link.onclose=function(){
-      if(M!==cur)return;
+      if(M!==cur||cur.link!==link)return;
       if(!got)return fail('اتصال برقرار نشد');
-      if(cur.over)cur.left=true;else{
-        if(cur.g.id==='tavla'&&ECO_ON){ECO.b+=cur.stake||10;ecoSave();ecoPaint();}
-        cur.over=true;cur.res='left';cur.left=true;cur.glob=false;mgRecord();}
-      mgRender();
+      if(cur.over){cur.left=true;mgRender();return;}
+      recon();
     };
     link.onmessage=function(d){
       if(M!==cur||!d||typeof d!=='object')return;
-      if(d.t==='no'){fail('ورود ممکن نیست: '+String(d.why||'').slice(0,60));link.onclose=null;link.close();return;}
+      if(d.t==='no'){if(cur.rec){cur.rec=false;clearTimeout(cur.rt);lsSet('mb_mgrj',null);giveUp();link.onclose=null;link.close();return;}fail('ورود ممکن نیست: '+String(d.why||'').slice(0,60));link.onclose=null;link.close();return;}
       if(d.t==='say'){var si=+d.x;if(si>=0&&si<MG_SAY.length)toast(cur.names[0]+': '+MG_SAY[si]);return;}
       var n=+d.n;
       if(d.g!==cur.g.id||!(n>=2&&n<=cur.g.max)||!Array.isArray(d.names)||d.names.length!==n)return;
       var you=+d.you;if(!(you>=1&&you<n))return;
       if(d.t==='lob'){
+        if(typeof d.tk==='string'&&d.tk.length<=24){cur.tk=d.tk;lsSet('mb_mgrj',{g:cur.g.id,code:code,tk:d.tk,t:Date.now()});}
+        if(cur.rec){cur.rec=false;clearTimeout(cur.rt);toast('دوباره وصل شدی ✅');}
         got=true;cur.n=n;cur.me=you;cur.mode='guest';cur.glob=true;cur.wait=false;
         cur.names=d.names.map(function(x){return cleanName(x);});cur.av=Array.isArray(d.av)&&d.av.length===n?d.av.map(avI):[];cur.wins=cur.names.map(function(){return 0;});cur.ai=cur.names.map(function(){return false;});
         var u0=cleanUid(d.uid);if(u0)addRecent([{uid:u0,name:cur.names[0]||'بازیکن'}]);
@@ -5882,14 +6044,17 @@ function mgJoin(code){
       cur.res=d.res==='draw'?'draw':(d.res===0||(d.res>0&&d.res<n)?d.res|0:null);
       cur.line=d.line.filter(function(v){return typeof v==='number'&&v>=0&&v<cur.b.length;});
       cur.rn=+d.rn|0;if(cur.rn!==oldRn||!wasOver){cur.sel=-1;cur.promo=null;}
+      if(cur.noPay){cur.paidRn=cur.rn;cur.noPay=false;}
       if(!cur.g.land&&cur.paidRn!==cur.rn){cur.paidRn=cur.rn;ecoPayClamp(ECO_FEE);}
       if(cur.g.id==='tavla'&&ECO_ON&&d.over&&x&&x.dl&&cur.tvPaid!==cur.rn){cur.tvPaid=cur.rn;ECO.b=Math.max(0,ECO.b+x.dl[you]);ecoSave();ecoPaint();}
       if(cur.g.type==='poker'&&ECO_ON&&x&&x.st0){if(cur.pkBaseRn!==cur.rn){cur.pkBaseRn=cur.rn;cur.pkBase=Math.max(0,ECO.b-x.st0[you]);}if(x.st==='show'||x.st==='end'){ECO.b=Math.max(0,cur.pkBase+(x.ch[you]|0));ecoSave();ecoPaint();}}
       var u1=cleanUid(d.uid);if(u1)addRecent([{uid:u1,name:cur.names[0]}]);
       mgRender();mgRecord();
     };
-    link.send({t:'hi',g:cur.g.id,name:nm,uid:PROF.id,av:myAv(),bal:ECO_ON?ECO.b:100});
-  },function(){fail('اتاقی با این کد پیدا نشد یا اتصال برقرار نشد');});
+    link.send({t:'hi',g:cur.g.id,name:nm,uid:PROF.id,av:myAv(),bal:ECO_ON?ECO.b:100,tk:cur.tk||undefined});
+  },function(){if(cur.rec||(got&&!cur.over))return;fail('اتاقی با این کد پیدا نشد یا اتصال برقرار نشد');});
+  }
+  attempt();
 }
 function mgChessClick(sq){
   if(M.over||M.turn!==M.me)return;
@@ -5912,11 +6077,14 @@ function mgCellClick(i){
   for(var j=0;j<4;j++)if(mnCellOf(M.me,tk[j])===i&&tk[j]>=0)t=j;
   if(t>=0&&mnLegal(M.me,M.x.die).indexOf(t)>=0)mgDo('mv',t);
 }
+function mgrjOk(){var r=lsGet('mb_mgrj',null);return !!(r&&typeof r.g==='string'&&typeof r.tk==='string'&&/^\d{5}$/.test(String(r.code))&&Date.now()-(+r.t||0)<8*60*1000&&GAMES_BY_ID(r.g));}
+function GAMES_BY_ID(id){return typeof MGS!=='undefined'&&MGS&&MGS[id];}
 function mgInvInfo(){return M&&M.wait&&M.code?{code:M.code,g:M.g.id}:{code:NET.code};}
 $('#hub').addEventListener('click',function(e){
   var c=e.target.closest('[data-hg]');if(!c)return;
   var k=c.dataset.hg;
-  if(k==='catan')hubCatan();else if(k==='people')openPeople();else if(k==='acct')accOpen();else mgOpen(k);
+  if(k==='hist'){histOpen();return;}
+  if(k==='mgrj'){var rj=lsGet('mb_mgrj',null);if(mgrjOk()){mgOpen(rj.g);mgJoin(rj.code,rj.tk);}else{lsSet('mb_mgrj',null);renderHub();}}else if(k==='catan')hubCatan();else if(k==='people')openPeople();else if(k==='acct')accOpen();else mgOpen(k);
 });
 $('#mini').addEventListener('click',function(e){
   var t=e.target;if(!M)return;
