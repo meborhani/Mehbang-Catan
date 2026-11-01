@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>پنل ادمین مهبانگ</title>
+<style>
+:root{--bg:#05061a;--panel:#10132e;--line:#2a2f5e;--ink:#f1f1ff;--dim:#9aa0d0;--ember:#ffb23f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,Tahoma,sans-serif;padding:16px;max-width:760px;margin-inline:auto}
+h1{font-size:18px;margin:0 0 12px}input,button{font:inherit;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:7px 10px}
+button{cursor:pointer;background:var(--ember);color:#000;border:0;font-weight:700}button.g{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}
+.pl{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}.pl small{color:var(--dim)}
+.pl input[type=number]{width:80px}.msg{color:var(--ember);min-height:1.4em}table{width:100%;border-collapse:collapse}td,th{padding:4px 6px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}
+</style></head><body>
+<h1>🪙 پنل ادمین مهبانگ گیم</h1>
+<div id="login" class="card"><div class="row"><input id="em" type="email" placeholder="ایمیل ادمین" autocomplete="username"><input id="pw" type="password" placeholder="رمز" autocomplete="current-password"><button id="go">ورود</button></div><div class="msg" id="m1"></div></div>
+<div id="app" hidden>
+ <div class="card"><div class="row"><input id="q" placeholder="جستجوی نام یا شناسه…" style="flex:1"><button class="g" id="rf">تازه‌سازی</button><button class="g" id="out">خروج</button></div><div class="msg" id="m2"></div><div id="list"></div></div>
+ <div class="card"><b>هدیه‌های اخیر</b><div id="gl"></div></div>
+</div>
+<script src="sb-config.js"></script>
+<script>
+(function(){
+var C=window.MB_SB||{},U=(C.url||'').replace(/\/$/,''),K=C.key||'',tok='',P=[],$=function(s){return document.querySelector(s);};
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function api(path,opt){opt=opt||{};opt.headers=Object.assign({apikey:K,Authorization:'Bearer '+(tok||K),'Content-Type':'application/json'},opt.headers||{});return fetch(U+path,opt).then(function(r){return r.text().then(function(t){var j=null;try{j=JSON.parse(t);}catch(e){}if(!r.ok)throw new Error((j&&(j.msg||j.message||j.error_description))||('خطا '+r.status));return j;});});}
+if(!U||!K){$('#m1').textContent='ابتدا sb-config.js را با آدرس و کلید Supabase پر کن.';}
+$('#go').onclick=function(){$('#m1').textContent='…';api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email:$('#em').value.trim(),password:$('#pw').value})}).then(function(d){tok=d.access_token;try{sessionStorage.setItem('mb_adm',tok);}catch(e){}start();}).catch(function(e){$('#m1').textContent=e.message;});};
+$('#out').onclick=function(){tok='';try{sessionStorage.removeItem('mb_adm');}catch(e){}$('#app').hidden=true;$('#login').hidden=false;};
+$('#rf').onclick=load;$('#q').oninput=draw;
+function start(){$('#login').hidden=true;$('#app').hidden=false;load();}
+function load(){$('#m2').textContent='در حال بارگذاری…';
+ api('/rest/v1/players?select=uid,name,last_seen,created_at&order=last_seen.desc&limit=1000').then(function(d){P=d||[];$('#m2').textContent=P.length+' بازیکن';draw();}).catch(function(e){$('#m2').textContent=e.message;});
+ api('/rest/v1/grants?select=uid,amount,note,created_at,claimed_at&order=created_at.desc&limit=40').then(function(g){var nm={};P.forEach(function(p){nm[p.uid]=p.name;});$('#gl').innerHTML='<table><tr><th>بازیکن</th><th>سکه</th><th>یادداشت</th><th>وضعیت</th></tr>'+(g||[]).map(function(r){return '<tr><td>'+esc(nm[r.uid]||'')+' <small>'+esc(r.uid)+'</small></td><td>'+r.amount+'</td><td>'+esc(r.note)+'</td><td>'+(r.claimed_at?'دریافت شد':'منتظر')+'</td></tr>';}).join('')+'</table>';}).catch(function(){});
+}
+function ago(t){var s=(Date.now()-new Date(t))/1000;if(s<90)return 'الان';if(s<5400)return Math.round(s/60)+' دقیقه پیش';if(s<129600)return Math.round(s/3600)+' ساعت پیش';return Math.round(s/86400)+' روز پیش';}
+function draw(){var q=$('#q').value.trim().toLowerCase();
+ $('#list').innerHTML=P.filter(function(p){return !q||(p.name||'').toLowerCase().indexOf(q)>=0||p.uid.toLowerCase().indexOf(q)>=0;}).map(function(p){
+  return '<div class="pl"><div><b>'+esc(p.name||'بدون نام')+'</b> <small>'+esc(p.uid)+' · '+ago(p.last_seen)+'</small></div><input type="number" min="1" max="100000" value="20" data-a="'+esc(p.uid)+'"><input placeholder="یادداشت" data-n="'+esc(p.uid)+'" style="width:110px"><button data-g="'+esc(p.uid)+'">بده</button></div>';}).join('')||'<small>بازیکنی نیست</small>';
+ Array.prototype.forEach.call(document.querySelectorAll('[data-g]'),function(b){b.onclick=function(){var u=b.dataset.g,a=+document.querySelector('[data-a="'+u+'"]').value|0,n=document.querySelector('[data-n="'+u+'"]').value;
+  if(!(a>=1&&a<=100000)){$('#m2').textContent='مقدار نامعتبر';return;}
+  b.disabled=true;api('/rest/v1/grants',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({uid:u,amount:a,note:n.slice(0,60)})}).then(function(){$('#m2').textContent='✔ '+a+' سکه ثبت شد؛ وقتی بازیکن بازی را باز کند دریافت می‌کند';b.disabled=false;load();}).catch(function(e){$('#m2').textContent=e.message;b.disabled=false;});};});}
+try{var t=sessionStorage.getItem('mb_adm');if(t&&U&&K){tok=t;start();}}catch(e){}
+})();
+</script></body></html>

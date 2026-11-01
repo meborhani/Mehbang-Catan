@@ -1,0 +1,53 @@
+-- مهبانگ گیم: ثبت بازیکنان و هدیهٔ سکهٔ ادمین
+-- ۱) در Supabase بخش SQL Editor این فایل را یک‌جا اجرا کن.
+-- ۲) خط ADMIN_EMAIL را قبل از اجرا با ایمیل ادمین عوض کن (همان کاربری که در Authentication می‌سازی).
+
+create table if not exists public.players(
+  uid text primary key,
+  name text not null default '',
+  created_at timestamptz not null default now(),
+  last_seen timestamptz not null default now()
+);
+create table if not exists public.grants(
+  id bigserial primary key,
+  uid text not null,
+  amount int not null check (amount between 1 and 100000),
+  note text not null default '',
+  created_at timestamptz not null default now(),
+  claimed_at timestamptz
+);
+create index if not exists grants_uid_idx on public.grants(uid) where claimed_at is null;
+
+alter table public.players enable row level security;
+alter table public.grants enable row level security;
+
+drop policy if exists admin_players_sel on public.players;
+drop policy if exists admin_grants_sel on public.grants;
+drop policy if exists admin_grants_ins on public.grants;
+create policy admin_players_sel on public.players for select to authenticated using ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
+create policy admin_grants_sel on public.grants for select to authenticated using ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
+create policy admin_grants_ins on public.grants for insert to authenticated with check ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
+
+-- بازیکن‌ها فقط از این دو تابع می‌توانند استفاده کنند؛ به جدول‌ها دسترسی مستقیم ندارند
+create or replace function public.mb_register(p_uid text, p_name text) returns void
+language plpgsql security definer set search_path = public as $$
+begin
+  if p_uid is null or p_uid !~ '^[A-Z0-9]{8}$' then return; end if;
+  insert into players(uid,name,last_seen) values (p_uid, left(coalesce(p_name,''),12), now())
+  on conflict (uid) do update set name = excluded.name, last_seen = now();
+end $$;
+
+create or replace function public.mb_claim(p_uid text) returns int
+language plpgsql security definer set search_path = public as $$
+declare n int;
+begin
+  if p_uid is null or p_uid !~ '^[A-Z0-9]{8}$' then return 0; end if;
+  with u as (update grants set claimed_at = now() where uid = p_uid and claimed_at is null returning amount)
+  select coalesce(sum(amount),0) into n from u;
+  return n;
+end $$;
+
+revoke all on function public.mb_register(text,text) from public;
+revoke all on function public.mb_claim(text) from public;
+grant execute on function public.mb_register(text,text) to anon, authenticated;
+grant execute on function public.mb_claim(text) to anon, authenticated;

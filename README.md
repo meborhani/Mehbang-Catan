@@ -18,3 +18,10 @@
 
 ## انتشار
 Settings → Pages → Branch: `main` / root.
+
+## پنل ادمین و هدیهٔ سکه (Supabase)
+1. در supabase.com یک پروژه بساز. در Authentication یک کاربر (ایمیل و رمز) برای ادمین بساز.
+2. فایل `supabase-setup.sql` را در SQL Editor اجرا کن (قبلش `ADMIN_EMAIL` را با ایمیل ادمین عوض کن).
+3. در Project Settings ← API مقدار Project URL و کلید `anon` را در `sb-config.js` بگذار.
+4. صفحهٔ `admin.html` را باز کن، وارد شو، بازیکنان را با نام ببین و سکه بده.
+بازیکن‌ها فقط نام و شناسهٔ ۸ نویسه‌ای خودشان را ثبت می‌کنند؛ موجودی سکه همچنان روی گوشی خودشان است.

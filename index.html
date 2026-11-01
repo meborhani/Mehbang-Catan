@@ -801,6 +801,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 <div id="mini" hidden dir="rtl" lang="fa"></div>
 <div id="lobby" hidden><div class="intro-in" id="lobbyIn"></div></div>
 <script src="peerjs.min.js"></script>
+<script src="sb-config.js"></script>
 <script>window.Peer||document.write('<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"><\/script>')</script>
 <script>
 (function(){
@@ -3647,6 +3648,24 @@ function ecoCharge(fee){
 }
 function ecoNeed(g,cfg){return g.type==='poker'?(cfg.bl||1)*20:(g.type==='tavla'?((M&&M.stake)||10):ECO_FEE);}
 function ecoPayClamp(fee){if(!ECO_ON)return;ECO.b=Math.max(0,ECO.b-fee);ecoSave();ecoPaint();}
+/* optional Supabase link: registers the player's name/id and receives coins granted from the admin panel (config in sb-config.js) */
+function sbCall(fn,args){
+  var c=window.MB_SB;
+  return fetch(c.url.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':c.key,'Authorization':'Bearer '+c.key,'Content-Type':'application/json'},body:JSON.stringify(args)})
+    .then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){try{return JSON.parse(t);}catch(e){return null;}});
+}
+function sbSync(){
+  var c=window.MB_SB;
+  if(!c||!c.url||!c.key||!window.fetch||(window.__TRANSPORT&&!window.__SB)||!ECO_ON&&!window.__SB)return;
+  if(Date.now()-lsGet('mb_sbt',0)<120000)return;
+  lsSet('mb_sbt',Date.now());
+  sbCall('mb_register',{p_uid:PROF.id,p_name:cleanName(loadName())})
+    .then(function(){return sbCall('mb_claim',{p_uid:PROF.id});})
+    .then(function(n){n=+n|0;if(n>0&&n<=100000){ECO.b+=n;ecoSave();ecoPaint();toast('🎁 '+fa(n)+' سکه هدیه از مهبانگ گرفتی');}})
+    .catch(function(){lsSet('mb_sbt',0);});
+}
+document.addEventListener('visibilitychange',function(){if(!document.hidden)sbSync();});
+setTimeout(sbSync,1500);
 /* ---------- game hub: small online two-player games ---------- */
 var MGS={
   ttt:{id:'ttt',type:'grid',name:'دوز',sub:'سه نشان در یک ردیف',w:3,h:3,k:3,grav:false,max:2},
@@ -5062,7 +5081,7 @@ function showHub(){
   mgClose();VIEW='hub';
   document.title='مهبانگ گیم';
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#hub').hidden=false;
-  presenceStart();ecoDaily();
+  presenceStart();ecoDaily();sbSync();
 }
 function hubCatan(){$('#hub').hidden=true;applyTheme(loadTheme(),true);showIntro();}
 function mgIcon(id){
