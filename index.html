@@ -4760,8 +4760,9 @@ function jzAct(seat,kind,m){
     var f=m.f;
     if(x.ph==='p'){
       if(!x.hand[seat].length)return false;
-      var t=x.hand[seat][0];if(!jzOpen(seat,f,t))return false;
-      x.hand[seat].shift();var fo=x.fl[seat][f];x.fl[seat][f]=fo?{t:t,n:fo.n+1}:{t:t,n:1};
+      var hci=m.ci===undefined?0:m.ci;if(hci%1!==0||hci<0||hci>=x.hand[seat].length)return false;
+      var t=x.hand[seat][hci];if(!jzOpen(seat,f,t))return false;
+      x.hand[seat].splice(hci,1);var fo=x.fl[seat][f];x.fl[seat][f]=fo?{t:t,n:fo.n+1}:{t:t,n:1};
       x.pc++;
       var lim=x.tr[seat]?3:2;
       if(x.fin){if(!x.hand[seat].length||x.pc>=lim)jzFinEnd();}
@@ -4947,7 +4948,7 @@ function jzStatus(){
   }
   if(M.turn!==me)return (M.ai[M.turn]?M.names[M.turn]+' فکر می‌کند…':'نوبت '+M.names[M.turn])+(v.lg?' · '+v.lg:'');
   if(v.fin)return 'دور آخر: تا '+fa(v.tr[me]?3:2)+' کارت بکار یا «رد کردن»';
-  return {p:v.pc?'زمین را بزن، بعد کارت بعدی را؛ یا «رد کردن»':'زمینی را بزن، بعد کارت اول دستت را',tr:'معامله کن یا «پایان معامله»',fu:(v.fu.length&&!jzSpotV(v,me)?'جای کاشت نداری؛ یک زمینت را بزن تا برداشت شود':'زمینی را بزن، بعد یکی از کارت‌های وسط را')}[v.ph]||'نوبت توست';
+  return {p:v.pc?'زمین را بزن، بعد کارت بعدی را؛ یا «رد کردن»':'زمینی را بزن، بعد هر کارتی از دستت را',tr:'معامله کن یا «پایان معامله»',fu:(v.fu.length&&!jzSpotV(v,me)?'جای کاشت نداری؛ یک زمینت را بزن تا برداشت شود':'زمینی را بزن، بعد یکی از کارت‌های وسط را')}[v.ph]||'نوبت توست';
 }
 function jzFm(v,i,f){
   var o=v.fl[i][f],m=(v.fe[i][f]?'🌱':'')+(v.rt[i][f]?'💧':'')+(v.sn[i][f]?'❄️':'')+(v.br[i][f]?'🧬':'');
@@ -5020,8 +5021,8 @@ function jzHtml(){
   var hn2=Math.min(v.hand.length,16),ov=hn2<=5?2:hn2<=8?12:hn2<=11?20:26;
   var hdH='<div class="jz-hd" style="--ov:'+ov+'px">'+(v.hand.length?v.hand.slice(0,16).map(function(t,j){
     var sl=M.sc&&M.sc.s==='h'&&M.sc.i===j,gs=M.gs.hd.indexOf(j)>=0,fits=my&&v.ph==='p'&&!v.of;
-    var dim=fits&&j!==0,r=(j-(hn2-1)/2)*(hn2>8?1.4:2.4);
-    return jzCard(t,'hc'+(j===0&&my&&v.ph==='p'?' nx':'')+((sl||gs)?' sel':'')+(dim?' dim':''),'data-jh="'+j+'" style="--r:'+r.toFixed(1)+'deg;z-index:'+(j===0?5:1+j)+'"',true);
+    var dim=false,r=(j-(hn2-1)/2)*(hn2>8?1.4:2.4);
+    return jzCard(t,'hc'+''+((sl||gs)?' sel':'')+(dim?' dim':''),'data-jh="'+j+'" style="--r:'+r.toFixed(1)+'deg;z-index:'+(j===0?5:1+j)+'"',true);
   }).join('')+(v.hand.length>16?'<span class="jz-em">+'+fa(v.hand.length-16)+'</span>':''):'<span class="jz-em">دستت خالی است</span>')+'</div>';
   h+='<div class="jzt n'+M.n+'"><div class="jzt-t">'+seatT+'</div>'+(seatL?'<div class="jzt-l">'+seatL+'</div>':'')+'<div class="jzt-c">'+midH+'</div>'+(seatR?'<div class="jzt-r">'+seatR+'</div>':'')+'<div class="jzt-m">'+meS+'<div class="jz-mf">'+meF+'</div></div></div>'+hdH;
   var acts='';
@@ -5069,7 +5070,7 @@ function jzClick(t){
     return true;
   }
   if((el=t.closest('[data-jh]'))){
-    if(my&&v.ph==='p'&&!v.of){var j3=+el.dataset.jh;if(j3!==0)toast('اول باید کارت اول دستت را بکاری');else jzPickCard({s:'h',i:0});return true;}
+    if(my&&v.ph==='p'&&!v.of){jzPickCard({s:'h',i:+el.dataset.jh});return true;}
     if(my&&v.ph==='tr'&&!v.of&&v.evn==='mkt'){var j2=+el.dataset.jh,p2=M.gs.hd.indexOf(j2);if(p2>=0)M.gs.hd.splice(p2,1);else M.gs.hd.push(j2);mgRender();}return true;}
   if((el=t.closest('[data-jt]'))){M.wt=+el.dataset.jt;mgRender();return true;}
   if((el=t.closest('[data-jj]'))){M.wj=+el.dataset.jj;mgRender();return true;}
@@ -5093,13 +5094,13 @@ function jzPickCard(c){
   M.sc=(M.sc&&M.sc.s===c.s&&M.sc.i===c.i)?null:c;mgRender();
 }
 function jzPlant(f,c){
-  var ci=c.s==='f'?c.i:undefined;
+  var ci=c.i;
   if(M.mode!=='guest'&&!jzActOk(f,ci)){toast('اینجا نمی‌شود کاشت؛ زمین دیگری را انتخاب کن');return;}
   M.sf=-1;M.sc=null;
-  mgDo('jz',ci===undefined?{a:'pl',f:f}:{a:'pl',f:f,ci:ci});mgRender();
+  mgDo('jz',{a:'pl',f:f,ci:ci});mgRender();
 }
 function jzActOk(f,ci){
-  var v=jzV(),t=v.ph==='fu'?v.fu[ci||0]:v.hand[0];
+  var v=jzV(),t=v.ph==='fu'?v.fu[ci||0]:v.hand[ci||0];
   if(t===undefined)return false;
   if(f>=v.nf[M.me]||v.sn[M.me][f])return false;
   var o=v.fl[M.me][f];return !o||o.t===t;
