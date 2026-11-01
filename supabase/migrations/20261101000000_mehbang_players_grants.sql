@@ -1,6 +1,8 @@
 -- مهبانگ گیم: ثبت بازیکنان و هدیهٔ سکهٔ ادمین
--- ۱) در Supabase بخش SQL Editor این فایل را یک‌جا اجرا کن.
--- ۲) خط ADMIN_EMAIL را قبل از اجرا با ایمیل ادمین عوض کن (همان کاربری که در Authentication می‌سازی).
+-- این فایل با اتصال گیت‌هاب خودکار اجرا می‌شود (یا در SQL Editor دستی).
+-- ایمیل ادمین در مخزن عمومی نیست: بعد از اجرا، یک بار این خط را در SQL Editor بزن:
+--   insert into public.admins(email) values ('ایمیل-ادمین@example.com');
+-- و همان ایمیل را در Authentication ← Users بساز.
 
 create table if not exists public.players(
   uid text primary key,
@@ -18,15 +20,17 @@ create table if not exists public.grants(
 );
 create index if not exists grants_uid_idx on public.grants(uid) where claimed_at is null;
 
+create table if not exists public.admins(email text primary key);
+alter table public.admins enable row level security; -- بدون سیاست: از بیرون خوانده نمی‌شود
 alter table public.players enable row level security;
 alter table public.grants enable row level security;
 
 drop policy if exists admin_players_sel on public.players;
 drop policy if exists admin_grants_sel on public.grants;
 drop policy if exists admin_grants_ins on public.grants;
-create policy admin_players_sel on public.players for select to authenticated using ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
-create policy admin_grants_sel on public.grants for select to authenticated using ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
-create policy admin_grants_ins on public.grants for insert to authenticated with check ((auth.jwt()->>'email') = 'ADMIN_EMAIL');
+create policy admin_players_sel on public.players for select to authenticated using (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
+create policy admin_grants_sel on public.grants for select to authenticated using (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
+create policy admin_grants_ins on public.grants for insert to authenticated with check (exists (select 1 from public.admins a where a.email = (auth.jwt()->>'email')));
 
 -- بازیکن‌ها فقط از این دو تابع می‌توانند استفاده کنند؛ به جدول‌ها دسترسی مستقیم ندارند
 create or replace function public.mb_register(p_uid text, p_name text) returns void
