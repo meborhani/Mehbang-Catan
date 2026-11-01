@@ -1704,7 +1704,11 @@ async function entropyStep(p,st){
   S.entropy++;render();
 }
 var TMR=null;
-function timerOn(){return ROLE==='host'&&!!S&&S.players.some(function(q){return q.remote;});}
+function timerOn(){
+  if(!S)return false;
+  if(ROLE==='host')return S.players.some(function(q){return q.remote;});
+  return ROLE==='solo'&&S.players.some(function(q){return !q.ai&&!q.remote;});
+}
 function limitFor(p){return p.idle>=1?30:60;}
 function tScale(){return window.__TSCALE||1;}
 function armTimer(p,st,sec){
@@ -1732,7 +1736,7 @@ function strikeCheck(p){
   p.idle++;
   if(p.idle>=2&&p.remote){kickPlayer(p);return;}
   log(p.name+' در این نوبت هیچ کاری نکرد.');
-  toastTo(p,'اخطار! نوبت بعدی فقط ۳۰ ثانیه وقت داری. اگر دوباره کاری نکنی از بازی حذف می‌شوی.');
+  toastTo(p,p.remote?'اخطار! نوبت بعدی فقط ۳۰ ثانیه وقت داری. اگر دوباره کاری نکنی از بازی حذف می‌شوی.':'نوبت بعدی فقط ۳۰ ثانیه وقت داری.');
 }
 function kickPlayer(p){
   var seat=p.id,l=NET.links[seat];
