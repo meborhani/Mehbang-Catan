@@ -1,7 +1,7 @@
 {
-  "name": "سیطره کتان",
-  "short_name": "کتان",
-  "description": "بازی استراتژیک ۲ تا ۶ نفره با تم‌های مختلف و اتاق آنلاین",
+  "name": "Mehbang Game",
+  "short_name": "Mehbang",
+  "description": "مجموعه بازی‌های آنلاین: کتان، شطرنج، منچ، دوز و چهار در ردیف",
   "lang": "fa",
   "dir": "rtl",
   "start_url": "./",
