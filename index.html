@@ -689,6 +689,32 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-ac{gap:6px}.jz-ac .btn{min-width:0;flex:1}
 @media (orientation:landscape) and (max-height:600px){.hb-in.gm.jzg{display:flex;flex-direction:column}.hb-in.gm.jzg>*{grid-column:auto}}
 .hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
+
+.pkw{position:absolute;inset:0;align-items:stretch;display:flex;flex-direction:column;padding:4px 8px;gap:3px}
+.pk-top{display:flex;align-items:center;gap:8px;justify-content:space-between}.pk-ti{font-size:clamp(11px,2.6dvh,14px);color:var(--ink-dim);flex:1;text-align:center}
+.pk-tb{position:relative;flex:1;min-height:0;border-radius:50% / 46%;background:radial-gradient(ellipse at center,#14633a,#0b3b24);border:3px solid #5a3a1e;margin:2px 4% 0}
+.pk-s{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:0;width:clamp(58px,14vw,100px);font-size:clamp(9px,2.3dvh,12px);line-height:1.15;text-align:center}
+.pk-s.on .pk-n{background:var(--ember);color:#000}.pk-s.fd{opacity:.45}
+.pk-n{background:rgba(0,0,0,.55);border-radius:8px;padding:0 5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pk-n em{font-style:normal;background:#fff;color:#000;border-radius:50%;padding:0 3px;margin-inline-end:3px;font-weight:700}
+.pk-ch{color:#ffe08a;white-space:nowrap}.pk-bt{background:#ffd24d;color:#000;border-radius:10px;padding:0 6px;font-weight:700}.pk-f{color:#ccc}
+.pk-cd{display:flex;gap:1px;justify-content:center;min-height:clamp(16px,4.2dvh,26px)}
+.pc{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:clamp(20px,4.4dvh,32px);height:clamp(28px,6dvh,44px);border-radius:4px;font-size:clamp(11px,2.5dvh,16px);line-height:1;border:1px solid #0006}
+.pc b{font-weight:700}.pc u{text-decoration:none;font-size:1.05em}
+.pc.sm{width:clamp(14px,3.2dvh,22px);height:clamp(20px,4.4dvh,30px);font-size:clamp(8px,1.9dvh,12px)}
+.pc.cl{background:#fff;color:#111}.pc.cl.rd{color:#c4161c}
+.pc.th{background:#1a1f3a;color:#e8e8ff;border-color:#8890ff}.pc.th.rd{color:#ff7a8a}
+.pc.bk{background:repeating-linear-gradient(45deg,#24408a,#24408a 3px,#16295c 3px,#16295c 6px);border-color:#9fb4ff}
+.pc.ph{background:rgba(0,0,0,.25);border:1px dashed #fff4}
+.pk-mid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:2px;width:50%}
+.pk-bd{display:flex;gap:3px}.pk-pot{color:#ffe08a;font-weight:700;font-size:clamp(11px,2.6dvh,15px)}.pk-lg{font-size:clamp(9px,2.2dvh,12px);color:#fff;text-align:center;max-height:2.6em;overflow:hidden}
+.pk-ctl{display:flex;gap:5px;align-items:center;justify-content:center;flex-wrap:nowrap;min-height:clamp(30px,8dvh,40px)}.pk-ctl .btn{min-height:clamp(28px,7dvh,36px);padding:2px 8px;font-size:clamp(11px,2.6dvh,14px);white-space:nowrap}
+.pk-am{min-width:34px;text-align:center}.pk-q{font-size:12px}
+.pk-end{position:absolute;inset:8% 14%;background:rgba(5,8,20,.94);border:1px solid var(--line);border-radius:14px;padding:8px 12px;display:flex;flex-direction:column;gap:3px;overflow:hidden;font-size:clamp(11px,2.6dvh,14px)}
+.pk-end>div:not(.mg-r){display:flex;justify-content:space-between}.pk-end .up b{color:#6be08a}.pk-end .dn b{color:#ff8a8a}
+.rot{display:none}
+#mini.land .rot{display:none}
+@media (orientation:portrait){#mini.land>.hb-in{display:none !important}#mini.land .rot{display:flex;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:var(--void);font-size:16px;text-align:center;padding:20px}#mini.land .rot b{font-size:56px}}
+.hb-in.gm.pkg{display:block !important;padding:0;max-width:none}
 </style>
 </head>
 <body>
@@ -3592,12 +3618,14 @@ function ecoCharge(fee){
   ECO.b-=fee;ecoSave();ecoPaint();toast(fa(fee)+' سکه ورودی کم شد · '+fa(ECO.b)+' مانده');
   return true;
 }
+function ecoNeed(g,cfg){return g.type==='poker'?(cfg.bl||1)*20:(g.type==='tavla'?10:ECO_FEE);}
 function ecoPayClamp(fee){if(!ECO_ON)return;ECO.b=Math.max(0,ECO.b-fee);ecoSave();ecoPaint();}
 /* ---------- game hub: small online two-player games ---------- */
 var MGS={
   ttt:{id:'ttt',type:'grid',name:'دوز',sub:'سه نشان در یک ردیف',w:3,h:3,k:3,grav:false,max:2},
   c4:{id:'c4',type:'grid',name:'چهار در ردیف',sub:'چهار مهره را در یک خط بچین',w:7,h:6,k:4,grav:true,max:2},
   chess:{id:'chess',type:'chess',name:'شطرنج',sub:'نبرد کلاسیک دو نفره',w:8,h:8,max:2},
+  poker:{id:'poker',type:'poker',name:'پوکر',sub:'تگزاس هولدم با سکه‌های مهبانگ؛ فقط افقی',w:0,h:0,max:9,land:true},
   jaliz:{id:'jaliz',type:'jaliz',name:'جالیز',sub:'بکار، معامله کن و برداشت کن؛ ۲ تا ۵ نفره',w:0,h:0,max:5},
   manch:{id:'manch',type:'manch',name:'منچ',sub:'۲ تا ۴ نفره؛ تاس بریز و مهره‌ها را به خانه برسان',w:11,h:11,max:4}
 };
@@ -4170,10 +4198,309 @@ function jzActOk(f){
   var o=v.fl[M.me][f];return !o||o.t===t;
 }
 
+/* ---- poker (Texas hold'em, stakes are Mehbang coins) ---- */
+var PK_CAT=['کارت بالا','یک جفت','دو جفت','سه‌تایی','استریت','فلاش','فول‌هاوس','چهارتایی','استریت فلاش'];
+var PK_SU=['♠','♥','♦','♣'],PK_RK=['۲','۳','۴','۵','۶','۷','۸','۹','۱۰','J','Q','K','A'];
+function pkR(c){return c%13;}function pkS(c){return (c/13)|0;}
+function pk5(cs){
+  var r=cs.map(pkR).sort(function(a,b){return b-a;}),fl=cs.every(function(c){return pkS(c)===pkS(cs[0]);});
+  var cnt={};r.forEach(function(v){cnt[v]=(cnt[v]||0)+1;});
+  var gr=Object.keys(cnt).map(function(k){return [cnt[k],+k];}).sort(function(a,b){return b[0]-a[0]||b[1]-a[1];});
+  var st=false,hi=r[0];
+  if(gr.length===5){if(r[0]-r[4]===4)st=true;else if(r[0]===12&&r[1]===3&&r[2]===2&&r[3]===1&&r[4]===0){st=true;hi=3;}}
+  var cat;
+  if(st&&fl)cat=8;else if(gr[0][0]===4)cat=7;else if(gr[0][0]===3&&gr[1][0]===2)cat=6;else if(fl)cat=5;else if(st)cat=4;
+  else if(gr[0][0]===3)cat=3;else if(gr[0][0]===2&&gr[1][0]===2)cat=2;else if(gr[0][0]===2)cat=1;else cat=0;
+  var tie=st?[hi]:gr.map(function(g){return g[1];}),sc=cat,i;
+  for(i=0;i<5;i++)sc=sc*15+(tie[i]===undefined?0:tie[i]+1);
+  return sc;
+}
+function pkBest(cs){
+  var best=-1,n=cs.length;
+  (function rec(start,pk){
+    if(pk.length===5){var v=pk5(pk);if(v>best)best=v;return;}
+    for(var i=start;i<n;i++){pk.push(cs[i]);rec(i+1,pk);pk.pop();}
+  })(0,[]);
+  return best;
+}
+function pkCatOf(sc){return Math.floor(sc/Math.pow(15,5));}
+function pkSum(a){var s=0;a.forEach(function(v){s+=v;});return s;}
+function pkInit(){
+  var cfg=M.pkcfg||{end:'hands',lim:10,bl:1},i,x;
+  x={cfg:{end:cfg.end,lim:cfg.lim,bl:cfg.bl},t0:Date.now(),hn:0,ch:[],st0:[],dealer:-1,deck:[],hole:[],board:[],st:'idle',bet:[],tot:[],fold:[],al:[],act:[],cur:0,minr:0,rv:[],lg:'',poll:null,endAfter:false,nxAt:0};
+  for(i=0;i<M.n;i++){
+    var c=M.ai[i]?100:(i===0&&M.mode!=='guest'?(ECO_ON?ECO.b:100):((M.bal&&M.bal[i])||100));
+    x.ch.push(c);x.st0.push(c);x.hole.push([]);x.bet.push(0);x.tot.push(0);x.fold.push(false);x.al.push(false);x.act.push(false);x.rv.push(false);
+  }
+  M.x=x;
+  pkStartHand();
+}
+function pkNextAlive(from,pred){
+  var n=M.n;for(var k=1;k<=n;k++){var s=(from+k)%n;if(pred(s))return s;}return -1;
+}
+function pkStartHand(){
+  var x=M.x,n=M.n,i;
+  clearTimeout(M.t2);
+  for(i=0;i<n;i++)if(M.ai[i]&&x.ch[i]<=0)x.ch[i]=100;
+  var alive=[];for(i=0;i<n;i++)if(x.ch[i]>0)alive.push(i);
+  var hum=alive.filter(function(s){return !M.ai[s];}).length;
+  if(alive.length<2||hum<1||x.endAfter||(x.cfg.end==='hands'&&x.hn>=x.cfg.lim)||(x.cfg.end==='time'&&Date.now()-x.t0>=x.cfg.lim*60000)){pkEndGame();return;}
+  x.hn++;x.board=[];x.st='pre';x.poll=x.poll;x.lg='';
+  var d=[];for(i=0;i<52;i++)d.push(i);x.deck=shuffle(d);
+  for(i=0;i<n;i++){
+    x.fold[i]=x.ch[i]<=0;x.al[i]=false;x.bet[i]=0;x.tot[i]=0;x.act[i]=false;x.rv[i]=false;
+    x.hole[i]=x.ch[i]>0?[x.deck.pop(),x.deck.pop()]:[];
+  }
+  var inH=function(s){return x.ch[s]>0;};
+  x.dealer=pkNextAlive(x.dealer<0?n-1:x.dealer,inH);
+  var sb,bb;
+  if(alive.length===2){sb=x.dealer;bb=pkNextAlive(sb,inH);}
+  else{sb=pkNextAlive(x.dealer,inH);bb=pkNextAlive(sb,inH);}
+  var unit=x.cfg.bl;
+  pkPay(sb,unit);pkPay(bb,unit*2);
+  x.cur=unit*2;x.minr=unit*2;
+  var first=pkNextAlive(bb,function(s){return !x.fold[s]&&!x.al[s];});
+  if(alive.length===2)first=sb;
+  if(first<0||x.fold[first]||x.al[first]){pkStreet();return;}
+  M.turn=first;
+  pkNeedAct();
+}
+function pkNeedAct(){
+  var x=M.x,cnt=0;
+  for(var s=0;s<M.n;s++)if(!x.fold[s]&&!x.al[s])cnt++;
+  if(cnt<2&&x.bet[M.turn]>=x.cur){pkStreet();}
+}
+function pkPay(s,p){var x=M.x;p=Math.min(p,x.ch[s]);x.ch[s]-=p;x.bet[s]+=p;x.tot[s]+=p;if(x.ch[s]===0)x.al[s]=true;return p;}
+function pkLive(){var x=M.x,o=[];for(var s=0;s<M.n;s++)if(!x.fold[s]&&x.hole[s].length)o.push(s);return o;}
+function pkSync(){
+  if(!ECO_ON||!M||M.mode==='guest')return;
+  ECO.b=Math.max(0,Math.floor(M.x.ch[0]));ecoSave();ecoPaint();
+}
+function pkAfterAct(seat){
+  var x=M.x,live=pkLive();
+  if(live.length===1){
+    var w=live[0],pot=pkSum(x.tot);x.ch[w]+=pot;x.lg=M.names[w]+' برنده شد (بقیه فولد کردند) +'+fa(pot);
+    x.st='show';pkSync();return;
+  }
+  var nxt=pkNextAlive(seat,function(s){return !x.fold[s]&&!x.al[s]&&(!x.act[s]||x.bet[s]<x.cur);});
+  if(nxt>=0)M.turn=nxt;else pkStreet();
+}
+function pkStreet(){
+  var x=M.x,i;
+  if(x.st==='river'){pkShow();return;}
+  for(i=0;i<M.n;i++){x.bet[i]=0;x.act[i]=false;}
+  x.cur=0;x.minr=x.cfg.bl*2;
+  if(x.st==='pre'){x.board=[x.deck.pop(),x.deck.pop(),x.deck.pop()];x.st='flop';}
+  else if(x.st==='flop'){x.board.push(x.deck.pop());x.st='turn';}
+  else{x.board.push(x.deck.pop());x.st='river';}
+  var can=[];for(i=0;i<M.n;i++)if(!x.fold[i]&&!x.al[i])can.push(i);
+  if(can.length<2){pkStreet();return;}
+  M.turn=pkNextAlive(x.dealer,function(s){return !x.fold[s]&&!x.al[s];});
+}
+function pkShow(){
+  var x=M.x,live=pkLive(),sc={},i,rem=x.tot.slice(),txt=[];
+  live.forEach(function(s){sc[s]=pkBest(x.hole[s].concat(x.board));x.rv[s]=true;});
+  var guard=0;
+  while(rem.some(function(v){return v>0;})&&guard++<20){
+    var lvl=1e9;for(i=0;i<M.n;i++)if(rem[i]>0&&!x.fold[i])lvl=Math.min(lvl,rem[i]);
+    if(lvl===1e9){lvl=Math.max.apply(null,rem);}
+    var pot=0,elig=[];
+    for(i=0;i<M.n;i++)if(rem[i]>0){var t=Math.min(rem[i],lvl);pot+=t;rem[i]-=t;if(!x.fold[i])elig.push(i);}
+    if(!elig.length)elig=live.slice();
+    var best=-1,ws=[];elig.forEach(function(s){if(sc[s]>best){best=sc[s];ws=[s];}else if(sc[s]===best)ws.push(s);});
+    var share=Math.floor(pot/ws.length),extra=pot-share*ws.length;
+    ws.forEach(function(s,k){x.ch[s]+=share+(k===0?extra:0);});
+    txt.push(ws.map(function(s){return M.names[s];}).join('، ')+' ('+PK_CAT[pkCatOf(best)]+') +'+fa(share));
+  }
+  x.lg=txt.join(' · ');x.st='show';pkSync();
+}
+function pkEndGame(){
+  var x=M.x;M.over=true;x.st='end';
+  var best=-1e9,w=[];
+  x.ch.forEach(function(c,i){var net=c-x.st0[i];if(net>best){best=net;w=[i];}else if(net===best)w.push(i);});
+  if(w.length===1){M.res=w[0];M.wins[w[0]]++;}else M.res='draw';
+  pkSync();
+}
+function pkPollCheck(){
+  var x=M.x,p=x.poll;if(!p)return;
+  if(p.y.length*2>M.n){x.endAfter=true;x.poll=null;x.lg='رأی‌گیری موافق بود؛ بازی بعد از این دست تمام می‌شود.';}
+  else if(p.n.length*2>=M.n){x.poll=null;x.lg='رأی‌گیری رد شد؛ بازی ادامه دارد.';}
+}
+function pkAct(seat,kind,m){
+  var x=M.x,a=kind==='pk'&&m&&m.a;if(!a||M.over||M.wait)return false;
+  var ok=false;
+  if(a==='pp'){
+    if(seat!==0||x.poll||x.endAfter)return false;
+    x.poll={y:[0],n:[]};pkPollCheck();ok=true;
+  }else if(a==='pv'){
+    var p=x.poll;if(!p||p.y.indexOf(seat)>=0||p.n.indexOf(seat)>=0)return false;
+    (m.v?p.y:p.n).push(seat);pkPollCheck();ok=true;
+  }else if(a==='nx'){
+    if(seat!==0||x.st!=='show')return false;
+    pkStartHand();ok=true;
+  }else{
+    if(seat!==M.turn||x.st==='show'||x.st==='idle'||x.fold[seat]||x.al[seat])return false;
+    var toCall=x.cur-x.bet[seat];
+    if(a==='f'){x.fold[seat]=true;x.lg='';x.act[seat]=true;ok=true;}
+    else if(a==='c'){pkPay(seat,toCall);x.act[seat]=true;ok=true;}
+    else if(a==='r'){
+      var maxTo=x.bet[seat]+x.ch[seat],to=Math.min(Math.floor(+m.to||0),maxTo);
+      if(to<=x.cur){pkPay(seat,toCall);x.act[seat]=true;ok=true;}
+      else{
+        if(to<x.cur+x.minr&&to<maxTo)to=Math.min(x.cur+x.minr,maxTo);
+        var before=x.minr;
+        pkPay(seat,to-x.bet[seat]);
+        var rs=x.bet[seat]-x.cur;
+        if(rs>0){
+          x.cur=x.bet[seat];if(rs>=before)x.minr=rs;
+          if(rs>=before)for(var i=0;i<M.n;i++)if(i!==seat)x.act[i]=false;
+        }
+        x.act[seat]=true;ok=true;
+      }
+    }
+    if(ok)pkAfterAct(seat);
+  }
+  if(ok)mgAfter();
+  return ok;
+}
+function pkStrength(seat){
+  var x=M.x,h=x.hole[seat],a=pkR(h[0]),b=pkR(h[1]),hi=Math.max(a,b),lo=Math.min(a,b);
+  if(!x.board.length){
+    var s;
+    if(a===b)s=.5+a/26;else s=.12+hi*.022+lo*.012+(pkS(h[0])===pkS(h[1])?.05:0)+(hi-lo<=2?.04:0);
+    return Math.min(.97,s);
+  }
+  var c=pkCatOf(pkBest(h.concat(x.board)));
+  if(c===0)return .12+hi*.012;
+  return [0,.5,.68,.78,.84,.88,.93,.98,1][c];
+}
+function pkAiAct(seat){
+  var x=M.x,toCall=x.cur-x.bet[seat],pot=pkSum(x.tot),str=pkStrength(seat),r=Math.random();
+  if(toCall<=0){
+    if(str>.62&&r<.65){var to=x.cur+Math.max(x.minr,Math.floor(pot*(str>.85?.8:.5)));pkAct(seat,'pk',{a:'r',to:to});}
+    else pkAct(seat,'pk',{a:'c'});
+  }else{
+    var odds=toCall/(pot+toCall);
+    if(str<odds*.85&&r>.12)pkAct(seat,'pk',{a:'f'});
+    else if(str>.82&&r<.55)pkAct(seat,'pk',{a:'r',to:x.cur+Math.max(x.minr,Math.floor(pot*.7))});
+    else pkAct(seat,'pk',{a:'c'});
+  }
+}
+function pkSchedule(){
+  var cur=M,x=M.x,rn=M.rn;
+  clearTimeout(M.t);clearTimeout(M.t2);
+  if(x.poll){
+    for(var s=1;s<M.n;s++)if(M.ai[s]&&x.poll.y.indexOf(s)<0&&x.poll.n.indexOf(s)<0){
+      (function(seat){M.t2=setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn)return;pkAct(seat,'pk',{a:'pv',v:Math.random()<.55});},window.__FAST?10:1200);})(s);
+      break;
+    }
+  }
+  if(x.st==='show'){
+    cur.t=setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn||cur.x.st!=='show')return;pkStartHand();mgAfter();},window.__FAST?30:6000);
+    return;
+  }
+  if(M.ai[M.turn]&&x.st!=='idle'&&!x.poll)cur.t=setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn)return;var sx=cur.turn;if(cur.ai[sx]&&!cur.x.fold[sx]&&!cur.x.al[sx])pkAiAct(sx);},window.__FAST?15:1100);
+  else if(M.ai[M.turn]&&x.poll)cur.t=setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn)return;var sx=cur.turn;if(cur.ai[sx]&&!cur.x.fold[sx]&&!cur.x.al[sx])pkAiAct(sx);},window.__FAST?15:2200);
+}
+function pkView(seat){
+  var x=M.x;
+  return {st:x.st,hn:x.hn,ch:x.ch,bet:x.bet,tot:x.tot,fold:x.fold,al:x.al,cur:x.cur,minr:x.minr,dealer:x.dealer,board:x.board,
+    hole:x.hole.map(function(h,i){return (i===seat||x.rv[i])&&h.length?h:null;}),has:x.hole.map(function(h){return h.length>0;}),
+    lg:x.lg,poll:x.poll?{y:x.poll.y,n:x.poll.n}:null,cfg:x.cfg,el:Math.floor((Date.now()-x.t0)/1000),
+    net:M.over?x.ch.map(function(c,i){return c-x.st0[i];}):null,ea:x.endAfter};
+}
+function pkV(){return M.mode==='guest'?M.x:pkView(M.me);}
+/* ---- poker UI ---- */
+function pkCard(c,sm,back){
+  if(back)return '<span class="pc bk'+(sm?' sm':'')+'"></span>';
+  var su=pkS(c),red=su===1||su===2;
+  return '<span class="pc '+(M.pkc?'cl':'th')+(red?' rd':'')+(sm?' sm':'')+'"><b>'+PK_RK[pkR(c)]+'</b><u>'+PK_SU[su]+'</u></span>';
+}
+function pkStatus(){
+  var v=pkV(),me=M.me;
+  if(M.over)return 'بازی تمام شد';
+  if(v.st==='show')return v.lg||'پایان دست';
+  if(v.lg)return v.lg;
+  if(M.turn===me)return 'نوبت توست';
+  return M.ai[M.turn]?M.names[M.turn]+' فکر می‌کند…':'نوبت '+M.names[M.turn];
+}
+function pkTimeLeft(v){
+  if(v.cfg.end==='hands')return 'دست '+fa(v.hn)+' از '+fa(v.cfg.lim);
+  if(v.cfg.end==='time'){var left=Math.max(0,v.cfg.lim*60-v.el),m=Math.floor(left/60),s=left%60;return 'زمان '+fa(m)+':'+fa(('0'+s).slice(-2));}
+  return 'دست '+fa(v.hn)+(v.ea?' · آخرین دست':' · رأی‌گیری');
+}
+function pkHtml(){
+  var v=pkV(),me=M.me,n=M.n,i,h='',my=M.turn===me&&!M.over&&v.st!=='show'&&v.st!=='idle'&&!v.fold[me]&&!v.al[me];
+  var pot=pkSum(v.tot);
+  var seats='';
+  for(i=0;i<n;i++){
+    var k=(i-me+n)%n,ang=Math.PI/2+2*Math.PI*k/n,lx=50+41*Math.cos(ang),ty=50+35*Math.sin(ang);
+    var hc=v.hole[i],cards='';
+    if(v.has[i]&&!v.fold[i]){cards=hc?pkCard(hc[0],i!==me)+pkCard(hc[1],i!==me):pkCard(0,true,true)+pkCard(0,true,true);}
+    else if(v.fold[i]&&v.has[i])cards='<small class="pk-f">فولد</small>';
+    seats+='<div class="pk-s'+(i===me?' me':'')+(M.turn===i&&!M.over&&v.st!=='show'?' on':'')+(v.fold[i]?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
+      '<div class="pk-cd">'+cards+'</div><div class="pk-n">'+(v.dealer===i?'<em>D</em>':'')+M.names[i]+'</div><div class="pk-ch">🪙'+fa(v.ch[i])+(v.al[i]&&!v.fold[i]?' · آل‌این':'')+'</div>'+
+      (v.bet[i]>0?'<div class="pk-bt">'+fa(v.bet[i])+'</div>':'')+'</div>';
+  }
+  var board='';for(i=0;i<5;i++)board+=v.board[i]!==undefined?pkCard(v.board[i]):'<span class="pc ph"></span>';
+  var ctl='';
+  if(my){
+    var toCall=v.cur-v.bet[me],chips=v.ch[me],maxTo=v.bet[me]+chips,minTo=Math.min(v.cur+v.minr,maxTo);
+    if(M.rz<minTo||M.rz>maxTo)M.rz=minTo;
+    ctl+='<button class="btn sm" data-pa="f">فولد</button>'+
+      '<button class="btn sm primary" data-pa="c">'+(toCall<=0?'چک':(toCall>=chips?'آل‌این '+fa(chips):'کال '+fa(toCall)))+'</button>';
+    if(maxTo>v.cur){
+      if(M.rzo){
+        ctl+='<button class="btn sm" data-pr="'+minTo+'">حداقل</button><button class="btn sm" data-pr="'+Math.min(maxTo,v.cur+Math.max(v.minr,Math.floor(pot/2)))+'">½ پات</button><button class="btn sm" data-pr="'+Math.min(maxTo,v.cur+Math.max(v.minr,pot))+'">پات</button><button class="btn sm" data-pr="'+maxTo+'">آل‌این</button>'+
+          '<button class="btn sm" data-pstep="-1">−</button><b class="pk-am">'+fa(M.rz)+'</b><button class="btn sm" data-pstep="1">+</button><button class="btn sm primary" data-pa="r">ریز</button>';
+      }else ctl+='<button class="btn sm" data-pa="ro">ریز…</button>';
+    }
+  }else if(!M.over&&v.poll&&M.me!==0&&v.poll.y.indexOf(me)<0&&v.poll.n.indexOf(me)<0){
+    ctl+='<span class="pk-q">پایان بازی؟</span><button class="btn sm primary" data-pa="pvy">موافقم</button><button class="btn sm" data-pa="pvn">مخالفم</button>';
+  }
+  if(!M.over&&!M.rzo){
+    if(M.me===0&&!v.poll&&!v.ea)ctl+='<button class="btn sm" data-pa="pp">رأی‌گیری پایان</button>';
+    if(M.me===0&&v.st==='show')ctl+='<button class="btn sm" data-pa="nx">دست بعد</button>';
+  }
+  var end='';
+  if(M.over&&v.net){
+    end='<div class="pk-end"><b>نتیجهٔ نهایی</b>'+M.names.map(function(nm,i){return {nm:nm,n:v.net[i],i:i};}).sort(function(a,b){return b.n-a.n;}).map(function(r){return '<div class="'+(r.n>=0?'up':'dn')+'"><span>'+r.nm+(r.i===me?' (تو)':'')+'</span><b dir="ltr">'+(r.n>0?'+':'')+fa(r.n)+' 🪙</b></div>';}).join('')+
+      '<div class="mg-r">'+(M.mode!=='guest'&&!M.left?'<button class="btn primary" data-mg="again">بازی دوباره</button>':'')+'<button class="btn" data-mg="back">خروج</button></div></div>';
+  }
+  h='<div class="pkw"><div class="pk-top"><button class="btn sm" data-mg="back">بازگشت</button><span class="pk-ti">پوکر · '+pkTimeLeft(v)+(v.poll?' · رأی‌گیری ('+fa(v.poll.y.length)+' موافق)':'')+'</span><button class="btn sm" data-pa="cs">'+(M.pkc?'کارت: کلاسیک':'کارت: رنگی')+'</button></div>'+
+    '<div class="pk-tb">'+seats+'<div class="pk-mid"><div class="pk-bd">'+board+'</div><div class="pk-pot">پات '+fa(pot)+' 🪙</div><div class="pk-lg" id="mgSt">'+pkStatus()+'</div></div>'+end+'</div>'+
+    '<div class="pk-ctl">'+ctl+'</div></div>';
+  return h;
+}
+function pkClick(t){
+  var el,v=pkV(),me=M.me;
+  if((el=t.closest('[data-pa]'))){
+    var a=el.dataset.pa;
+    if(a==='cs'){M.pkc=!M.pkc;lsSet('mb_pkc',M.pkc?1:0);mgRender();return true;}
+    if(a==='ro'){M.rzo=true;mgRender();return true;}
+    if(a==='f'||a==='c'){M.rzo=false;mgDo('pk',{a:a});return true;}
+    if(a==='r'){M.rzo=false;mgDo('pk',{a:'r',to:M.rz});return true;}
+    if(a==='pp'||a==='nx'){mgDo('pk',{a:a});return true;}
+    if(a==='pvy'||a==='pvn'){mgDo('pk',{a:'pv',v:a==='pvy'});return true;}
+  }
+  if((el=t.closest('[data-pr]'))&&el.closest('.pk-ctl')){M.rz=+el.dataset.pr;mgRender();return true;}
+  if((el=t.closest('[data-pstep]'))){M.rz+=(+el.dataset.pstep)*(v.cfg.bl);mgRender();return true;}
+  return false;
+}
+function pkCfgHtml(){
+  var c=M.pkcfg;
+  function row(lbl,key,items){return '<div class="mg-r"><span class="hb-s">'+lbl+'</span>'+items.map(function(it){return '<button class="btn sm'+(c[key]===it[0]?' primary':'')+'" data-pk="'+key+':'+it[0]+'">'+it[1]+'</button>';}).join('')+'</div>';}
+  var h=row('پایان بازی','end',[['hands','تعداد دست'],['time','زمانی'],['vote','رأی‌گیری']]);
+  if(c.end==='hands')h+=row('تعداد دست','lim',[[5,'۵'],[10,'۱۰'],[20,'۲۰']]);
+  if(c.end==='time')h+=row('مدت (دقیقه)','lim',[[15,'۱۵'],[30,'۳۰'],[60,'۶۰']]);
+  h+=row('بلایند کوچک/بزرگ','bl',[[1,'۱ / ۲'],[2,'۲ / ۴'],[5,'۵ / ۱۰']]);
+  return h;
+}
+
 /* ---- room state ---- */
 function mgNew(g,mode,n){
   clearTimeout(M&&M.t);
-  M={g:g,mode:mode,n:n||(g.max>2?(g.type==='manch'?4:3):2),me:0,names:[],wins:[],ai:[],rn:0,over:false,res:null,line:[],links:{},link:null,srv:null,code:null,wait:false,glob:false,msg:'',t:null,left:false,recd:-1,turn:0,b:[],x:null,sel:-1,promo:null,pn:g.type==='jaliz'?3:4,gs:{fu:[],hd:[]},wt:-1,wj:1,jm:false};
+  M={g:g,mode:mode,n:n||(g.max>2?(g.type==='manch'?4:(g.type==='poker'?4:3)):2),me:0,names:[],wins:[],ai:[],rn:0,over:false,res:null,line:[],links:{},link:null,srv:null,code:null,wait:false,glob:false,msg:'',t:null,left:false,recd:-1,turn:0,b:[],x:null,sel:-1,promo:null,pn:g.type==='jaliz'?3:(g.type==='poker'?4:4),gs:{fu:[],hd:[]},wt:-1,wj:1,jm:false,pkcfg:{end:'hands',lim:10,bl:1},pkc:!!lsGet('mb_pkc',0),rz:0,rzo:false,bal:[],stake:10};
   for(var i=0;i<M.n;i++){M.names.push('');M.wins.push(0);M.ai.push(false);}
   return M;
 }
@@ -4186,6 +4513,7 @@ function mgReset(){
   if(g.type==='grid'){for(i=0;i<g.w*g.h;i++)M.b.push(-1);M.turn=M.rn%2;M.x=null;}
   else if(g.type==='chess'){M.b=CH_START.slice();M.x={cs:[true,true,true,true],ep:-1,hm:0,last:null};M.turn=chWhite();M.rep[chKey(M.b,M.turn,M.x.cs,-1)]=1;}
   else if(g.type==='jaliz'){M.b=[];jzInit();}
+  else if(g.type==='poker'){M.b=[];M.rzo=false;pkInit();}
   else{M.b=[];M.x={tok:[],die:0,ph:'roll',tries:0};for(i=0;i<M.n;i++)M.x.tok.push([-1,-1,-1,-1]);M.turn=M.rn%M.n;}
 }
 function mgClose(){
@@ -4243,6 +4571,7 @@ function mgStatus(){
     return M.res===M.me?'بردی! 🎉':M.names[M.res]+' برد';
   }
   if(M.g.type==='jaliz')return jzStatus();
+  if(M.g.type==='poker')return pkStatus();
   var s=M.turn===M.me?'نوبت توست':(M.ai[M.turn]?M.names[M.turn]+' فکر می‌کند…':'نوبت '+M.names[M.turn]);
   if(M.g.type==='chess'&&chInCheck(chPos(),chColOf(M.turn)))s+=' — کیش!';
   if(M.g.type==='manch'&&M.x.die)s+=' · تاس: '+fa(M.x.die);
@@ -4251,6 +4580,7 @@ function mgStatus(){
 function mgBoardHtml(){
   var g=M.g,i,h='';
   if(g.type==='jaliz')return jzHtml();
+  if(g.type==='poker')return pkHtml();
   if(g.type==='grid'){
     for(i=0;i<M.b.length;i++){
       var v=M.b[i];
@@ -4290,7 +4620,8 @@ function mgRender(){
   var el=$('#mini'),h='',g=M.g,i;
   if(M.mode==='menu'&&!M.wait){
     h=mgShell('<div class="hb-s">'+g.sub+'</div>'+
-      (g.max>2?'<div class="hb-s">تعداد بازیکنان در بازی با رایانه</div><div class="mg-r">'+[2,3,4,5].filter(function(n){return n<=g.max;}).map(function(n){return '<button class="btn'+(M.pn===n?' primary':'')+'" data-pn="'+n+'">'+fa(n)+'</button>';}).join('')+'</div>':'')+
+      (g.max>2?'<div class="hb-s">تعداد بازیکنان در بازی با رایانه</div><div class="mg-r">'+[2,3,4,5,6,7,8,9].filter(function(n){return n<=g.max;}).map(function(n){return '<button class="btn'+(M.pn===n?' primary':'')+'" data-pn="'+n+'">'+fa(n)+'</button>';}).join('')+'</div>':'')+
+      (g.type==='poker'?pkCfgHtml():'')+
       '<button class="btn primary big" data-mg="ai">بازی با هوش مصنوعی</button>'+
       '<button class="btn big" data-mg="mk">ساخت اتاق آنلاین</button>'+
       '<div class="mg-r"><input id="mgCode" class="inp code" maxlength="5" placeholder="کد اتاق" dir="ltr" autocomplete="off" autocapitalize="characters"><button class="btn" data-mg="join">ورود به اتاق</button></div>'+
@@ -4301,12 +4632,12 @@ function mgRender(){
     var host=M.mode!=='guest';
     h=mgShell((host?'<div class="hb-s">این کد را برای دوستت بفرست تا وارد شود</div><div class="mg-code">'+M.code+'</div>':'<div class="hb-s">وارد اتاق شدی؛ منتظر شروع بازی توسط میزبان…</div>')+
       '<div class="mg-pl">'+seats+'</div>'+
-      (host&&g.max>2?'<div class="hb-s">تعداد بازیکنان (جاهای خالی را رایانه پر می‌کند)</div><div class="mg-r">'+[2,3,4,5].filter(function(n){return n<=g.max;}).map(function(n){return '<button class="btn'+(M.n===n?' primary':'')+'" data-ln="'+n+'">'+fa(n)+'</button>';}).join('')+'</div><button class="btn primary big" data-mg="start">شروع بازی</button>':'')+
+      (host&&g.type==='poker'?pkCfgHtml():'')+(host&&g.max>2?'<div class="hb-s">تعداد بازیکنان (جاهای خالی را رایانه پر می‌کند)</div><div class="mg-r">'+[2,3,4,5,6,7,8,9].filter(function(n){return n<=g.max;}).map(function(n){return '<button class="btn'+(M.n===n?' primary':'')+'" data-ln="'+n+'">'+fa(n)+'</button>';}).join('')+'</div><button class="btn primary big" data-mg="start">شروع بازی</button>':'')+
       (host?'<div class="mg-r"><button class="btn" data-mg="copy">کپی کد</button><button class="btn" data-mg="inv">دعوت دوستان</button></div>':'')+
       (M.msg?'<div class="mg-st">'+M.msg+'</div>':''));
   }else{
     var pls='';
-    if(g.type!=='jaliz')for(i=0;i<M.n;i++)pls+='<div class="mg-p'+(!M.over&&M.turn===i?' on':'')+'">'+mgMark(i)+'<span>'+M.names[i]+(i===M.me?' (تو)':'')+'</span><b>'+fa(M.wins[i])+'</b></div>';
+    if(g.type!=='jaliz'&&g.type!=='poker')for(i=0;i<M.n;i++)pls+='<div class="mg-p'+(!M.over&&M.turn===i?' on':'')+'">'+mgMark(i)+'<span>'+M.names[i]+(i===M.me?' (تو)':'')+'</span><b>'+fa(M.wins[i])+'</b></div>';
     var canAgain=M.over&&!M.left&&(M.mode==='ai'||M.mode==='host');
     var extra='';
     if(g.type==='manch'){
@@ -4315,12 +4646,15 @@ function mgRender(){
         '<div class="mn-base">'+M.x.tok.map(function(tk,s){var n=tk.filter(function(p){return p===-1;}).length,fin=tk.filter(function(p){return p>=40;}).length;return '<span>'+mgMark(s)+' '+fa(n)+' پایگاه · '+fa(fin)+' خانه</span>';}).join('')+'</div>'+
         (!M.over&&M.turn===M.me&&M.x.ph==='move'&&M.x.tok[M.me].indexOf(-1)>=0&&M.x.die===6?'<div class="mg-r"><button class="btn" data-bt="1">بیرون آوردن مهره از پایگاه</button></div>':'');
     }
-    h=mgShell((pls?'<div class="mg-pl">'+pls+'</div>':'')+'<div class="mg-st" id="mgSt">'+mgStatus()+'</div>'+mgBoardHtml()+extra+
+    if(g.type==='poker'){h='<div class="hb-in gm pkg">'+pkHtml()+'</div>';}
+    else h=mgShell((pls?'<div class="mg-pl">'+pls+'</div>':'')+'<div class="mg-st" id="mgSt">'+mgStatus()+'</div>'+mgBoardHtml()+extra+
       '<div class="mg-r">'+(!M.over&&g.max===2&&M.mode!=='menu'?'<button class="btn sm" data-mg="resign">تسلیم</button>':'')+(canAgain?'<button class="btn primary" data-mg="again">دوباره</button>':'')+
       (M.over&&M.mode==='guest'&&!M.left?'<div class="hb-s" style="margin:0">منتظر شروع دوباره توسط میزبان…</div>':'')+'</div>'+
       (M.mode==='host'||M.mode==='guest'?'<div class="mg-r">'+MG_SAY.map(function(s,j){return '<button class="btn sm" data-say="'+j+'">'+s+'</button>';}).join('')+'</div>':''),g.type==='jaliz'?'gm jzg':'gm');
   }
-  el.innerHTML='';el.insertAdjacentHTML('beforeend',h);mgFit();
+  el.innerHTML='';el.insertAdjacentHTML('beforeend',h);
+  if(g.land)el.insertAdjacentHTML('beforeend','<div class="rot"><b>↻</b><span>گوشی را بچرخان؛ این بازی فقط افقی است</span><button class="btn sm" data-mg="back">بازگشت</button></div>');
+  el.classList.toggle('land',!!g.land);mgFit();
 }
 
 function mgFit(){
@@ -4350,7 +4684,7 @@ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&(e.ke
 /* ---- networking ---- */
 function mgSend(seat,m){var l=M.links[seat];if(l)l.send(m);}
 function mgView(seat){
-  return {t:'st',g:M.g.id,you:seat,n:M.n,names:M.names,wins:M.wins,ai:M.ai,rn:M.rn,turn:M.turn,over:M.over,res:M.res,line:M.line,b:M.b,x:M.g.type==='jaliz'?jzView(seat):M.x,uid:PROF.id};
+  return {t:'st',g:M.g.id,you:seat,n:M.n,names:M.names,wins:M.wins,ai:M.ai,rn:M.rn,turn:M.turn,over:M.over,res:M.res,line:M.line,b:M.b,x:M.g.type==='jaliz'?jzView(seat):(M.g.type==='poker'?pkView(seat):M.x),uid:PROF.id};
 }
 function mgSync(){
   if(!M||M.mode!=='host'||M.wait)return;
@@ -4369,12 +4703,18 @@ function mgRecord(){
   g.push({t:Date.now(),w:w,p:p,n:M.n,o:1,g:M.g.id});
   lsSet(PK.g,g.slice(-400));
 }
+function mgEntry(){
+  var g=M.g;
+  if(g.land)return ecoCan(ecoNeed(g,M.pkcfg));
+  return ecoCharge();
+}
 function mgAfter(){
   if(!M)return;
   mgRender();mgSync();mgRecord();mgAuto();
 }
 function mgAct(seat,kind,m){
   if(M&&!M.over&&!M.wait&&M.g.type==='jaliz')return jzAct(seat,kind,m);
+  if(M&&!M.over&&!M.wait&&M.g.type==='poker')return pkAct(seat,kind,m);
   if(!M||M.over||M.wait||seat!==M.turn)return false;
   var g=M.g,ok=false;
   if(g.type==='grid'){
@@ -4418,12 +4758,13 @@ function mgResign(seat){
 }
 function mgDo(kind,m){
   if(!M||M.over||M.wait)return;
-  if(M.g.type!=='jaliz'&&M.turn!==M.me)return;
+  if(M.g.type!=='jaliz'&&M.g.type!=='poker'&&M.turn!==M.me)return;
   if(M.mode==='guest'){M.link&&M.link.send({t:kind,m:m});return;}
   mgAct(M.me,kind,m);
 }
 function mgAuto(){
   if(M&&!M.over&&!M.wait&&M.g.type==='jaliz'){jzSchedule();return;}
+  if(M&&!M.over&&!M.wait&&M.g.type==='poker'){pkSchedule();return;}
   if(!M||M.over||M.wait||!M.ai[M.turn])return;
   var cur=M,seat=M.turn,ph=M.x&&M.x.ph,rn=M.rn;
   clearTimeout(M.t);
@@ -4438,7 +4779,7 @@ function mgAuto(){
 }
 function g_delay(){return M&&M.g.type==='manch'?650:450;}
 function mgBegin(){
-  if(!ecoCharge())return;
+  if(!mgEntry())return;
   if(M.mode==='menu')M.mode='host';
   M.wait=false;M.glob=false;M.rn=0;
   for(var i=0;i<M.n;i++)if(!M.names[i]){M.names[i]='رایانه'+(M.n>2?' '+fa(i):'');M.ai[i]=true;}
@@ -4466,12 +4807,12 @@ function mgHost(){
         if(!cur.wait){link.send({t:'no',why:'بازی شروع شده است'});return;}
         for(s=1;s<cur.n;s++)if(!cur.names[s])break;
         if(s>=cur.n){link.send({t:'no',why:'اتاق پر است'});return;}
-        cur.links[s]=link;cur.names[s]=cleanName(d.name)||'مهمان';
+        cur.links[s]=link;cur.names[s]=cleanName(d.name)||'مهمان';cur.bal[s]=Math.max(0,Math.min(1e6,+d.bal|0))||100;
         var uid=cleanUid(d.uid);if(uid)addRecent([{uid:uid,name:cur.names[s]}]);
         link.onclose=function(){if(M===cur)mgLeaveSeat(s);};
         mgLob();
         if(cur.g.max===2)mgBegin();else mgRender();
-      }else if(seat>0&&(d.t==='mv'||d.t==='rl'||d.t==='jz')){
+      }else if(seat>0&&(d.t==='mv'||d.t==='rl'||d.t==='jz'||d.t==='pk')){
         mgAct(seat,d.t,d.m);
       }else if(seat>0&&d.t==='rs'){
         mgResign(seat);
@@ -4521,6 +4862,19 @@ function mgJoin(code){
         if(d.b.length!==64||d.b.some(function(v){return !(v%1===0&&v>=-6&&v<=6);}))return;
         var q=d.x;if(!q||!Array.isArray(q.cs)||q.cs.length!==4||!(q.ep>=-1&&q.ep<64)||!(q.hm>=0&&q.hm<1000))return;
         x={cs:q.cs.map(Boolean),ep:q.ep|0,hm:q.hm|0,last:Array.isArray(q.last)&&q.last.length===2&&q.last.every(function(v){return v>=0&&v<64;})?[q.last[0]|0,q.last[1]|0]:null};
+      }else if(g.type==='poker'){
+        var q2=d.x;
+        function oI(v,lo,hi){return v%1===0&&v>=lo&&v<=hi;}
+        function arrN(a,len,lo,hi){return Array.isArray(a)&&a.length===len&&a.every(function(v){return oI(v,lo,hi);});}
+        if(!q2||!arrN(q2.ch,n,0,1e7)||!arrN(q2.bet,n,0,1e7)||!arrN(q2.tot,n,0,1e7)||!Array.isArray(q2.fold)||q2.fold.length!==n||!Array.isArray(q2.al)||q2.al.length!==n||!Array.isArray(q2.has)||q2.has.length!==n)return;
+        if(!Array.isArray(q2.board)||q2.board.length>5||!q2.board.every(function(v){return oI(v,0,51);})||!Array.isArray(q2.hole)||q2.hole.length!==n)return;
+        if(!q2.hole.every(function(hh){return hh===null||(Array.isArray(hh)&&hh.length===2&&hh.every(function(v){return oI(v,0,51);}));}))return;
+        if(['idle','pre','flop','turn','river','show','end'].indexOf(q2.st)<0||!oI(q2.cur,0,1e7)||!oI(q2.minr,0,1e7)||!oI(q2.dealer,-1,n-1)||!q2.cfg||['hands','time','vote'].indexOf(q2.cfg.end)<0||!oI(q2.cfg.lim,0,1000)||!oI(q2.cfg.bl,1,100)||!oI(q2.hn,0,100000)||!oI(q2.el,0,1e7))return;
+        var pl2=null;
+        if(q2.poll){if(!Array.isArray(q2.poll.y)||!Array.isArray(q2.poll.n)||!q2.poll.y.every(function(v){return oI(v,0,n-1);})||!q2.poll.n.every(function(v){return oI(v,0,n-1);}))return;pl2={y:q2.poll.y.slice(),n:q2.poll.n.slice()};}
+        var nt=null;if(q2.net){if(!arrN(q2.net,n,-1e7,1e7))return;nt=q2.net.slice();}
+        x={st:q2.st,hn:q2.hn,ch:q2.ch.slice(),bet:q2.bet.slice(),tot:q2.tot.slice(),fold:q2.fold.map(Boolean),al:q2.al.map(Boolean),cur:q2.cur,minr:q2.minr,dealer:q2.dealer,board:q2.board.slice(),
+          hole:q2.hole.map(function(hh){return hh?hh.slice():null;}),has:q2.has.map(Boolean),lg:String(q2.lg||'').replace(/[<>&"'`\\]/g,'').slice(0,120),poll:pl2,cfg:{end:q2.cfg.end,lim:q2.cfg.lim,bl:q2.cfg.bl},el:q2.el,net:nt,ea:!!q2.ea};
       }else if(g.type==='jaliz'){
         var y=d.x;
         function okI(v,lo,hi){return v%1===0&&v>=lo&&v<=hi;}
@@ -4545,11 +4899,12 @@ function mgJoin(code){
       cur.res=d.res==='draw'?'draw':(d.res===0||(d.res>0&&d.res<n)?d.res|0:null);
       cur.line=d.line.filter(function(v){return typeof v==='number'&&v>=0&&v<cur.b.length;});
       cur.rn=+d.rn|0;if(cur.rn!==oldRn||!wasOver){cur.sel=-1;cur.promo=null;}
-      if(cur.paidRn!==cur.rn){cur.paidRn=cur.rn;ecoPayClamp(ECO_FEE);}
+      if(!cur.g.land&&cur.paidRn!==cur.rn){cur.paidRn=cur.rn;ecoPayClamp(ECO_FEE);}
+      if(cur.g.land&&ECO_ON&&d.x&&d.x.ch&&(d.x.st==='show'||d.x.st==='end')){ECO.b=Math.max(0,d.x.ch[you]|0);ecoSave();ecoPaint();}
       var u1=cleanUid(d.uid);if(u1)addRecent([{uid:u1,name:cur.names[0]}]);
       mgRender();mgRecord();
     };
-    link.send({t:'hi',g:cur.g.id,name:nm,uid:PROF.id});
+    link.send({t:'hi',g:cur.g.id,name:nm,uid:PROF.id,bal:ECO_ON?ECO.b:100});
   },function(){fail('اتاقی با این کد پیدا نشد یا اتصال برقرار نشد');});
 }
 function mgChessClick(sq){
@@ -4582,11 +4937,13 @@ $('#hub').addEventListener('click',function(e){
 $('#mini').addEventListener('click',function(e){
   var t=e.target;if(!M)return;
   if(M.g.type==='jaliz'&&!M.wait&&!M.glob&&M.mode!=='menu'&&jzClick(t))return;
+  if(M.g.type==='poker'&&!M.wait&&!M.glob&&M.mode!=='menu'&&pkClick(t))return;
   var c=t.closest('[data-c]');if(c){mgCellClick(+c.dataset.c);return;}
   var pr=t.closest('[data-pr]');
   if(pr&&M.promo){var pm=M.promo;M.promo=null;M.sel=-1;mgDo('mv',{f:pm.f,t:pm.t,p:+pr.dataset.pr});mgRender();return;}
   var s=t.closest('[data-say]');
   if(s){var j=+s.dataset.say;mgSay(j);if(M.mode==='guest'&&M.link)M.link.send({t:'say',x:j});else Object.keys(M.links).forEach(function(q){mgSend(q,{t:'say',x:j});});return;}
+  var pk2=t.closest('[data-pk]');if(pk2&&(M.mode==='menu'||M.wait)){var kv=pk2.dataset.pk.split(':');M.pkcfg[kv[0]]=kv[0]==='end'?kv[1]:+kv[1];if(kv[0]==='end')M.pkcfg.lim=kv[1]==='time'?30:10;mgRender();return;}
   var pn=t.closest('[data-pn]');if(pn){M.pn=+pn.dataset.pn;mgRender();return;}
   var ln=t.closest('[data-ln]');
   if(ln&&M.wait){
@@ -4605,13 +4962,14 @@ $('#mini').addEventListener('click',function(e){
   if(k==='back'){mgClose();return;}
   if(k==='ai'){
     var g=M.g,n=g.max>2?M.pn:2;
-    if(!ecoCharge())return;
-    mgNew(g,'ai',n);M.me=0;M.names[0]=cleanName(loadName())||'تو';
+    if(!mgEntry())return;
+    var keepCfg=M.pkcfg;
+    mgNew(g,'ai',n);M.pkcfg=keepCfg;M.me=0;M.names[0]=cleanName(loadName())||'تو';
     for(var i=1;i<n;i++){M.names[i]='رایانه'+(n>2?' '+fa(i):'');M.ai[i]=true;}
     M.rn=0;mgReset();mgAfter();
   }
   else if(k==='mk')mgHost();
-  else if(k==='join'){if(ecoCan())mgJoin($('#mgCode').value);}
+  else if(k==='join'){if(ecoCan(M.g.land?ecoNeed(M.g,M.pkcfg):ECO_FEE))mgJoin($('#mgCode').value);}
   else if(k==='start'){if(M.wait)mgBegin();}
   else if(k==='roll')mgDo('rl');
   else if(k==='resign'){
@@ -4624,7 +4982,7 @@ $('#mini').addEventListener('click',function(e){
   else if(k==='copy'){try{navigator.clipboard.writeText(M.code).then(function(){toast('کد کپی شد');},function(){toast('کد: '+M.code);});}catch(x){toast('کد: '+M.code);}}
   else if(k==='again'){
     if(M.mode==='guest')return;
-    if(!ecoCharge())return;
+    if(!mgEntry())return;
     M.rn++;mgReset();mgAfter();
   }
 });
@@ -4633,7 +4991,7 @@ function mgSay(j){
   toast((M.names[M.me]||'')+': '+MG_SAY[j]);
 }
 $('#btnHub').addEventListener('click',showHub);
-if(window.__TRANSPORT)window.__mg={M:function(){return M;},JZ:JZ,kick:function(){mgAuto();}};
+if(window.__TRANSPORT)window.__mg={M:function(){return M;},JZ:JZ,kick:function(){mgAuto();},pkStep:function(){var x=M.x;if(M&&!M.over&&M.turn===0&&x.st!=='show'&&x.st!=='idle'&&!x.fold[0]&&!x.al[0])pkAiAct(0);}};
 renderHub();ecoPaint();
 if(!(navigator.webdriver&&!/[?&]hub/.test(location.search))&&!window.__TRANSPORT&&!recLoad()){showHub();}
 DIFF=loadDiff();paintDiff();paintFeel();
