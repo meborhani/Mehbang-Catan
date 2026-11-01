@@ -3958,7 +3958,7 @@ var JZE={rain:{n:'باران',e:'🌧️',h:'توکن باران را روی ی�
 var JZ_EV=['rain','snow','crow','dry','bless','trade'];
 function jzCoins(t,n){var b=JZ[t].b,c=0;for(var i=0;i<4;i++)if(b[i]&&n>=b[i])c=i+1;return c;}
 function jzTot(seat){var s=0;M.x.cc[seat].forEach(function(v){s+=v;});return s;}
-function jzScore(seat){var x=M.x;return jzTot(seat)+(x.tr[seat]?2:0)+x.bl[seat];}
+function jzScore(seat){var x=M.x;return jzTot(seat)+(x.tr[seat]?2:0)+(x.nf[seat]>=3?1:0)+x.bl[seat];}
 function jzEff(seat,f){var x=M.x,o=x.fl[seat][f];if(!o)return 0;return o.n>=2?o.n+(x.fe[seat][f]?1:0)+(x.rt[seat][f]?1:0):o.n;}
 function jzFVal(seat,f){var o=M.x.fl[seat][f];return o?jzCoins(o.t,jzEff(seat,f)):0;}
 function jzInit(){
@@ -4132,8 +4132,8 @@ function jzAct(seat,kind,m){
     if(m.f%1!==0||m.f<0||m.f>2||!jzCanHv(seat,m.f))return false;
     jzHarvest(seat,m.f);ok=true;
   }else if(a==='by'){
-    if(x.nf[seat]>=3||jzTot(seat)<3)return false;
-    jzPay(seat,3);x.nf[seat]++;ok=true;
+    if(x.nf[seat]>=3||jzTot(seat)<2)return false;
+    jzPay(seat,2);x.nf[seat]++;ok=true;
   }else if(a==='tc'){
     if(x.tr[seat]||jzTot(seat)<3)return false;
     jzPay(seat,3);x.tr[seat]=true;ok=true;
@@ -4235,7 +4235,7 @@ function jzAiStep(seat){
     var tot=jzTot(seat);
     if(!x.tr[seat]&&tot>=6){jzAct(seat,'jz',{a:'tc'});return;}
     if(x.fs>0&&tot>=5)for(f=0;f<x.nf[seat];f++){var o3=x.fl[seat][f];if(o3&&o3.n>=2&&!x.fe[seat][f]){jzAct(seat,'jz',{a:'fz',f:f});return;}}
-    if(x.nf[seat]<3&&tot>=4&&x.fl[seat][0]&&x.fl[seat][1]){jzAct(seat,'jz',{a:'by'});return;}
+    if(x.nf[seat]<3&&tot>=3&&x.fl[seat][0]&&x.fl[seat][1]){jzAct(seat,'jz',{a:'by'});return;}
   }
   function plantTop(t,optional){
     var f2=jzHas(seat,t);
@@ -4336,7 +4336,7 @@ function jzHtml(){
   h+='<div class="jz-mid"><div class="jz-fu">'+(v.fu.length?v.fu.map(function(t,j){return '<button class="jz-cd'+(M.gs.fu.indexOf(j)>=0?' sel':'')+((my&&v.ph==='fu'&&j===0)?' nx':'')+'" data-jc="'+j+'">'+JZ[t].e+'</button>';}).join(''):'<span class="jz-em">رو شده‌ای نیست</span>')+'</div><div class="jz-rt">'+mid+'</div></div>';
   h+='<div class="jz-fl">';
   for(i=0;i<3;i++){
-    if(i>=v.nf[me]){h+='<button class="jz-f lk" data-ja="by"'+(my&&v.co[me]>=3&&!of?'':' disabled')+'>زمین سوم · ۳🪙</button>';continue;}
+    if(i>=v.nf[me]){h+='<button class="jz-f lk" data-ja="by"'+(my&&v.co[me]>=2&&!of?'':' disabled')+'>زمین سوم · ۲🪙</button>';continue;}
     var o=v.fl[me][i],mk=(v.fe[me][i]?'🌱':'')+(v.rt[me][i]?'💧':'')+(v.sn[me][i]?'❄️':'');
     var pk=(M.jm==='hv'&&o)||(M.jm==='fz'&&!v.fe[me][i])||evq==='rain'||evq==='snow'||(evq==='dry'&&o);
     var ec=o?jzCoins(o.t,o.n>=2?o.n+(v.fe[me][i]?1:0)+(v.rt[me][i]?1:0):o.n):0;
