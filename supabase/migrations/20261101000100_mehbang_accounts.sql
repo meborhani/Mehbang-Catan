@@ -179,3 +179,40 @@ begin
 end $$;
 revoke all on function public.mb_admin_setpass(bigint,text) from public;
 grant execute on function public.mb_admin_setpass(bigint,text) to authenticated;
+
+-- پروفایل: آواتار و تغییر رمز توسط خود کاربر
+alter table public.accounts add column if not exists avatar smallint not null default -1 check (avatar between -1 and 9);
+
+create or replace function public.mb__out(p_id bigint, p_token text, p_daily boolean) returns json
+language sql security definer set search_path = public as $$
+  select json_build_object('token',p_token,'name',username,'bal',balance,'daily',p_daily,'av',avatar) from accounts where id = p_id
+$$;
+
+create or replace function public.mb_set_avatar(p_token text, p_av int) returns void
+language plpgsql security definer set search_path = public, extensions as $$
+declare a bigint := mb__session(p_token);
+begin
+  if a is null then raise exception 'نشست تمام شده؛ دوباره وارد شو'; end if;
+  if p_av is null or p_av < -1 or p_av > 9 then raise exception 'آواتار نامعتبر'; end if;
+  update accounts set avatar = p_av where id = a;
+end $$;
+
+create or replace function public.mb_change_pass(p_token text, p_old text, p_new text) returns void
+language plpgsql security definer set search_path = public, extensions as $$
+declare a bigint := mb__session(p_token); r accounts;
+begin
+  if a is null then raise exception 'نشست تمام شده؛ دوباره وارد شو'; end if;
+  if p_new is null or length(p_new) < 6 or length(p_new) > 72 then raise exception 'رمز جدید باید حداقل ۶ نویسه باشد'; end if;
+  select * into r from accounts where id = a for update;
+  if r.lock_until is not null and r.lock_until > now() then raise exception 'تلاش‌های زیاد؛ چند دقیقه بعد دوباره امتحان کن'; end if;
+  if r.pass_hash <> crypt(coalesce(p_old,''), r.pass_hash) then
+    update accounts set fails = case when fails + 1 >= 8 then 0 else fails + 1 end,
+      lock_until = case when fails + 1 >= 8 then now() + interval '5 minutes' else lock_until end where id = a;
+    raise exception 'رمز فعلی اشتباه است';
+  end if;
+  update accounts set pass_hash = crypt(p_new, gen_salt('bf')), fails = 0, lock_until = null where id = a;
+  delete from sessions where account_id = a and token_hash <> encode(digest(p_token,'sha256'),'hex');
+end $$;
+
+revoke all on function public.mb_set_avatar(text,int), public.mb_change_pass(text,text,text) from public;
+grant execute on function public.mb_set_avatar(text,int), public.mb_change_pass(text,text,text) to anon, authenticated;
