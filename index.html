@@ -796,6 +796,12 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-ac .btn{border-radius:6px}
 
 .jz-sf .jz-pt{flex:none;max-width:none;width:auto;aspect-ratio:3/4;height:clamp(26px,calc(8.5*var(--vh)*var(--ko,var(--k,1))),480px)}
+.jzt.n6 .jz-s:not(.me),.jzt.n7 .jz-s:not(.me){flex-direction:row;align-items:center;gap:4px}
+.jzt.n6 .jz-s:not(.me) .jz-sh,.jzt.n7 .jz-s:not(.me) .jz-sh{flex:none;flex-direction:column;align-items:center;text-align:center;gap:2px;max-width:42%}
+.jzt.n6 .jz-s:not(.me) .jz-in,.jzt.n7 .jz-s:not(.me) .jz-in{align-items:center;min-width:0}
+.jzt.n6 .jz-s:not(.me) .jz-in small,.jzt.n7 .jz-s:not(.me) .jz-in small{justify-content:center;flex-wrap:wrap}
+.jzt.n6 .jz-s:not(.me) .jz-sf,.jzt.n7 .jz-s:not(.me) .jz-sf{flex:1;min-width:0;justify-content:center;align-items:center}
+.jzt.n6 .jz-sf .jz-pt,.jzt.n7 .jz-sf .jz-pt{height:clamp(26px,calc(9.5*var(--vh)*var(--ko,var(--k,1))),480px)}
 .jz-mf{display:flex !important;justify-content:center;align-items:flex-end;gap:clamp(6px,calc(1.6*var(--vh)),20px)}
 .jz-mf .jz-f{flex:none;width:auto !important;aspect-ratio:3/4;height:clamp(44px,calc(11.7*var(--vh)*var(--k,1)),480px) !important}
 .jz-mf .jz-f.lk{padding:0 4px;text-align:center}
@@ -949,13 +955,13 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 }
 .jz-cd.img{background:none !important;border:0 !important;box-shadow:0 2px 5px #000a;padding:0;aspect-ratio:150/212;border-radius:7%;overflow:hidden;display:block;width:auto}
 .jz-cd.img img{width:100%;height:100%;display:block;object-fit:fill;pointer-events:none}
-.jz-cd.img.big{height:clamp(50px,calc(16*var(--vh)*var(--k,1)),700px);width:auto}
+.jz-cd.img.big{height:clamp(30px,calc(16*var(--vh)*var(--k,1)*var(--kf,1)),700px);width:auto}
 .jz-cd.img.hc{height:clamp(50px,calc(16*var(--vh)*var(--k,1)),700px);width:auto}
 .jz-cd.img.nx,.jz-cd.img.sel{box-shadow:0 0 0 2px #ffd35a,0 3px 8px #000a}
 .jz-cr.st{position:absolute;inset:3px;display:block;padding:0}
 .jz-cr.st img{position:absolute;left:50%;transform:translateX(-50%);aspect-ratio:150/212;width:auto;max-width:100%;border-radius:4px;box-shadow:0 1px 3px #000a;object-fit:fill}
 .jz-pt:has(.jz-cr.st) .jz-pv{z-index:2}.jz-pt:has(.jz-cr.st) .jz-nb{z-index:2}
-.jzw .pk-top .btn{min-height:clamp(24px,calc(7*var(--vh)),34px);padding:0 10px}.jzw .pk-top{min-height:0}.jzw .jz-t{height:clamp(22px,calc(7*var(--vh)),40px);font-size:clamp(11px,calc(3.4*var(--vh)),20px)}
+.jzw .pk-top .btn{min-height:clamp(22px,calc(5.6*var(--vh)),34px);padding:0 10px}.jzw .pk-top{min-height:0}.jzw .jz-t{height:clamp(22px,calc(7*var(--vh)),40px);font-size:clamp(11px,calc(3.4*var(--vh)),20px)}
 .jzw.cmp .pk-top{position:absolute;inset:3px 6px auto 6px;z-index:6;pointer-events:none;display:flex;align-items:flex-start;min-height:0;gap:6px}
 .jzw.cmp .pk-top .btn{pointer-events:auto}
 .jzw.cmp .pk-ti{margin-inline-start:auto;flex:none;max-width:31%;text-align:left;font-size:clamp(8px,calc(2.3*var(--vh)),12px);line-height:1.3;white-space:normal}
@@ -5320,15 +5326,27 @@ function jzFit(){
     var hd=w.querySelector('.jz-hd');if(hd&&hd.scrollWidth>hd.clientWidth+1)return true;
     return false;
   }
+  w.style.setProperty('--kf','.62');
   var c0=w.querySelector('.jzt-c'),fu0=c0&&c0.querySelector('.jz-fu'),rt0=c0&&c0.querySelector('.jz-rt'),sv=null;
   if(fu0&&rt0){sv=[fu0.innerHTML,rt0.innerHTML];fu0.innerHTML=jzCard(0,'big','',true)+jzCard(1,'big','',true);rt0.innerHTML=jzPickerHtml();}   /* measure the busiest case so sizes stay stable across phases */
   var k=1.5;
   for(;k>1.001;k-=.1){w.style.setProperty('--k',k.toFixed(2));if(!bad())break;}
-  if(k<=1.001){k=1;w.style.setProperty('--k','1');}
-  var ko=k;w.style.setProperty('--ko',ko.toFixed(2));
-  for(var t=k+.1;t<=3.2;t+=.1){w.style.setProperty('--ko',t.toFixed(2));if(bad()){break;}ko=t;}   /* opponents' plots: as large as fits */
-  w.style.setProperty('--ko',ko.toFixed(2));
+  if(k<=1.001){k=1;}
+  function maxKo(kk){
+    w.style.setProperty('--k',kk.toFixed(2));var best=kk;
+    for(var t=kk;t<=3.2;t+=.1){w.style.setProperty('--ko',t.toFixed(2));if(bad())break;best=t;}
+    return best;
+  }
+  var ko=maxKo(k),kBest=k;
+  /* opponents' plots matter most: give up a little hand-card size if it buys clearly bigger plots */
+  for(var k2=k-.1;k2>=.84;k2-=.1){var o2=maxKo(k2);if(o2>=ko+.25){ko=o2;kBest=k2;}}
+  w.style.setProperty('--k',kBest.toFixed(2));w.style.setProperty('--ko',ko.toFixed(2));
   if(sv){fu0.innerHTML=sv[0];rt0.innerHTML=sv[1];}
+  /* face-up cards in the middle shrink only as much as the current phase needs */
+  var kf=1;
+  function feltBad(){var c=w.querySelector('.jzt-c'),m=c&&c.firstElementChild;return !!(c&&m&&m.getBoundingClientRect().height>c.getBoundingClientRect().height-6);}
+  for(;kf>.5;kf-=.05){w.style.setProperty('--kf',kf.toFixed(2));if(!feltBad())break;}
+  w.style.setProperty('--kf',Math.max(.5,kf).toFixed(2));
 }
 function jzActOk(f,ci){
   var v=jzV(),t=v.ph==='fu'?v.fu[ci||0]:v.hand[ci||0];
