@@ -851,7 +851,9 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .pkp .pk-ctl .btn{min-height:clamp(32px,calc(11*var(--vh)),54px);border-radius:10px;font-size:clamp(12px,calc(3.6*var(--vh)),19px);font-weight:700;padding:2px 6px;background:linear-gradient(#262c4e,#151a34);border:1px solid #4b5488;border-top-color:#7a85c4;color:#eef}
 .pkp .pk-ctl .btn.primary{background:linear-gradient(#3b8a4e,#215c33);border-color:#6fd18a;color:#fff}
 .pkp .pk-ctl .btn:disabled{opacity:.38}
-.pkp .pk-ctl.rz{grid-auto-flow:column;grid-auto-columns:auto}.pkp .pk-ctl.rz .btn{font-size:clamp(11px,calc(3*var(--vh)),15px);min-height:clamp(30px,calc(9.5*var(--vh)),44px)}
+.pkp .pk-ctl.rz{grid-auto-flow:row;grid-template-columns:repeat(4,1fr) .6fr 1.25fr .6fr 1.15fr;grid-auto-columns:auto}
+.pkp .pk-ctl.rz .btn{font-size:clamp(12px,calc(3.6*var(--vh)),19px);min-height:clamp(32px,calc(11*var(--vh)),54px);padding:2px 2px;white-space:nowrap;min-width:0}
+.pkp .pk-ctl.rz .pk-am{display:flex;align-items:center;justify-content:center;min-width:0;height:clamp(32px,calc(11*var(--vh)),54px);border:1px solid #6fd18a;border-radius:10px;background:#0b1a12;color:#ffd35a;font-size:clamp(14px,calc(4.4*var(--vh)),24px);font-weight:800}
 .pkp .pk-ctl .pk-q{display:flex;align-items:center;justify-content:center}
 .hb-in.lm2{display:grid !important;grid-template-columns:1fr 1fr;gap:clamp(3px,1dvh,8px) 14px;align-content:start;overflow:hidden}
 .lm2>.mg-top,.lm2>.mg-top+.hb-s,.lm2>.mg-st{grid-column:1/-1}
