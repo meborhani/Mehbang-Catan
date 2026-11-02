@@ -6116,6 +6116,7 @@ function mgReset(){
   else{M.b=[];M.x={tok:[],die:0,ph:'roll',tries:0};for(i=0;i<M.n;i++)M.x.tok.push([-1,-1,-1,-1]);M.turn=M.rn%M.n;}
 }
 function mgClose(){
+  if(M===PARK)PARK=null;
   if(M){
     clearTimeout(M.t);clearTimeout(M.goneT);clearTimeout(M.rt);M.rec=false;if(M.mode==='guest')lsSet('mb_mgrj',null);
     Object.keys(M.links).forEach(function(s){var l=M.links[s];if(l){l.onclose=null;l.close();}});
@@ -6124,8 +6125,18 @@ function mgClose(){
   }
   M=null;$('#mini').hidden=true;
 }
+var PARK=null;
+/* leaving a live online room (host or guest) keeps it running in the background so the player can come back */
+function mgPark(){
+  if(!M||M.over||M.left||M.wait&&!M.code&&!M.link)return false;
+  if(!(M.mode==='host'||M.mode==='guest'||(M.mode==='menu'&&M.wait&&M.code&&M.srv)))return false;
+  if(M.mode==='guest'&&!M.glob&&!M.link)return false;
+  PARK=M;$('#mini').hidden=true;renderHub();return true;
+}
+function mgParkDrop(){if(PARK&&M===PARK){mgClose();}PARK=null;}
 function showHub(){
-  mgClose();VIEW='hub';
+  if(PARK&&M===PARK){$('#mini').hidden=true;}else{mgClose();PARK=null;}
+  VIEW='hub';
   document.title='مهبانگ گیم';
   $('#intro').hidden=true;$('#lobby').hidden=true;$('#hub').hidden=false;
   presenceStart();ecoDaily();sbSync();
@@ -6144,6 +6155,7 @@ function mgIcon(id){
 }
 function renderHub(){
   var h='<div class="hb-in hub"><div class="hbtop" style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:4px"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 8px;font-size:13px;min-width:0;max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button><button class="btn sm" data-hg="hist" aria-label="سوابق بازی‌ها" title="سوابق بازی‌ها" style="min-height:0;padding:3px 8px;font-size:13px">📜</button><span class="tgq"><button class="btn sm" data-tg="mus" data-ic="🎵" aria-label="موسیقی"></button><button class="btn sm" data-tg="snd" data-ic="🔊" aria-label="افکت"></button><button class="btn sm" data-tg="vib" data-ic="📳" aria-label="ویبره"></button></span>'+(mgrjOk()?'<button class="btn sm primary" data-hg="mgrj" style="min-height:0;padding:3px 10px;font-size:13px">↩ بازگشت به بازی قبلی</button>':'')+'</div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
+  if(PARK&&M===PARK&&!M.over){h+='<div style="grid-column:1/-1;display:flex;gap:6px"><button class="btn primary big" data-hg="mgpark" style="flex:1;min-width:0">'+(M.wait?'بازگشت به اتاق':'بازگشت به بازی')+' · '+esc2(M.g.name)+(M.code?' ('+fa(M.code)+')':'')+'</button><button class="btn big" data-hg="mgparkx" style="flex:none">بستن</button></div>';}
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -6662,6 +6674,10 @@ $('#hub').addEventListener('click',function(e){
   var k=c.dataset.hg;
   if(k==='hist'){histOpen();return;}
   if(k==='gset'){openGlobalSettings();return;}
+  if(k==='mgpark'){if(PARK&&M===PARK){$('#mini').hidden=false;mgRender();}else{PARK=null;renderHub();}return;}
+  if(k==='mgparkx'){mgParkDrop();renderHub();return;}
+  if(PARK&&M===PARK&&MGS[k]){var sh=openSheet('<h3>اتاق فعال داری</h3><p class="sub">برای باز کردن بازی دیگر، اتاق فعلی بسته می‌شود.</p><button class="btn primary wide" data-pk="y">بستن اتاق و ادامه</button><button class="btn wide" data-pk="n">بازگشت به اتاق</button>');sh.addEventListener('click',function(e){var b=e.target.closest('[data-pk]');if(!b)return;closeSheet();if(b.dataset.pk==='y'){mgParkDrop();renderHub();mgOpen(k);}else{$('#mini').hidden=false;mgRender();}});return;}
+  if(k==='mgrj'&&PARK&&M===PARK){$('#mini').hidden=false;mgRender();return;}
   if(k==='mgrj'){var rj=lsGet('mb_mgrj',null);if(mgrjOk()){mgOpen(rj.g);mgJoin(rj.code,rj.tk);}else{lsSet('mb_mgrj',null);renderHub();}}else if(k==='catan')hubCatan();else if(k==='people')openPeople();else if(k==='acct')accOpen();else mgOpen(k);
 });
 $('#mini').addEventListener('click',function(e){
@@ -6691,7 +6707,7 @@ $('#mini').addEventListener('click',function(e){
   }
   var a=t.closest('[data-mg]');if(!a)return;
   var k=a.dataset.mg;
-  if(k==='back'){mgClose();return;}
+  if(k==='back'){if(!mgPark())mgClose();return;}
   if(k==='ai'){
     var g=M.g,n=g.max>2?M.pn:2;
     if(!mgEntry())return;
