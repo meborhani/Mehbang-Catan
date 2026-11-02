@@ -806,6 +806,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-mf{display:flex !important;justify-content:center;align-items:flex-end;gap:clamp(6px,calc(1.6*var(--vh)),20px)}
 .jz-mf .jz-f{flex:none;width:auto !important;aspect-ratio:3/4;height:clamp(44px,calc(11.7*var(--vh)*var(--k,1)),480px) !important}
 .jz-mf .jz-f.lk{padding:0 4px;text-align:center}
+.jz-mf>.jz-fw{position:relative;flex:none;display:flex}.jz-fw>.jz-tks{top:0;left:50%;inset-inline-end:auto;transform:translate(-50%,-88%);z-index:6;pointer-events:none;flex-direction:row;gap:2px}
 .jz-pt .jz-cr{flex-direction:row}
 .hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
 
@@ -5201,8 +5202,9 @@ function jzHtml(){
     }
     var cr='';
     if(o2){var cn=Math.min(o2.n,8),hp=100/(1+.3*(cn-1));for(var q2=0;q2<cn;q2++)cr+=JZIMG[JZ[o2.t].c]?'<img alt="" draggable="false" src="'+JZIMG[JZ[o2.t].c]+'" style="height:'+hp.toFixed(1)+'%;top:'+(q2*.3*hp).toFixed(1)+'%">':JZ[o2.t].e;}
-    var inner=(o2?'<div class="jz-cr c'+(o2.n<=2?1:o2.n<=4?2:3)+(JZIMG[JZ[o2.t].c]?' st':'')+'">'+cr+'</div><span class="jz-nb">'+fa(o2.n)+'</span><span class="jz-pv">🪙'+fa(jzFValV(v,k,f2))+'</span>':(mine?'<span class="jz-pl2">＋</span>':''))+(tk2?'<span class="jz-tks">'+tk2+'</span>':'');
-    return mine?'<button class="jz-f '+cls+'" data-jf="'+f2+'">'+inner+'</button>':'<div class="'+cls+'">'+inner+'</div>';
+    var inner=(o2?'<div class="jz-cr c'+(o2.n<=2?1:o2.n<=4?2:3)+(JZIMG[JZ[o2.t].c]?' st':'')+'">'+cr+'</div><span class="jz-nb">'+fa(o2.n)+'</span><span class="jz-pv">🪙'+fa(jzFValV(v,k,f2))+'</span>':(mine?'<span class="jz-pl2">＋</span>':''));
+    if(mine)return '<span class="jz-fw"><button class="jz-f '+cls+'" data-jf="'+f2+'">'+inner+'</button>'+(tk2?'<span class="jz-tks">'+tk2+'</span>':'')+'</span>';
+    return '<div class="'+cls+'">'+inner+(tk2?'<span class="jz-tks">'+tk2+'</span>':'')+'</div>';
   }
   function seatHtml(k,nof){
     var held='',fs='',f2;
