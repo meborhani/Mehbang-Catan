@@ -5317,15 +5317,47 @@ function pkStrength(seat){
   if(c===0)return .12+hi*.012;
   return [0,.5,.68,.78,.84,.88,.93,.98,1][c];
 }
+/* AI table personalities modelled on well-known players' public styles:
+   l = looseness (calls lighter), a = aggression, b = bluff frequency, t = slow-play/trap frequency */
+var PK_AI=[
+ {n:'فیل آیوی',l:0,a:.6,b:.14,t:.2},       /* adaptable all-rounder, mixes bluffs and traps */
+ {n:'دنیل نگرینو',l:.1,a:.35,b:.1,t:.12},  /* small-ball, loves reading and calling down */
+ {n:'تام دوان',l:.2,a:.85,b:.36,t:.05},    /* ultra-loose, huge bluffs */
+ {n:'فیل هلموث',l:-.14,a:.35,b:.02,t:.1},  /* very tight, only plays strong hands */
+ {n:'دویل برانسون',l:.05,a:.78,b:.2,t:.08},/* power poker, big bets */
+ {n:'اریک سیدل',l:-.06,a:.5,b:.08,t:.28},  /* patient, solid, sets traps */
+ {n:'فدور هولتز',l:.02,a:.72,b:.26,t:.15}, /* modern balanced aggression */
+ {n:'ونسا سلبست',l:.1,a:.9,b:.32,t:.05},   /* relentless re-raiser */
+ {n:'استو آنگر',l:.06,a:.7,b:.22,t:.2},    /* sharp reader, fast aggression */
+ {n:'کریس مانی‌میکر',l:.12,a:.5,b:.18,t:.1}
+];
+function pkPersonas(n){
+  var a=PK_AI.map(function(p,i){return i;}),o=[],k;
+  while(o.length<n&&a.length){k=Math.floor(Math.random()*a.length);o.push(a.splice(k,1)[0]);}
+  while(o.length<n)o.push(Math.floor(Math.random()*PK_AI.length));
+  return o;
+}
+function pkNameAi(){
+  var ps=pkPersonas(M.n);M.pp=[];
+  for(var i=0;i<M.n;i++)if(!M.names[i]||M.ai[i]===true&&/^رایانه/.test(M.names[i])){M.pp[i]=ps[i];M.names[i]=PK_AI[ps[i]].n;M.ai[i]=true;}
+}
 function pkAiAct(seat){
-  var x=M.x,toCall=x.cur-x.bet[seat],pot=pkSum(x.tot),str=pkStrength(seat),r=Math.random();
+  var x=M.x,toCall=x.cur-x.bet[seat],pot=pkSum(x.tot),str=pkStrength(seat),r=Math.random(),r2=Math.random();
+  var pp=PK_AI[M.pp&&M.pp[seat]!==undefined?M.pp[seat]:0],st=x.board.length;
+  str=Math.max(0,Math.min(1,str+(Math.random()-.5)*.08));
+  function rz(f){return x.cur+Math.max(x.minr,Math.floor(pot*f*(.75+pp.a*.5)));}
   if(toCall<=0){
-    if(str>.62&&r<.65){var to=x.cur+Math.max(x.minr,Math.floor(pot*(str>.85?.8:.5)));pkAct(seat,'pk',{a:'r',to:to});}
+    if(str>.62-pp.a*.06&&r<.4+pp.a*.4){
+      if(str>.85&&r2<pp.t){pkAct(seat,'pk',{a:'c'});return;}
+      pkAct(seat,'pk',{a:'r',to:rz(str>.85?.8:.5)});
+    }else if(str<.45&&st>0&&r2<pp.b){pkAct(seat,'pk',{a:'r',to:rz(.6)});}
+    else if(st===0&&str<.45&&r2<pp.b*.35){pkAct(seat,'pk',{a:'r',to:rz(.5)});}
     else pkAct(seat,'pk',{a:'c'});
   }else{
-    var odds=toCall/(pot+toCall);
-    if(str<odds*.85&&r>.12)pkAct(seat,'pk',{a:'f'});
-    else if(str>.82&&r<.55)pkAct(seat,'pk',{a:'r',to:x.cur+Math.max(x.minr,Math.floor(pot*.7))});
+    var odds=toCall/(pot+toCall),need=odds*(.85-pp.l);
+    if(str<.5&&r2<pp.b*.5&&toCall<pot*.8&&st>0)pkAct(seat,'pk',{a:'r',to:rz(.7)});
+    else if(str<need&&r>.1+pp.l*.4)pkAct(seat,'pk',{a:'f'});
+    else if(str>.82&&r<.3+pp.a*.45)pkAct(seat,'pk',{a:'r',to:rz(.7)});
     else pkAct(seat,'pk',{a:'c'});
   }
 }
@@ -6015,6 +6047,7 @@ function mgBegin(){
   if(M.mode==='menu')M.mode='host';
   M.wait=false;M.glob=false;M.rn=0;
   for(var i=0;i<M.n;i++)if(!M.names[i]){M.names[i]='رایانه'+(M.n>2?' '+fa(i):'');M.ai[i]=true;}
+  if(M.g.type==='poker')pkNameAi();
   mgReset();mgAfter();
 }
 function mgForfeit2(){
@@ -6274,6 +6307,7 @@ $('#mini').addEventListener('click',function(e){
     var keepCfg=M.pkcfg,keepStake=M.stake;
     mgNew(g,'ai',n);M.pkcfg=keepCfg;M.stake=keepStake;M.me=0;M.names[0]=cleanName(loadName())||'تو';
     for(var i=1;i<n;i++){M.names[i]='رایانه'+(n>2?' '+fa(i):'');M.ai[i]=true;}
+    if(g.type==='poker')pkNameAi();
     M.rn=0;mgReset();mgAfter();
   }
   else if(k==='mk')mgHost();
