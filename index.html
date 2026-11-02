@@ -115,7 +115,7 @@ button:disabled{cursor:default}
 .hbtop .tgq{height:auto !important;padding:0 !important;gap:3px}
 .tgq{display:inline-flex;gap:3px}
 /* one corner radius for every button (6px) */
-body .btn,body .hb-card,body .bb,body .th,body .seg-n button,body .seg-d button,body .tabs button,body .hbtop>*,body .hbtop .tgq .btn,body .jz-t,body .sbtn,body .help,body #btnGear,body .rc{border-radius:6px !important}.tgq .btn{min-height:0;padding:3px 6px;font-size:13px}
+body .btn,body .hb-card,body .bb,body .th,body .seg-n button,body .seg-d button,body .tabs button,body .hbtop>*,body .hbtop .tgq .btn,body .jz-t,body .sbtn,body .help,body #btnGear,body #btnBack,body .rc{border-radius:6px !important}.tgq .btn{min-height:0;padding:3px 6px;font-size:13px}
 .rc{min-width:0}
 .rc span{font-size:9px;color:var(--ink-dim);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .row2{display:flex;gap:6px}
@@ -674,7 +674,8 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 }
 @media (orientation:landscape) and (max-height:600px){
  #introIn{width:min(900px,100%);display:grid !important;grid-template-columns:1fr 1fr;column-gap:18px;row-gap:clamp(4px,1.2dvh,8px);align-content:center;padding-top:6px;padding-bottom:6px}
- #introIn>.over,#introIn>.hero,#introIn>#resume,#introIn>#btnHub{grid-column:1/-1}
+ #introIn>.over,#introIn>.hero,#introIn>#resRow,#introIn>#btnHub{grid-column:1/-1}
+#resRow{display:flex;gap:8px}#resRow[hidden]{display:none}#resRow>.btn{flex:1;min-width:0}#resRow>#endGame{flex:none;color:#ff8a8a;border-color:#ff8a8a88}#resRow>[hidden]{display:none}
  #introIn .hero{font-size:clamp(26px,9dvh,40px) !important;padding:0}#introIn .hero br{display:none}
  #introIn .btn,#introIn .btn.big{min-height:36px;font-size:14px}
  #introIn .online{padding:6px}
@@ -986,7 +987,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 <div id="app" class="wrap" dir="rtl" lang="fa">
   <header class="top">
     <div class="brand">کارخانه داتیس<small>درایو و تابلو فرمان بساز</small></div>
-    <div class="meta"><div id="meta"></div><button class="help" id="btnGear" aria-label="تنظیمات"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button><button class="help" id="btnHelp" aria-label="راهنمای قوانین">؟</button></div>
+    <div class="meta"><div id="meta"></div><button class="help" id="btnBack" aria-label="بازگشت" style="font-size:12px;width:auto;padding:0 10px">بازگشت ›</button><button class="help" id="btnGear" aria-label="تنظیمات"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg></button><button class="help" id="btnHelp" aria-label="راهنمای قوانین">؟</button></div>
   </header>
   <div id="players" class="pls"></div>
   <div id="status" class="status"></div>
@@ -1003,7 +1004,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
   <div class="intro-in" id="introIn">
     <div class="over">بازی ۲ تا ۶ نفره</div>
     <h1 class="hero" id="hero">کارخانه<br>داتیس</h1>
-    <button class="btn primary big" id="resume" hidden>ادامهٔ بازی</button>
+    <div id="resRow" hidden><button class="btn primary big" id="resume" hidden>ادامهٔ بازی</button><button class="btn big" id="endGame" hidden>اتمام بازی</button></div>
     <div>
       <div class="sub stg-lbl">تعداد بازیکنان</div>
       <div class="seg-n" id="segN">
@@ -3712,6 +3713,9 @@ function refreshResume(){
   var r=$('#resume');if(!r)return;
   var k=sessionKind(),rec=k?null:recLoad();
   r.hidden=!(VIEW==='intro'&&(k||rec));
+  var eg=$('#endGame'),solo=(k==='game'&&ROLE==='solo')||(!k&&rec&&rec.type==='solo');
+  if(eg)eg.hidden=!(VIEW==='intro'&&solo);
+  $('#resRow').hidden=r.hidden&&(!eg||eg.hidden);
   if(k==='game')r.textContent=ROLE==='solo'?'ادامهٔ بازی':'بازگشت به بازی آنلاین';
   else if(k==='lobby')r.textContent='بازگشت به اتاق'+(NET.lv&&NET.lv.code?' ('+NET.lv.code+')':'');
   else if(rec)r.textContent=rec.type==='solo'?'ادامهٔ بازی قبلی':(rec.type==='host'?'بازگشایی اتاق قبلی ('+rec.code+')':'بازگشت به بازی آنلاین ('+rec.code+')');
@@ -3732,6 +3736,15 @@ function resumeSession(){
   refreshResume();
 }
 window.addEventListener('popstate',function(){if(VIEW==='session')showIntro();});
+$('#endGame').addEventListener('click',function(){
+  var sh=openSheet('<h3>اتمام بازی؟</h3><p class="sub">بازی نیمه‌کاره بسته می‌شود و پیشرفتش از بین می‌رود.</p><button class="btn primary wide" data-eg="y">بله، تمام کن</button><button class="btn wide" data-eg="n">نه، بماند</button>');
+  sh.addEventListener('click',function(e){
+    var b=e.target.closest('[data-eg]');if(!b)return;
+    closeSheet();
+    if(b.dataset.eg==='y'){clearTimeout(TMR);recClear();if(ROLE==='solo')S=null;refreshResume();toast('بازی تمام شد');}
+  });
+});
+$('#btnBack').addEventListener('click',function(){if(VIEW==='session')showIntro();});
 $('#resume').addEventListener('click',function(){if(sessionKind())resumeSession();else resumeSaved();});
 function leaveOnline(){
   NET.leaving=true;clearTimeout(NET.rejoinT);NET.rejoinT=null;hideRejoin();NET.cli=null;NET.restore=null;NET.linkOk=false;recClear();
