@@ -839,6 +839,9 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .pk-bub{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);z-index:10;background:#fff;color:#16181d;border-radius:10px;padding:2px 9px;font-weight:700;font-size:clamp(10px,calc(2.8*var(--vh)),19px);white-space:nowrap;box-shadow:0 2px 8px #000a;animation:pkbub .25s ease-out}
 .pk-bub::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:#fff}
 @keyframes pkbub{from{opacity:0;transform:translateX(-50%) translateY(6px) scale(.8)}}
+.pk-chi{position:absolute;right:calc(100% + clamp(4px,calc(1.2*var(--vh)),12px));top:calc(var(--av)*.28);width:clamp(30px,calc(10*var(--vh)),68px);height:clamp(30px,calc(10*var(--vh)),68px);border-radius:50%;background:radial-gradient(circle at 35% 28%,#3a8fe0,#1b4f9c 75%);border:2px solid #cfe3ff;box-shadow:0 2px 8px #000b;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:6;-webkit-tap-highlight-color:transparent}
+.pk-chi svg{width:62%;height:62%;fill:#fff}.pk-chi svg circle{fill:#1b4f9c}
+.pk-chi:active{transform:scale(.92)}
 .pk-chp{position:absolute;z-index:45;left:50%;bottom:clamp(40px,calc(14*var(--vh)),70px);transform:translateX(-50%);width:min(94%,520px);display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(92px,calc(26*var(--vh)),170px),1fr));gap:5px;padding:7px;border-radius:12px;background:#0c0d10f0;border:1px solid #3a3c42;box-shadow:0 6px 24px #000d}
 .pk-chp .btn{min-height:clamp(26px,calc(8*var(--vh)),40px);font-size:clamp(10px,calc(2.9*var(--vh)),17px);padding:2px 5px;white-space:normal;line-height:1.15;min-width:0}
 .pc.ph{background:rgba(0,0,0,.22);border:1px dashed #fff3;box-shadow:none}
@@ -5525,13 +5528,25 @@ function pkPollCheck(){
   if(p.y.length*2>M.n){x.endAfter=true;x.poll=null;x.lg='رأی‌گیری موافق بود؛ بازی بعد از این دست تمام می‌شود.';}
   else if(p.n.length*2>=M.n){x.poll=null;x.lg='رأی‌گیری رد شد؛ بازی ادامه دارد.';}
 }
-var PK_CHAT=['چه دستی بود! 😎','بلوف زدی؟ 😏','امشب شانس با منه 🍀','کال کن اگه جرات داری 🔥','فولد کن بره 😂','دمت گرم! 👏','بدشانسی بود 😅','همه‌چی یا هیچی! 💥','فکر نکن، ریز بزن! ⚡','خسته نباشی ✌️'];
-function pkAiSay(seat,pool){
+var PK_CHAT=['چه دستی بود! 😎','بلوف زدی؟ 😏','امشب شانس با منه 🍀','کال کن اگه جرات داری 🔥','فولد کن بره 😂','دمت گرم! 👏','بدشانسی بود 😅','همه‌چی یا هیچی! 💥','فکر نکن، ریز بزن! ⚡','خسته نباشی ✌️','بزن بریم! 🚀','ترسیدی؟ 😈','این دست مال منه 💪','شانس آوردی 🙄'];
+var PK_REPLY=[[5,6,2],[4,2,11],[1,12,13],[8,7,10],[3,1,11],[0,9],[5,9],[3,11,12],[3,10,7],[5,0],[8,12],[3,7,12],[1,4,13],[2,6,0]];
+function pkAiSay(seat,pool,chained){
   var cur=M,rn=M.rn;
-  setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn||!cur.ai[seat])return;pkAct(seat,'pk',{a:'ct',i:pool[Math.floor(Math.random()*pool.length)]});},window.__FAST?5:900+Math.random()*1400);
+  setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn||!cur.ai[seat]||(cur.x.out&&cur.x.out[seat]))return;pkAct(seat,'pk',{a:'ct',c:chained?1:0,i:pool[Math.floor(Math.random()*pool.length)]});},window.__FAST?5:800+Math.random()*1500);
 }
-function pkAiTaunt(w){if(M.ai[w]&&Math.random()<.4)pkAiSay(w,[0,2,4,7]);}
-function pkAct(seat,kind,m){if(m&&m.a==='ct')return pkAct0(seat,kind,m);var ok=pkAct0(seat,kind,m);stAct(seat,m,ok);if(ok&&m&&(m.a==='f'||m.a==='c'||m.a==='r')&&M.x.la[seat])stAdd(seat,'p_'+M.x.la[seat]);if(ok&&M.x.al[seat]&&M.x.alc!==undefined&&M.x.alc[seat]!==M.x.hn){M.x.alc[seat]=M.x.hn;stAdd(seat,'allin');}return ok;}
+function pkAiOther(not){var ais=[],q;for(q=0;q<M.n;q++)if(M.ai[q]&&!M.x.out[q]&&q!==not)ais.push(q);return ais.length?ais[Math.floor(Math.random()*ais.length)]:-1;}
+function pkAiTaunt(w){
+  var x=M.x,q;
+  if(M.ai[w]){if(Math.random()<.6)pkAiSay(w,[0,2,4,7,12]);}
+  else{q=pkAiOther(w);if(q>=0&&Math.random()<.5)pkAiSay(q,[5,6,13]);}   /* a bot congratulates or grumbles when a human wins */
+}
+function pkAct(seat,kind,m){if(m&&m.a==='ct')return pkAct0(seat,kind,m);var ok=pkActB(seat,kind,m);
+  if(ok&&M.ai[seat]&&m&&!M.over){var xx=M.x,rr=Math.random();
+    if(m.a==='r'&&xx.al[seat]){if(rr<.55)pkAiSay(seat,[3,7,8,11,12]);}
+    else if(m.a==='r'){if(rr<.14)pkAiSay(seat,[3,8,10,11,12]);}
+    else if(m.a==='f'){if(rr<.07)pkAiSay(seat,[6,13]);}}
+  return ok;}
+function pkActB(seat,kind,m){var ok=pkAct0(seat,kind,m);stAct(seat,m,ok);if(ok&&m&&(m.a==='f'||m.a==='c'||m.a==='r')&&M.x.la[seat])stAdd(seat,'p_'+M.x.la[seat]);if(ok&&M.x.al[seat]&&M.x.alc!==undefined&&M.x.alc[seat]!==M.x.hn){M.x.alc[seat]=M.x.hn;stAdd(seat,'allin');}return ok;}
 function pkAct0(seat,kind,m){
   var x=M.x,a=kind==='pk'&&m&&m.a;if(!a||M.over||M.wait)return false;
   var ok=false;
@@ -5539,7 +5554,8 @@ function pkAct0(seat,kind,m){
     var ci=m.i|0;if(ci<0||ci>=PK_CHAT.length)return false;
     x.cta=x.cta||{};var nw=Date.now();if(!window.__FAST&&x.cta[seat]&&nw-x.cta[seat]<1500)return false;x.cta[seat]=nw;
     x.ct={s:seat,i:ci,n:(x.ct?x.ct.n:0)+1};ok=true;
-    if(!M.ai[seat]){var ais=[],q;for(q=0;q<M.n;q++)if(M.ai[q]&&!x.out[q]&&q!==seat)ais.push(q);if(ais.length&&Math.random()<.55)pkAiSay(ais[Math.floor(Math.random()*ais.length)],ci===1?[4,2,8]:ci===0?[5,6]:[1,3,9,7]);}
+    if(!m.c){var rq=pkAiOther(seat);if(rq>=0&&Math.random()<(M.ai[seat]?.22:.92)){pkAiSay(rq,PK_REPLY[ci]||[0],true);
+      if(!M.ai[seat]&&Math.random()<.35){var rq2=pkAiOther(rq);if(rq2>=0)pkAiSay(rq2,PK_REPLY[ci]||[0],true);}}}
   }else if(a==='pp'){
     if(seat!==0||x.poll||x.endAfter)return false;
     x.poll={y:[0],n:[]};pkPollCheck();ok=true;
@@ -5776,6 +5792,7 @@ function pkHtml(){
     var isWin=v.st==='show'&&v.wn&&v.wn.indexOf(i)>=0,bub='';
     if(v.ct&&v.ct.s===i&&M.ctSeen===v.ct.n&&Date.now()-M.ctAt<3600)bub='<span class="pk-bub">'+esc2(PK_CHAT[v.ct.i]||'')+'</span>';
     seats+='<div class="pk-s'+(isWin?' win':'')+(rvl?' rvl':'')+(isMe?' me cr':'')+(isMe?'':(lx<50?' cr':' cl2'))+(M.turn===i&&live?' on':'')+(v.fold[i]||(v.out&&v.out[i])?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
+      (isMe?'<span class="pk-chi" data-pa="chat" role="img" aria-label="گفتگو"><svg viewBox="0 0 24 24"><path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H11l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><circle cx="8" cy="10.5" r="1.3"/><circle cx="12" cy="10.5" r="1.3"/><circle cx="16" cy="10.5" r="1.3"/></svg></span>':'')+
       (isWin?'<span class="pk-wn">برد!</span>':(tg?'<span class="pk-tag t-'+tg[1]+'">'+tg[0]+'</span>':''))+bub+
       '<div class="pk-cd">'+cards+'</div>'+
       '<div class="pk-av">'+avHtml(mgAv(i),nm,M.ai[i],0)+(v.dealer===i?'<em class="pk-dl">D</em>':'')+'</div>'+
@@ -5815,7 +5832,7 @@ function pkHtml(){
     end='<div class="pk-end"><b>نتیجهٔ نهایی</b>'+M.names.map(function(nm,i){return {nm:nm,n:v.net[i],i:i};}).sort(function(a,b){return b.n-a.n;}).map(function(r){return '<div class="'+(r.n>=0?'up':'dn')+'"><span>'+esc2(r.nm)+(r.i===me?' (تو)':'')+'</span><b dir="ltr">'+(r.n>0?'+':'')+fa(r.n)+' 🪙</b></div>';}).join('')+
       '<div class="mg-r">'+(M.mode!=='guest'&&!M.left?'<button class="btn primary" data-mg="again">بازی دوباره</button>':'')+'<button class="btn" data-mg="back">خروج</button></div></div>';
   }
-  h='<div class="pkw pkp"><div class="pk-top"><button class="btn sm" data-mg="back">بازگشت</button><span class="pk-ti">پوکر · '+pkTimeLeft(v)+' · سقف ورودی '+fa(v.cfg.buy||100)+(v.poll?' · رأی‌گیری ('+fa(v.poll.y.length)+' موافق)':'')+'</span><button class="btn sm" data-pa="chat" aria-label="گفتگو">💬</button><button class="btn sm" data-pa="cs">'+(M.pkc?'کارت: کلاسیک':'کارت: رنگی')+'</button></div>'+
+  h='<div class="pkw pkp"><div class="pk-top"><button class="btn sm" data-mg="back">بازگشت</button><span class="pk-ti">پوکر · '+pkTimeLeft(v)+' · سقف ورودی '+fa(v.cfg.buy||100)+(v.poll?' · رأی‌گیری ('+fa(v.poll.y.length)+' موافق)':'')+'</span><button class="btn sm" data-pa="cs">'+(M.pkc?'کارت: کلاسیک':'کارت: رنگی')+'</button></div>'+
     '<div class="pk-tb'+(n>=7?' dense':'')+'"><div class="pk-felt"></div>'+bets+'<div class="pk-mid"><div class="pk-pot">پات '+fa(pot)+'</div><div class="pk-bd">'+board+'</div><div class="pk-lg" id="mgSt">'+pkStatus()+'</div></div>'+seats+end+'</div>'+
     (M.chp?'<div class="pk-chp">'+PK_CHAT.map(function(t,k){return '<button class="btn sm" data-pa="ct" data-ci="'+k+'">'+t+'</button>';}).join('')+'</div>':'')+'<div class="pk-ctl'+(rzm?' rz':'')+'">'+ctl+'</div></div>';
   return h;
