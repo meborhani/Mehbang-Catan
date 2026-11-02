@@ -6119,6 +6119,7 @@ function mgClose(){
   if(M===PARK)PARK=null;
   if(M){
     clearTimeout(M.t);clearTimeout(M.goneT);clearTimeout(M.rt);M.rec=false;if(M.mode==='guest')lsSet('mb_mgrj',null);
+    if(M.mode==='host'&&!M.__keepRec)lsSet(MGH,null);
     Object.keys(M.links).forEach(function(s){var l=M.links[s];if(l){l.onclose=null;l.close();}});
     if(M.link){M.link.onclose=null;M.link.close();}
     if(M.srv)M.srv.close();
@@ -6156,6 +6157,7 @@ function mgIcon(id){
 function renderHub(){
   var h='<div class="hb-in hub"><div class="hbtop" style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:4px"><div class="hb-coin" data-coin></div><button class="btn sm" data-hg="acct" style="min-height:0;padding:3px 8px;font-size:13px;min-width:0;max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+'<span style="display:inline-block;width:18px;height:18px;vertical-align:-4px">'+(myAv()!==-1?avHtml(myAv(),'',false,0):'👤')+'</span> '+(ACCT?ACCT.name:(cleanName(loadName())||'پروفایل / ورود'))+'</button><button class="btn sm" data-hg="hist" aria-label="سوابق بازی‌ها" title="سوابق بازی‌ها" style="min-height:0;padding:3px 8px;font-size:13px">📜</button><span class="tgq"><button class="btn sm" data-tg="mus" data-ic="🎵" aria-label="موسیقی"></button><button class="btn sm" data-tg="snd" data-ic="🔊" aria-label="افکت"></button><button class="btn sm" data-tg="vib" data-ic="📳" aria-label="ویبره"></button></span>'+(mgrjOk()?'<button class="btn sm primary" data-hg="mgrj" style="min-height:0;padding:3px 10px;font-size:13px">↩ بازگشت به بازی قبلی</button>':'')+'</div><h1 class="hb-h">مهبانگ گیم</h1><div class="hb-s">یک بازی انتخاب کن، با هوش مصنوعی یا با دوستت از طریق کد اتاق</div>';
   if(PARK&&M===PARK&&!M.over){h+='<div style="grid-column:1/-1;display:flex;gap:6px"><button class="btn primary big" data-hg="mgpark" style="flex:1;min-width:0">'+(M.wait?'بازگشت به اتاق':'بازگشت به بازی')+' · '+esc2(M.g.name)+(M.code?' ('+fa(M.code)+')':'')+'</button><button class="btn big" data-hg="mgparkx" style="flex:none">بستن</button></div>';}
+  if(!(PARK&&M===PARK)&&mgHostOk()){var hr=lsGet(MGH,null);h+='<button class="btn big" data-hg="mghost" style="grid-column:1/-1">↩ بازگشت به اتاق قبلی · '+esc2(MGS[hr.g].name)+' ('+fa(hr.code)+')</button>';}
   h+='<button class="hb-card" data-hg="catan"><div class="hb-ic">'+mgIcon('catan')+'</div><div><b>سیطره کتان</b><small>بازی استراتژی ۲ تا ۶ نفره با چند تم</small></div><span class="hb-tag">۲–۶ نفره</span></button>';
   Object.keys(MGS).forEach(function(k){
     var g=MGS[k];
@@ -6367,8 +6369,32 @@ function mgEntry(){
   if(g.land)return ecoCan(ecoNeed(g,M.pkcfg));
   return ecoCharge();
 }
+var MGH='mb_mghost';
+function mgHostSave(){
+  if(!M||M.mode!=='host'||!M.code)return;
+  if(M.over||M.wait||M.left){if(M.over||M.left)lsSet(MGH,null);return;}
+  try{lsSet(MGH,{v:1,g:M.g.id,code:M.code,t:Date.now(),s:{n:M.n,names:M.names,wins:M.wins,ai:M.ai,rn:M.rn,res:M.res,line:M.line,b:M.b,turn:M.turn,x:M.x,bal:M.bal,av:M.av,tok:M.tok,stake:M.stake,pkcfg:M.pkcfg,tvNet:M.tvNet,tvPaid:M.tvPaid,pkBase0:M.pkBase0,pp:M.pp,agn:M.agn,rep:M.rep,st:M.st}});}catch(e){}
+}
+function mgHostOk(){var r=lsGet(MGH,null);return !!(r&&r.v===1&&typeof r.g==='string'&&/^\d{5}$/.test(String(r.code))&&r.s&&Date.now()-(+r.t||0)<6*3600*1000&&GAMES_BY_ID(r.g));}
+function mgHostRestore(){
+  var r=lsGet(MGH,null);if(!mgHostOk()){lsSet(MGH,null);renderHub();return;}
+  mgOpen(r.g);
+  var sv=r.s,cur=M,k;
+  cur.n=sv.n;cur.mode='host';
+  ['names','wins','ai','rn','res','line','b','turn','x','bal','av','tok','stake','pkcfg','tvNet','tvPaid','pkBase0','pp','agn','rep','st'].forEach(function(f){if(sv[f]!==undefined&&sv[f]!==null)cur[f]=sv[f];});
+  cur.me=0;cur.wait=false;cur.glob=false;cur.links={};
+  mgHost(r.code,true);
+  cur.wait=false;
+  mgAfter();
+  /* seats whose human has not reconnected yet: grace period, then a bot takes over (2-player games forfeit after their own timer) */
+  var s;for(s=1;s<cur.n;s++)(function(seat){if(cur.ai[seat])return;
+    if(cur.n===2){cur.gone=seat;cur.goneT=setTimeout(function(){if(M!==cur||cur.gone!==seat)return;cur.gone=null;mgForfeit2();},75000);return;}
+    setTimeout(function(){if(M!==cur||cur.over||cur.links[seat])return;mgLeaveSeat(seat,null);},60000);})(s);
+  toast('اتاق قبلی بازگردانی شد؛ بازیکن‌ها خودکار وصل می‌شوند');
+}
 function mgAfter(){
   if(!M)return;
+  if(M.mode==='host')mgHostSave();
   if(M.over&&M.mode!=='guest'&&M.rpRn!==M.rn){M.rpRn=M.rn;try{M.rp=mgReport();}catch(e){M.rp=null;}}
   mgRender();mgSync();mgRecord();mgAuto();
 }
@@ -6483,11 +6509,13 @@ function mgReclaim(s,link,d){
   toast(cur.names[s]+' به بازی برگشت');
   mgLob();mgAfter();
 }
-function mgHost(){
-  var cur=M,code=genCode(),nm=cleanName(loadName())||'میزبان';
+function mgHost(code0,keepState){
+  var cur=M,code=code0||genCode(),nm=cleanName(loadName())||'میزبان';
   if(!onlineAvailable()){M.msg='بازی آنلاین به اینترنت نیاز دارد';mgRender();return;}
-  cur.code=code;cur.wait=true;cur.names[0]=nm;cur.msg='';mgRender();
-  cur.srv=transport().host(code,function(link){
+  if(!keepState)lsSet(MGH,null);
+  cur.code=code;cur.names[0]=nm;cur.msg='';if(!keepState){cur.wait=true;}mgRender();
+  cur.hr=0;
+  function startSrv(){cur.srv=transport().host(code,function(link){
     link.onmessage=function(d){
       if(M!==cur||!d||typeof d!=='object')return;
       var seat=-1,s;
@@ -6515,8 +6543,12 @@ function mgHost(){
       }
     };
   },function(){},function(){
-    if(M===cur){cur.wait=false;cur.mode='menu';cur.msg='ساخت اتاق ناموفق بود؛ دوباره تلاش کن';mgRender();}
-  });
+    if(M!==cur)return;
+    /* a restored room may find its old id still registered for a few seconds: keep trying */
+    if(keepState&&cur.hr++<10){try{if(cur.srv)cur.srv.close();}catch(e){}setTimeout(function(){if(M===cur)startSrv();},2500);return;}
+    cur.wait=false;cur.mode='menu';cur.msg='ساخت اتاق ناموفق بود؛ دوباره تلاش کن';mgRender();
+  });}
+  startSrv();
 }
 function mgJoin(code,tk0){
   code=dg(code).replace(/[^0-9]/g,'');
@@ -6674,6 +6706,7 @@ $('#hub').addEventListener('click',function(e){
   var k=c.dataset.hg;
   if(k==='hist'){histOpen();return;}
   if(k==='gset'){openGlobalSettings();return;}
+  if(k==='mghost'){mgHostRestore();return;}
   if(k==='mgpark'){if(PARK&&M===PARK){$('#mini').hidden=false;mgRender();}else{PARK=null;renderHub();}return;}
   if(k==='mgparkx'){mgParkDrop();renderHub();return;}
   if(PARK&&M===PARK&&MGS[k]){var sh=openSheet('<h3>اتاق فعال داری</h3><p class="sub">برای باز کردن بازی دیگر، اتاق فعلی بسته می‌شود.</p><button class="btn primary wide" data-pk="y">بستن اتاق و ادامه</button><button class="btn wide" data-pk="n">بازگشت به اتاق</button>');sh.addEventListener('click',function(e){var b=e.target.closest('[data-pk]');if(!b)return;closeSheet();if(b.dataset.pk==='y'){mgParkDrop();renderHub();mgOpen(k);}else{$('#mini').hidden=false;mgRender();}});return;}
