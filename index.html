@@ -724,7 +724,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-em{color:var(--ink-dim);font-size:clamp(10px,calc(2.6*var(--vh)),48px);align-self:center}
 .jz-of{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:clamp(10px,calc(2.7*var(--vh)),52px);border:1px dashed var(--ember);border-radius:10px;padding:2px 6px;line-height:1.3}
 .jz-of .btn{min-height:clamp(24px,calc(7*var(--vh)),128px);padding:1px 8px}
-.jz-ty{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.jz-ty{display:grid;grid-template-columns:repeat(16,1fr);gap:1px}
 .jz-t{border:1px solid var(--line);background:var(--panel-2);border-radius:6px;padding:0;height:clamp(24px,calc(7.5*var(--vh)),136px);font-size:clamp(12px,calc(3.4*var(--vh)),68px);color:var(--ink);cursor:pointer}
 .jz-t.sel{background:var(--ember);color:#000}
 .jz-fl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -750,7 +750,7 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jzt.n3 .jzt-t>.jz-s,.jzt.n2 .jzt-t>.jz-s{max-width:46%}
 .jzt-m{grid-column:1/-1;grid-row:3;display:flex;align-items:stretch;gap:6px}
 .jz-s{--av:clamp(18px,calc(6.4*var(--vh)),120px);border:1px solid #5a3d1d;border-radius:12px;background:linear-gradient(180deg,#3b2915,#27190c);padding:3px 4px;display:flex;flex-direction:column;gap:3px;min-width:0;line-height:1.15;box-shadow:0 2px 5px #0008}
-.jzt.n6 .jz-sf .jz-pt,.jzt.n7 .jz-sf .jz-pt{height:clamp(30px,calc(9.5*var(--vh)),180px)}
+.jzt.n6 .jz-sf .jz-pt,.jzt.n7 .jz-sf .jz-pt{height:clamp(26px,calc(7*var(--vh)*var(--k,1)),260px)}
 .jzt.n6 .jz-s,.jzt.n7 .jz-s{--av:clamp(16px,calc(5*var(--vh)),26px)}
 .jzt:not(.n6):not(.n7) .jzt-t .jz-s{flex-direction:row;align-items:center;justify-content:center;gap:6px}
 .jzt:not(.n6):not(.n7) .jzt-t .jz-sh{flex:none}
@@ -795,9 +795,9 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 .jz-of{background:#0008;border:1px solid #ffb23f;color:#fff}
 .jz-ac .btn{border-radius:6px}
 
-.jz-sf .jz-pt{flex:none;max-width:none;width:auto;aspect-ratio:3/4;height:clamp(39px,calc(12.75*var(--vh)),240px)}
+.jz-sf .jz-pt{flex:none;max-width:none;width:auto;aspect-ratio:3/4;height:clamp(26px,calc(8.5*var(--vh)*var(--k,1)),320px)}
 .jz-mf{display:flex !important;justify-content:center;align-items:flex-end;gap:clamp(6px,calc(1.6*var(--vh)),20px)}
-.jz-mf .jz-f{flex:none;width:auto !important;aspect-ratio:3/4;height:clamp(54px,calc(18*var(--vh)),340px) !important}
+.jz-mf .jz-f{flex:none;width:auto !important;aspect-ratio:3/4;height:clamp(46px,calc(13*var(--vh)*var(--k,1)),520px) !important}
 .jz-mf .jz-f.lk{padding:0 4px;text-align:center}
 .jz-pt .jz-cr{flex-direction:row}
 .hb-coin{align-self:center;border:1px solid var(--ember);color:var(--ember);border-radius:20px;padding:2px 12px;font-weight:700;font-size:clamp(12px,2dvh,15px)}
@@ -949,12 +949,17 @@ html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adju
 }
 .jz-cd.img{background:none !important;border:0 !important;box-shadow:0 2px 5px #000a;padding:0;aspect-ratio:150/212;border-radius:7%;overflow:hidden;display:block;width:auto}
 .jz-cd.img img{width:100%;height:100%;display:block;object-fit:fill;pointer-events:none}
-.jz-cd.img.big{height:clamp(46px,calc(15*var(--vh)),440px);width:auto}
-.jz-cd.img.hc{height:clamp(54px,calc(17.5*var(--vh)),520px);width:auto}
+.jz-cd.img.big{height:clamp(50px,calc(16*var(--vh)*var(--k,1)),700px);width:auto}
+.jz-cd.img.hc{height:clamp(50px,calc(16*var(--vh)*var(--k,1)),700px);width:auto}
 .jz-cd.img.nx,.jz-cd.img.sel{box-shadow:0 0 0 2px #ffd35a,0 3px 8px #000a}
 .jz-cr.st{position:absolute;inset:3px;display:block;padding:0}
 .jz-cr.st img{position:absolute;left:50%;transform:translateX(-50%);aspect-ratio:150/212;width:auto;max-width:100%;border-radius:4px;box-shadow:0 1px 3px #000a;object-fit:fill}
 .jz-pt:has(.jz-cr.st) .jz-pv{z-index:2}.jz-pt:has(.jz-cr.st) .jz-nb{z-index:2}
+.jzw .pk-top .btn{min-height:clamp(24px,calc(7*var(--vh)),34px);padding:0 10px}.jzw .pk-top{min-height:0}.jzw .jz-t{height:clamp(22px,calc(7*var(--vh)),40px);font-size:clamp(11px,calc(3.4*var(--vh)),20px)}
+.jzw.cmp .pk-top{position:absolute;inset:3px 6px auto 6px;z-index:6;pointer-events:none;display:flex;align-items:flex-start;min-height:0;gap:6px}
+.jzw.cmp .pk-top .btn{pointer-events:auto}
+.jzw.cmp .pk-ti{margin-inline-start:auto;flex:none;max-width:31%;text-align:left;font-size:clamp(8px,calc(2.3*var(--vh)),12px);line-height:1.3;white-space:normal}
+.jzw .jz-ac .btn{min-height:clamp(24px,calc(7.2*var(--vh)),38px) !important}.jzw .jz-s{padding:2px 3px;gap:2px}
 </style>
 </head>
 <body>
@@ -5144,6 +5149,10 @@ function jzFm(v,i,f){
   var o=v.fl[i][f],m=(v.fe[i][f]?'🌱':'')+(v.rt[i][f]?'💧':'')+(v.sn[i][f]?'❄️':'')+(v.br[i][f]?'🧬':'');
   return o?JZ[o.t].e+fa(o.n)+m:'·'+m;
 }
+function jzPickerHtml(){
+  return '<div class="jz-ty">'+[-1,-2].concat(JZ.map(function(c,t){return t;})).map(function(t){return '<button class="jz-t'+(M.wt===t?' sel':'')+'" data-jt="'+t+'">'+(t===-1?'∅':t===-2?'🎩':JZ[t].e)+'</button>';}).join('')+
+      '<button class="jz-t'+(M.wj===2?' sel':'')+'" data-jj="'+(M.wj===2?1:2)+'">×'+fa(M.wj)+'</button></div>';
+}
 function jzHtml(){
   var v=jzV(),me=M.me,i,f,h='',of=v.of,hawk=v.ph==='hat'&&v.hw===me&&!v.ev;
   var evq=v.ev&&v.ev.pend.indexOf(me)>=0?v.ev.k:'';
@@ -5197,8 +5206,7 @@ function jzHtml(){
     mid='<div class="jz-of"><span>'+M.names[of.from]+' می‌دهد '+jzTxt(of.cards)+(of.t===-2?' و یک نشان کلاه 🎩 می‌خواهد':(of.j?' و '+JZ[of.t].e+'×'+fa(of.j)+' می‌خواهد':' (هدیه)'))+'</span>'+
       (canAns?'<button class="btn sm primary" data-ja="ac"'+(dis?' disabled':'')+'>قبول</button><button class="btn sm" data-ja="rj">رد</button>':'')+'</div>';
   }else if(my&&v.ph==='tr'){
-    mid='<div class="jz-ty">'+[-1,-2].concat(JZ.map(function(c,t){return t;})).map(function(t){return '<button class="jz-t'+(M.wt===t?' sel':'')+'" data-jt="'+t+'">'+(t===-1?'∅':t===-2?'🎩':JZ[t].e)+'</button>';}).join('')+
-      '<button class="jz-t'+(M.wj===2?' sel':'')+'" data-jj="'+(M.wj===2?1:2)+'">×'+fa(M.wj)+'</button></div>';
+    mid=jzPickerHtml();
   }else mid='<div class="jz-of"><span>'+jzStatus()+'</span></div>';
   var fuH=v.fu.length?v.fu.map(function(t,j){var sl=M.sc&&M.sc.s==='f'&&M.sc.i===j;return jzCard(t,'big'+((M.gs.fu.indexOf(j)>=0||sl)?' sel':'')+((my&&v.ph==='fu'&&M.sc===null&&M.sf<0&&j===0)?' nx':''),'data-jc="'+j+'"',true);}).join(''):'<span class="jz-em">کارت رو‌شده‌ای نیست</span>';
   var midH='<div class="jz-mid"><div class="jz-fu">'+fuH+'</div><div class="jz-rt">'+mid+'</div></div>';
@@ -5230,7 +5238,7 @@ function jzHtml(){
   if(M.over){if(!M.left&&(M.mode==='ai'||M.mode==='host'))acts+='<button class="btn sm primary" data-mg="again">دوباره</button>';}
   if(M.over)acts+='<span class="jz-em">'+v.sc.map(function(s,k){return M.names[k]+': '+fa(s);}).join(' · ')+'</span>';
   h+='<div class="jz-ac">'+acts+'</div>';
-  return '<div class="pkw jzw">'+h+'</div>';
+  return '<div class="pkw jzw'+(M.n<=5?' cmp':'')+'">'+h+'</div>';
 }
 function jzClick(t){
   var v=jzV(),me=M.me,el;
@@ -5289,6 +5297,24 @@ function jzPlant(f,c){
   if(M.mode!=='guest'&&!jzActOk(f,ci)){toast('اینجا نمی‌شود کاشت؛ زمین دیگری را انتخاب کن');return;}
   M.sf=-1;M.sc=null;
   mgDo('jz',{a:'pl',f:f,ci:ci});mgRender();
+}
+function jzFit(){
+  var w=document.querySelector('#mini .jzw');if(!w)return;
+  function bad(){
+    if(w.scrollHeight>w.clientHeight+1||w.scrollWidth>w.clientWidth+1)return true;
+    var c=w.querySelector('.jzt-c'),m=c&&c.firstElementChild;
+    if(c&&m&&m.getBoundingClientRect().height>c.getBoundingClientRect().height-6)return true;
+    var q=w.querySelectorAll('.jz-s,.jzt-t'),i;
+    for(i=0;i<q.length;i++)if(q[i].scrollWidth>q[i].clientWidth+1||q[i].scrollHeight>q[i].clientHeight+1)return true;
+    var hd=w.querySelector('.jz-hd');if(hd&&hd.scrollWidth>hd.clientWidth+1)return true;
+    return false;
+  }
+  var c0=w.querySelector('.jzt-c'),fu0=c0&&c0.querySelector('.jz-fu'),rt0=c0&&c0.querySelector('.jz-rt'),sv=null;
+  if(fu0&&rt0){sv=[fu0.innerHTML,rt0.innerHTML];fu0.innerHTML=jzCard(0,'big','',true)+jzCard(1,'big','',true);rt0.innerHTML=jzPickerHtml();}   /* measure the busiest case so sizes stay stable across phases */
+  var k=1.5;
+  for(;k>1.001;k-=.1){w.style.setProperty('--k',k.toFixed(2));if(!bad())break;}
+  if(k<=1.001)w.style.setProperty('--k','1');
+  if(sv){fu0.innerHTML=sv[0];rt0.innerHTML=sv[1];}
 }
 function jzActOk(f,ci){
   var v=jzV(),t=v.ph==='fu'?v.fu[ci||0]:v.hand[ci||0];
@@ -6083,6 +6109,7 @@ function mgRender(){
   }
   el.innerHTML='';el.insertAdjacentHTML('beforeend',h);
   if(g.land||g.rot)el.insertAdjacentHTML('beforeend','<div class="rot"><b>↻</b><span>گوشی را بچرخان؛ این بازی فقط افقی است</span><button class="btn sm" data-mg="back">بازگشت</button></div>');
+  if(g.type==='jaliz')jzFit();
   if(M.over&&M.rp&&!M.left)el.insertAdjacentHTML('beforeend','<button class="btn sm rpb" data-mg="rp">📊 گزارش بازی</button>');
   el.classList.toggle('land',!!(g.land||g.rot));mgFit();
 }
