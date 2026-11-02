@@ -5530,9 +5530,13 @@ function pkPollCheck(){
 }
 var PK_CHAT=['چه دستی بود! 😎','بلوف زدی؟ 😏','امشب شانس با منه 🍀','کال کن اگه جرات داری 🔥','فولد کن بره 😂','دمت گرم! 👏','بدشانسی بود 😅','همه‌چی یا هیچی! 💥','فکر نکن، ریز بزن! ⚡','خسته نباشی ✌️','بزن بریم! 🚀','ترسیدی؟ 😈','این دست مال منه 💪','شانس آوردی 🙄'];
 var PK_REPLY=[[5,6,2],[4,2,11],[1,12,13],[8,7,10],[3,1,11],[0,9],[5,9],[3,11,12],[3,10,7],[5,0],[8,12],[3,7,12],[1,4,13],[2,6,0]];
-function pkAiSay(seat,pool,chained){
+function pkAiSay(seat,pool,chained,msgN){
   var cur=M,rn=M.rn;
-  setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn||!cur.ai[seat]||(cur.x.out&&cur.x.out[seat]))return;pkAct(seat,'pk',{a:'ct',c:chained?1:0,i:pool[Math.floor(Math.random()*pool.length)]});},window.__FAST?5:800+Math.random()*1500);
+  setTimeout(function(){if(M!==cur||cur.over||cur.rn!==rn||!cur.ai[seat]||(cur.x.out&&cur.x.out[seat]))return;
+    var xx=cur.x;
+    if(chained){if(xx.ct&&xx.ct.n!==msgN)return;}                       /* a reply: only if nobody has spoken since */
+    else if(Date.now()-(xx.lastCt||0)<8000)return;                      /* table talk: never right after another message */
+pkAct(seat,'pk',{a:'ct',c:chained?1:0,i:pool[Math.floor(Math.random()*pool.length)]});},window.__FAST?5:800+Math.random()*1500);
 }
 function pkAiOther(not){var ais=[],q;for(q=0;q<M.n;q++)if(M.ai[q]&&!M.x.out[q]&&q!==not)ais.push(q);return ais.length?ais[Math.floor(Math.random()*ais.length)]:-1;}
 function pkAiTaunt(w){
@@ -5553,9 +5557,8 @@ function pkAct0(seat,kind,m){
   if(a==='ct'){
     var ci=m.i|0;if(ci<0||ci>=PK_CHAT.length)return false;
     x.cta=x.cta||{};var nw=Date.now();if(!window.__FAST&&x.cta[seat]&&nw-x.cta[seat]<1500)return false;x.cta[seat]=nw;
-    x.ct={s:seat,i:ci,n:(x.ct?x.ct.n:0)+1};ok=true;
-    if(!m.c){var rq=pkAiOther(seat);if(rq>=0&&Math.random()<(M.ai[seat]?.22:.92)){pkAiSay(rq,PK_REPLY[ci]||[0],true);
-      if(!M.ai[seat]&&Math.random()<.35){var rq2=pkAiOther(rq);if(rq2>=0)pkAiSay(rq2,PK_REPLY[ci]||[0],true);}}}
+    x.ct={s:seat,i:ci,n:(x.ct?x.ct.n:0)+1};x.lastCt=nw;ok=true;
+    if(!m.c&&!M.ai[seat]){var rq=pkAiOther(seat);if(rq>=0&&Math.random()<.9)pkAiSay(rq,PK_REPLY[ci]||[0],true,x.ct.n);}   /* exactly one bot answers a human message */
   }else if(a==='pp'){
     if(seat!==0||x.poll||x.endAfter)return false;
     x.poll={y:[0],n:[]};pkPollCheck();ok=true;
