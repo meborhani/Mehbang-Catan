@@ -5180,11 +5180,12 @@ function pkNextAlive(from,pred){
 function pkStartHand(){
   var x=M.x,n=M.n,i;
   clearTimeout(M.t2);
-  for(i=0;i<n;i++)if(M.ai[i]&&x.ch[i]<=0)x.ch[i]=100;
+  x.out=x.out||[];
+  for(i=0;i<n;i++)if(x.ch[i]<=0&&!x.out[i]){x.out[i]=true;if(M.ai[i])x.lg0=(x.lg0?x.lg0+' · ':'')+M.names[i]+' حذف شد';}
   var alive=[];for(i=0;i<n;i++)if(x.ch[i]>0)alive.push(i);
   var hum=alive.filter(function(s){return !M.ai[s];}).length;
   if(alive.length<2||hum<1||x.endAfter||(x.cfg.end==='hands'&&x.hn>=x.cfg.lim)||(x.cfg.end==='time'&&Date.now()-x.t0>=x.cfg.lim*60000)){pkEndGame();return;}
-  x.hn++;x.board=[];x.st='pre';x.poll=x.poll;x.lg='';
+  x.hn++;x.board=[];x.st='pre';x.poll=x.poll;x.lg=x.lg0||'';x.lg0='';
   var d=[];for(i=0;i<52;i++)d.push(i);x.deck=shuffle(d);
   for(i=0;i<n;i++){
     x.fold[i]=x.ch[i]<=0;x.al[i]=false;x.bet[i]=0;x.tot[i]=0;x.act[i]=false;x.rv[i]=false;
@@ -5341,22 +5342,40 @@ function pkNameAi(){
   var ps=pkPersonas(M.n);M.pp=[];
   for(var i=0;i<M.n;i++)if(!M.names[i]||M.ai[i]===true&&/^رایانه/.test(M.names[i])){M.pp[i]=ps[i];M.names[i]=PK_AI[ps[i]].n;M.ai[i]=true;}
 }
+function pkDraw(seat){
+  var x=M.x,h=x.hole[seat],b=x.board;
+  if(b.length<3||b.length>4)return 0;
+  var all=h.concat(b),su=[0,0,0,0],rk={},i;
+  all.forEach(function(c){su[pkS(c)]++;rk[pkR(c)]=1;});
+  for(i=0;i<4;i++)if(su[i]>=4&&(pkS(h[0])===i||pkS(h[1])===i))return 2;
+  var hr=[pkR(h[0]),pkR(h[1])];
+  for(var lo=-1;lo<=8;lo++){var cnt=0,hasH=false;for(var r=lo;r<lo+5;r++){var rr=r<0?12:r;if(rk[rr]){cnt++;if(hr.indexOf(rr)>=0)hasH=true;}}if(cnt>=4&&hasH)return 1;}
+  return 0;
+}
 function pkAiAct(seat){
   var x=M.x,toCall=x.cur-x.bet[seat],pot=pkSum(x.tot),str=pkStrength(seat),r=Math.random(),r2=Math.random();
   var pp=PK_AI[M.pp&&M.pp[seat]!==undefined?M.pp[seat]:0],st=x.board.length;
+  var opp=Math.max(1,pkLive().length-1),dr=pkDraw(seat);
   str=Math.max(0,Math.min(1,str+(Math.random()-.5)*.08));
+  var eq=str+(dr===2?.14:dr===1?.09:0);        /* a draw is worth some extra equity */
+  var stackBb=x.ch[seat]/Math.max(1,x.cfg.bl*2);
   function rz(f){return x.cur+Math.max(x.minr,Math.floor(pot*f*(.75+pp.a*.5)));}
+  /* bluffs only make sense in spots where they can work: few opponents, post-flop, a real pot, enough stack */
+  var bluffOk=st>0&&st<5&&dr===0&&str<.42&&pot>=x.cfg.bl*4&&stackBb>8;
+  var bluffP=pp.b*(opp===1?1:opp===2?.4:.08)*(st===3?.8:1);
   if(toCall<=0){
     if(str>.62-pp.a*.06&&r<.4+pp.a*.4){
       if(str>.85&&r2<pp.t){pkAct(seat,'pk',{a:'c'});return;}
       pkAct(seat,'pk',{a:'r',to:rz(str>.85?.8:.5)});
-    }else if(str<.45&&st>0&&r2<pp.b){pkAct(seat,'pk',{a:'r',to:rz(.6)});}
-    else if(st===0&&str<.45&&r2<pp.b*.35){pkAct(seat,'pk',{a:'r',to:rz(.5)});}
+    }else if(dr&&st<5&&r<.2+pp.a*.4){pkAct(seat,'pk',{a:'r',to:rz(.55)});}          /* semi-bluff */
+    else if(bluffOk&&r2<bluffP){pkAct(seat,'pk',{a:'r',to:rz(.6)});}                 /* pure bluff */
+    else if(st===0&&str<.4&&opp<=2&&r2<pp.b*.15){pkAct(seat,'pk',{a:'r',to:rz(.5)});}/* occasional steal */
     else pkAct(seat,'pk',{a:'c'});
   }else{
     var odds=toCall/(pot+toCall),need=odds*(.85-pp.l);
-    if(str<.5&&r2<pp.b*.5&&toCall<pot*.8&&st>0)pkAct(seat,'pk',{a:'r',to:rz(.7)});
-    else if(str<need&&r>.1+pp.l*.4)pkAct(seat,'pk',{a:'f'});
+    if(dr&&st<5&&r2<.12+pp.a*.2&&toCall<pot*.7)pkAct(seat,'pk',{a:'r',to:rz(.7)});    /* draw raise */
+    else if(bluffOk&&opp===1&&toCall<pot*.5&&r2<pp.b*.12)pkAct(seat,'pk',{a:'r',to:rz(.7)});
+    else if(eq<need&&r>.1+pp.l*.4)pkAct(seat,'pk',{a:'f'});
     else if(str>.82&&r<.3+pp.a*.45)pkAct(seat,'pk',{a:'r',to:rz(.7)});
     else pkAct(seat,'pk',{a:'c'});
   }
@@ -5382,7 +5401,7 @@ function pkView(seat){
   return {st:x.st,hn:x.hn,ch:x.ch,bet:x.bet,tot:x.tot,fold:x.fold,al:x.al,cur:x.cur,minr:x.minr,dealer:x.dealer,board:x.board,
     hole:x.hole.map(function(h,i){return (i===seat||x.rv[i])&&h.length?h:null;}),has:x.hole.map(function(h){return h.length>0;}),
     lg:x.lg,poll:x.poll?{y:x.poll.y,n:x.poll.n}:null,cfg:x.cfg,el:Math.floor((Date.now()-x.t0)/1000),
-    net:M.over?x.ch.map(function(c,i){return c-x.st0[i];}):null,ea:x.endAfter,st0:x.st0,la:x.la,rv:x.rv.slice()};
+    net:M.over?x.ch.map(function(c,i){return c-x.st0[i];}):null,ea:x.endAfter,st0:x.st0,la:x.la,rv:x.rv.slice(),out:(x.out||[]).slice(),lg0:x.lg0||''};
 }
 function pkV(){return M.mode==='guest'?M.x:pkView(M.me);}
 /* ---- poker UI ---- */
@@ -5427,11 +5446,11 @@ function pkHtml(){
     }
     var nm=M.names[i]||'',ini=M.ai[i]?'🤖':(Array.from(nm)[0]||'؟');
     var rvl=!isMe&&hc&&v.has[i]&&(v.st==='show'||(v.rv&&v.rv[i]));
-    seats+='<div class="pk-s'+(rvl?' rvl':'')+(isMe?' me cr':'')+(isMe?'':(lx<50?' cr':' cl2'))+(M.turn===i&&live?' on':'')+(v.fold[i]?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
+    seats+='<div class="pk-s'+(rvl?' rvl':'')+(isMe?' me cr':'')+(isMe?'':(lx<50?' cr':' cl2'))+(M.turn===i&&live?' on':'')+(v.fold[i]||(v.out&&v.out[i])?' fd':'')+'" style="left:'+lx.toFixed(1)+'%;top:'+ty.toFixed(1)+'%">'+
       (tg?'<span class="pk-tag t-'+tg[1]+'">'+tg[0]+'</span>':'')+
       '<div class="pk-cd">'+cards+'</div>'+
       '<div class="pk-av">'+avHtml(mgAv(i),nm,M.ai[i],0)+(v.dealer===i?'<em class="pk-dl">D</em>':'')+'</div>'+
-      '<div class="pk-pl"><span class="pk-n">'+esc2(nm)+'</span><b class="pk-ch">'+fa(v.ch[i])+'</b></div></div>';
+      '<div class="pk-pl"><span class="pk-n">'+esc2(nm)+'</span><b class="pk-ch">'+(v.out&&v.out[i]?'حذف':fa(v.ch[i]))+'</b></div></div>';
     if(v.bet[i]>0){
       var f=isMe?.36:.4,bx=lx+(50-lx)*f,by=ty+(46-ty)*f;
       bets+='<div class="pk-bet" style="left:'+bx.toFixed(1)+'%;top:'+by.toFixed(1)+'%"><i></i>'+fa(v.bet[i])+'</div>';
