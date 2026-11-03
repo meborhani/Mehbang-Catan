@@ -7321,6 +7321,18 @@ function mgHostRestore(){
     setTimeout(function(){if(M!==cur||cur.over||cur.links[seat])return;mgLeaveSeat(seat,null);},60000);})(s);
   toast('اتاق قبلی بازگردانی شد؛ بازیکن‌ها خودکار وصل می‌شوند');
 }
+var MG_HID=0;
+/* phone minimized / tab frozen while hosting: links die in the background, so on return re-host the same room (same code, saved state) and let players reclaim their seats */
+document.addEventListener('visibilitychange',function(){
+  try{
+    if(document.hidden){MG_HID=Date.now();if(M&&M.mode==='host'&&M.code&&!M.over&&!M.wait&&!M.left)mgHostSave();return;}
+    var away=MG_HID?Date.now()-MG_HID:0;MG_HID=0;
+    if(away<(window.__MGAW||12000)||!M||M.mode!=='host'||!M.code||M.over||M.wait||M.left||!lsGet(MGH,null))return;
+    var parked=(PARK&&M===PARK);
+    mgHostSave();M.__keepRec=true;mgClose();mgHostRestore();
+    if(parked&&M)mgPark();
+  }catch(e){}
+});
 function mgAfter(){
   if(!M)return;
   if(M.g.type==='kahroba'&&M.mode==='host'){kbRcl();kbTimer();}
