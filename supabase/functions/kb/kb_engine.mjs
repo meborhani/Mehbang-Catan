@@ -139,8 +139,7 @@ function kbPost(seat,skipNoble){
   if(nx===x.first&&x.endAt){
     var best=-1,w=[],bc=0;
     x.pl.forEach(function(q,i){var s=kbPts(q);if(s>best||(s===best&&q.c.length<bc)){best=s;bc=q.c.length;w=[i];}else if(s===best&&q.c.length===bc)w.push(i);});
-    /* tie for the lead: don't end here -- let another full round play out so someone can pull
-       ahead (per spec: keep extending rounds until exactly one player holds the top score). */
+    /* A tied lead must continue into another full round until one player is uniquely ahead. */
     if(w.length===1){M.over=true;M.res=w[0];M.wins[w[0]]++;}else M.turn=nx;
   }else M.turn=nx;
   return true;
